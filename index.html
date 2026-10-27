@@ -3531,6 +3531,9 @@ body.ton{background:var(--bg2)}
 .btn-ghost:active{background:var(--bg3)}
 .btn-danger{background:var(--bad);border-color:var(--bad);color:#fff}
 .btn-sm{padding:10px;font-size:14px;border-radius:10px}
+.support-wide{
+  width:58%;height:44px;margin:20px auto 0;display:flex;padding:0;border-radius:22px;font-size:14px
+}
 .card{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:12px}
 .section-title{font-size:20px;font-weight:800;letter-spacing:-.03em;margin:22px 0 12px}
 .row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line)}
@@ -3577,17 +3580,49 @@ body.ton{background:var(--bg2)}
 
   <!-- ЭКРАН: главное меню -->
   <section id="scr-home" class="screen">
-    <div class="header-logo">
-      <span class="enso" aria-hidden="true"></span>
-      <div><b style="font-size:17px;letter-spacing:-.02em">deepmint.vpn</b><div class="muted mono" style="font-size:11px">тихо и чисто</div></div>
+    <div style="text-align:center;padding:10px 0 4px">
+      <span class="enso" style="margin:0 auto" aria-hidden="true"></span>
+      <div style="font-size:20px;font-weight:800;letter-spacing:-.02em;margin-top:8px">deepmint.vpn</div>
+      <div class="muted mono" style="font-size:11px">тихо и чисто</div>
     </div>
-    <div class="menu-grid">
-      <button class="menu-item" data-nav="buy"><span class="ic">🎟</span><b>Купить подписку</b><span>30/90/180/360 дней</span></button>
-      <button class="menu-item" data-nav="balance"><span class="ic">👛</span><b>Баланс</b><span id="balMenu">0 ₽</span></button>
-      <button class="menu-item" data-nav="invite"><span class="ic">👥</span><b>Пригласить друзей</b><span>Зарабатывай 20%</span></button>
-      <button class="menu-item" data-nav="docs"><span class="ic">📄</span><b>Документы</b><span>Политики и условия</span></button>
+
+    <div class="card" style="margin-top:16px;text-align:center">
+      <div class="muted" style="font-size:13px">Баланс</div>
+      <div class="mono" style="font-size:38px;font-weight:800;letter-spacing:-.03em;margin:6px 0 2px" id="balBig">0 ₽</div>
+      <div class="row" style="border-bottom:0;justify-content:center;gap:8px;padding-top:0">
+        <span class="k">Подключено устройств</span>
+        <span class="v mono" id="devCount">0 / 2</span>
+      </div>
     </div>
+
+    <button class="btn" data-nav="buy" style="margin-bottom:10px">Оплатить подписку</button>
+    <button class="btn btn-ghost" data-nav="setup">Настроить VPN</button>
+
+    <button class="btn btn-ghost support-wide" data-nav="support">🛟 Поддержка</button>
+
     <div class="notify" id="userInfo">Загрузка…</div>
+  </section>
+
+  <!-- ЭКРАН: настройка VPN -->
+  <section id="scr-setup" class="screen hidden">
+    <div class="topbar"><button class="back" data-nav="home" aria-label="Назад">←</button><h1>Настроить VPN</h1></div>
+    <div class="card">
+      <b style="font-size:16px">Подключение</b>
+      <p class="muted" style="font-size:14px;margin:6px 0 10px">Скоро здесь будут инструкции и конфигурация для iOS, Android, Windows, macOS и Linux.</p>
+      <div class="kv"><span>iOS</span><span>Android</span><span>Windows</span><span>macOS</span><span>Linux</span></div>
+    </div>
+    <button class="btn btn-ghost" data-nav="home">← Назад</button>
+  </section>
+
+  <!-- ЭКРАН: поддержка -->
+  <section id="scr-support" class="screen hidden">
+    <div class="topbar"><button class="back" data-nav="home" aria-label="Назад">←</button><h1>Поддержка</h1></div>
+    <div class="card">
+      <b style="font-size:16px">Служба поддержки</b>
+      <p class="muted" style="font-size:14px;margin:6px 0 12px">Напишите нам — поможем с подпиской, платежом и настройкой.</p>
+      <a class="btn" href="https://t.me/deepmintvpn_support" target="_blank" rel="noopener">Открыть чат в Telegram</a>
+    </div>
+    <button class="btn btn-ghost" data-nav="home">← Назад</button>
   </section>
 
   <!-- ЭКРАН: тарифы -->
@@ -3703,13 +3738,11 @@ body.ton{background:var(--bg2)}
   function persist(){ try{ localStorage.setItem("deepmint-app", JSON.stringify(state)); }catch(e){} }
 
   function storeBalance(){
-    var big = $("#balanceBig"), menu = $("#balMenu");
+    var big = $("#balBig"), menu = $("#balanceBig"), dev = $("#devCount");
     var txt = state.balance + " ₽";
     if (big) big.textContent = txt;
     if (menu) menu.textContent = txt;
-    if (state.trialActive) {
-      var el = $("#trialBadge");
-    }
+    if (dev) dev.textContent = (state.devices || 0) + " / 2";
   }
 
   // telegram initData: user/first_name, start_param
