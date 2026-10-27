@@ -3,9 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0d0f11">
-<title>deepmint vpn — приложение</title>
-<script>// WebView
+<meta name="theme-color" content="#101010">
+<title>deepmint.vpn</title><script>// WebView
 (function () {
   var eventHandlers = {};
 
@@ -3494,352 +3493,350 @@
   WebView.postEvent('web_app_request_content_safe_area');
 
 })();
-</script>
-<style>
-:root{
-  --bg:#0d0f11; --bg2:#14181b; --bg3:#1b2125;
-  --line:#25303a; --line2:#32414e;
-  --ink:#eef2f5; --ink2:#9fb0bd; --ink3:#6d7e8b;
-  --acc:#e8a33d; --acc-deep:#b97a16; --acc-ink:#1c1305;
-  --good:#58c47e; --bad:#e05b52;
-  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  --r:10px;
-  --spring:cubic-bezier(.2,.8,.2,1);
-}
-*{box-sizing:border-box}
-html,body{margin:0;padding:0}
-body{
-  background:var(--bg);color:var(--ink);
-  font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif;
-  -webkit-font-smoothing:antialiased;
-  min-height:100vh;
-  overflow-x:hidden;
-}
-body.ton{background:var(--bg2)}
-#app{max-width:480px;margin:0 auto;padding:16px 16px 120px}
-.hidden{display:none!important}
-.muted{color:var(--ink2)}
-.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
-.btn{
-  display:flex;align-items:center;justify-content:center;gap:8px;width:100%;
-  border:1.5px solid var(--acc);border-radius:12px;background:var(--acc);color:var(--acc-ink);
-  padding:14px;font-size:15.5px;font-weight:700;cursor:pointer;transition:transform .1s;
-  -webkit-tap-highlight-color:transparent;
-}
+</script><style>
+@font-face{font-family:'SF Pro Rounded';src:url('https://raw.githubusercontent.com/Coderion31/deepmint-vpn-app/main/spider-assets/SF-Pro-Rounded-Semibold.otf') format('opentype');font-weight:600;font-style:normal;font-display:swap}
+html,body{margin:0;padding:0;background:#101010}
+main{min-height:100vh;min-height:100dvh;background:#101010;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:16vh;padding-bottom:calc(8rem + env(safe-area-inset-bottom));padding-left:1rem;padding-right:1rem;position:relative;overflow-x:hidden;font-family:'SF Pro Rounded',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+.dotgrid{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;user-select:none;z-index:0}
+.hero{position:relative;width:100%;max-width:950px;display:flex;flex-direction:column;align-items:center;text-align:center;z-index:2}
+.title{position:relative;min-height:52px;display:inline-flex;align-items:center;justify-content:center;text-align:center;letter-spacing:-.025em;color:#fff;line-height:1.15;font-family:'SF Pro Rounded',-apple-system,BlinkMacSystemFont,sans-serif;font-size:22px;font-weight:600;user-select:none;text-decoration:none}
+@media(min-width:640px){.title{font-size:32px}}
+@media(min-width:768px){.title{font-size:40px}}
+.morph-track{position:relative;display:inline-flex;align-items:center;justify-content:center;line-height:1.15;white-space:nowrap}
+.morph-slot{display:inline-grid;grid-template-columns:0fr;min-width:0;max-width:0;opacity:0;overflow:hidden;white-space:nowrap;transition:grid-template-columns .32s cubic-bezier(.25,1,.5,1),max-width .32s cubic-bezier(.25,1,.5,1),opacity .24s cubic-bezier(.25,1,.5,1)}
+.morph-slot.expanded{opacity:1;grid-template-columns:1fr;max-width:1200px}
+.morph-inner{display:inline-block;min-width:0;overflow:hidden;white-space:nowrap;letter-spacing:-.01em}
+.balance{margin-top:28px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.balance-label{font-family:'SF Pro Rounded',sans-serif;font-size:14px;font-weight:600;color:#8e8e8e;letter-spacing:.02em}
+.balance-amount{font-family:'SF Pro Rounded',sans-serif;font-size:36px;font-weight:600;color:#fff;letter-spacing:-.02em;line-height:1.1}
+.actions{margin-top:24px;display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.btn{font-family:'SF Pro Rounded',sans-serif;font-size:14px;font-weight:600;color:#fff;background:#202020;border:none;border-radius:9999px;padding:0 22px;height:44px;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;transition:background-color .15s ease,transform .15s ease;user-select:none;-webkit-tap-highlight-color:transparent}
+.btn:hover{background:#282828}
 .btn:active{transform:scale(.97)}
-.btn-ghost{background:transparent;color:var(--ink);border-color:var(--line2)}
-.btn-ghost:active{background:var(--bg3)}
-.btn-danger{background:var(--bad);border-color:var(--bad);color:#fff}
-.btn-sm{padding:10px;font-size:14px;border-radius:10px}
-.support-wide{
-  width:58%;height:44px;margin:20px auto 0;display:flex;padding:0;border-radius:22px;font-size:14px
-}
-.card{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:12px}
-.section-title{font-size:20px;font-weight:800;letter-spacing:-.03em;margin:22px 0 12px}
-.row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line)}
-.row:last-child{border-bottom:0}
-.row .k{color:var(--ink2);font-size:14px}
-.row .v{font-weight:700;text-align:right;font-size:14px}
-.plan{border:1px solid var(--line);border-radius:var(--r);background:var(--bg2);padding:14px;margin-bottom:10px}
-.plan-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px}
-.plan-name{font-weight:800;font-size:15px}
-.plan-price{font-family:var(--mono);font-size:19px;font-weight:800;color:var(--acc)}
-.plan-per{font-size:12px;color:var(--ink3);margin-bottom:8px}
-.plan ul{list-style:none;margin:0;padding:0;display:grid;gap:5px;font-size:13.5px;color:var(--ink2)}
-.plan li{display:flex;gap:8px}
-.plan li::before{content:"✓";color:var(--good);font-weight:800;flex:0 0 auto}
-.spacer{height:18px}
-.link-wrap{margin:12px 0;padding:10px 12px;border:1px dashed var(--line2);border-radius:10px;background:var(--bg3);word-break:break-all;font-family:var(--mono);font-size:12.5px;color:var(--acc)}
-.doc-item{display:block;text-decoration:none;padding:13px 14px;border:1px solid var(--line);border-radius:10px;background:var(--bg2);color:var(--ink);font-weight:600;font-size:14.5px;margin-bottom:8px}
-.doc-item:active{background:var(--bg3)}
-.badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--good);border:1px solid var(--good);border-radius:999px;padding:3px 10px}
-.progress{height:8px;border-radius:99px;background:var(--bg3);overflow:hidden;margin-top:10px}
-.progress i{display:block;height:100%;background:var(--acc);border-radius:99px;width:0%;transition:width .3s}
-.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.menu-item{border:1px solid var(--line);border-radius:12px;background:var(--bg2);padding:16px 14px;cursor:pointer;text-align:left;color:var(--ink);transition:background .15s;-webkit-tap-highlight-color:transparent}
-.menu-item:active{background:var(--bg3)}
-.menu-item .ic{font-size:22px;display:block;margin-bottom:8px}
-.menu-item b{display:block;font-size:14.5px;margin-bottom:3px}
-.menu-item span{font-size:12px;color:var(--ink3)}
-.footer{text-align:center;color:var(--ink3);font-size:12px;margin-top:18px}
-.topbar{display:flex;align-items:center;gap:10px;margin-bottom:6px}
-.topbar .back{width:36px;height:36px;border-radius:10px;border:1px solid var(--line2);background:transparent;color:var(--ink);font-size:17px;cursor:pointer;flex:0 0 36px}
-.topbar h1{font-size:19px;margin:0;letter-spacing:-.02em}
-.header-logo{display:flex;align-items:center;gap:10px;padding:4px 0 12px}
-.enso{width:34px;height:34px;border-radius:50%;border:3px solid var(--acc);display:grid;place-items:center;position:relative}
-.enso::after{content:"";width:5px;height:5px;border-radius:50%;background:var(--acc)}
-.demo-note{font-family:var(--mono);font-size:11px;color:var(--ink3);line-height:1.6;margin-top:14px}
-.notify{background:var(--bg3);border:1px solid var(--line2);border-radius:10px;padding:12px 14px;font-size:13.5px;line-height:1.5;margin-bottom:10px}
-.notify b{color:var(--ink)}
-.kv{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-.kv span{font-family:var(--mono);font-size:12px;color:var(--ink2);background:var(--bg3);border:1px solid var(--line);padding:4px 9px;border-radius:8px}
+.btn-accent{background:#0084ff}
+.btn-accent:hover{background:#1a90ff}
+.btn[disabled]{opacity:.4;cursor:default;transform:none}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:50;padding:1rem;opacity:0;pointer-events:none;transition:opacity .2s ease}
+.modal-overlay.open{opacity:1;pointer-events:auto}
+.modal{background:#181818;border:1px solid #2a2a2a;border-radius:20px;width:100%;max-width:400px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.5);transform:translateY(10px) scale(.98);transition:transform .2s ease}
+.modal-overlay.open .modal{transform:translateY(0) scale(1)}
+.modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.modal-title{font-family:'SF Pro Rounded',sans-serif;font-size:18px;font-weight:600;color:#fff}
+.modal-close{background:#202020;border:none;color:#fff;width:30px;height:30px;border-radius:50%;font-size:16px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background-color .15s ease}
+.modal-close:hover{background:#2a2a2a}
+.plans{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
+.plan{display:flex;align-items:center;justify-content:space-between;background:#202020;border:1px solid transparent;border-radius:14px;padding:12px 14px;cursor:pointer;transition:border-color .15s ease,background-color .15s ease;text-align:left;color:#fff;font:inherit}
+.plan:hover{background:#242424}
+.plan.selected{border-color:#0084ff;background:#1c2836}
+.plan-name{font-family:'SF Pro Rounded',sans-serif;font-size:15px;font-weight:600;color:#fff}
+.plan-sub{font-family:'SF Pro Rounded',sans-serif;font-size:12px;font-weight:600;color:#8e8e8e;margin-top:2px}
+.plan-price{font-family:'SF Pro Rounded',sans-serif;font-size:16px;font-weight:600;color:#fff;white-space:nowrap}
+.steps{display:flex;flex-direction:column;gap:12px;margin-bottom:18px}
+.step{display:flex;gap:12px;align-items:flex-start;text-align:left}
+.step-num{flex:none;width:24px;height:24px;border-radius:50%;background:#202020;color:#0084ff;font-family:'SF Pro Rounded',sans-serif;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.step-text{font-family:'SF Pro Rounded',sans-serif;font-size:14px;font-weight:600;color:#e5e5e5;line-height:1.45}
+.step-text a{color:#0084ff;text-decoration:none}
+.toast{position:fixed;left:50%;bottom:calc(28px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);background:#202020;border:1px solid #2a2a2a;color:#fff;font-family:'SF Pro Rounded',sans-serif;font-size:14px;font-weight:600;padding:12px 18px;border-radius:12px;opacity:0;pointer-events:none;transition:opacity .25s ease,transform .25s ease;z-index:60;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast a{color:#0084ff;text-decoration:none}
+.profile-btn{position:fixed;top:calc(16px + env(safe-area-inset-top));right:16px;z-index:40;width:40px;height:40px;border-radius:50%;background:#202020;border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background-color .15s ease,transform .15s ease;overflow:hidden;padding:0}
+.profile-btn:hover{background:#282828}
+.profile-btn:active{transform:scale(.95)}
+.profile-btn img{width:100%;height:100%;object-fit:cover}
+.profile-modal .profile-avatar{width:56px;height:56px;border-radius:50%;background:#202020;color:#0084ff;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;overflow:hidden}
+.profile-avatar img{width:100%;height:100%;object-fit:cover}
+.profile-name{font-family:'SF Pro Rounded',sans-serif;font-size:18px;font-weight:600;color:#fff;text-align:center;word-break:break-word}
+.profile-login{font-family:'SF Pro Rounded',sans-serif;font-size:13px;font-weight:600;color:#8e8e8e;text-align:center;margin-top:4px}
+.profile-balance-box{margin-top:18px;background:#202020;border-radius:14px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between}
+.profile-balance-label{font-family:'SF Pro Rounded',sans-serif;font-size:13px;font-weight:600;color:#8e8e8e}
+.profile-balance-value{font-family:'SF Pro Rounded',sans-serif;font-size:16px;font-weight:600;color:#fff}
+.btn-danger{margin-top:14px;width:100%;background:#202020}
+.btn-danger:hover{background:#382626}
+.auth-screen{position:fixed;inset:0;z-index:70;background:#101010;display:flex;align-items:center;justify-content:center;padding:1.5rem;transition:opacity .3s ease}
+.auth-screen.hidden{opacity:0;pointer-events:none}
+.auth-card{width:100%;max-width:340px;display:flex;flex-direction:column;align-items:center;text-align:center}
+.auth-title{font-family:'SF Pro Rounded',sans-serif;font-size:30px;font-weight:600;color:#fff;letter-spacing:-.02em}
+.auth-sub{font-family:'SF Pro Rounded',sans-serif;font-size:14px;font-weight:600;color:#8e8e8e;margin-top:8px;margin-bottom:28px}
+.auth-methods{display:flex;flex-direction:column;gap:10px;width:100%}
+.field-label{font-family:'SF Pro Rounded',sans-serif;font-size:13px;font-weight:600;color:#8e8e8e;margin-bottom:6px;display:block}
+.field-input{width:100%;box-sizing:border-box;background:#202020;border:1px solid #2e2e2e;border-radius:12px;color:#fff;font-family:'SF Pro Rounded',sans-serif;font-size:15px;font-weight:600;padding:12px 14px;outline:none;transition:border-color .15s ease;margin-bottom:12px}
+.field-input:focus{border-color:#0084ff}
+.field-input::placeholder{color:#6e6e6e}
+.field-error{font-family:'SF Pro Rounded',sans-serif;font-size:12px;font-weight:600;color:#ff6b6b;margin-bottom:10px;min-height:16px}
+.field-hint{font-family:'SF Pro Rounded',sans-serif;font-size:12px;font-weight:600;color:#6e6e6e;margin-top:12px;text-align:center}
+.auth-btn{width:100%}
+.tg-avatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#2aabee,#229ed9);color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-family:'SF Pro Rounded',sans-serif;font-size:22px;font-weight:600;overflow:hidden}
+.tg-avatar img{width:100%;height:100%;object-fit:cover}
+.sep{display:flex;align-items:center;gap:12px;width:100%;margin:6px 0 2px}
+.sep-line{flex:1;height:1px;background:#2a2a2a}
+.sep-text{font-family:'SF Pro Rounded',sans-serif;font-size:12px;font-weight:600;color:#6e6e6e}
+.tg-note{font-family:'SF Pro Rounded',sans-serif;font-size:12px;font-weight:600;color:#6e6e6e;margin-top:16px;line-height:1.5}
+.hidden{display:none!important}
 </style>
 </head>
 <body>
-<div id="app">
-
-  <!-- ЭКРАН: главное меню -->
-  <section id="scr-home" class="screen">
-    <div style="text-align:center;padding:10px 0 4px">
-      <span class="enso" style="margin:0 auto" aria-hidden="true"></span>
-      <div style="font-size:20px;font-weight:800;letter-spacing:-.02em;margin-top:8px">deepmint.vpn</div>
-      <div class="muted mono" style="font-size:11px">тихо и чисто</div>
+<main>
+  <svg class="dotgrid" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+    <defs><pattern id="dot-grid-pattern" x="12" y="12" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="12" cy="12" r="0.75" fill="rgba(255, 255, 255, 0.07)"/>
+    </pattern></defs>
+    <rect width="100%" height="100%" fill="url(#dot-grid-pattern)"/>
+  </svg>
+  <div class="hero">
+    <a href="#" class="title" title="deepmint.vpn">
+      <span class="morph-track"><span class="morph-slot expanded"><span class="morph-inner">deepmint.vpn</span></span></span>
+    </a>
+    <div class="balance">
+      <div class="balance-label">Баланс</div>
+      <div class="balance-amount" id="balanceAmount">1 250 ₽</div>
     </div>
-
-    <div class="card" style="margin-top:16px;text-align:center">
-      <div class="muted" style="font-size:13px">Баланс</div>
-      <div class="mono" style="font-size:38px;font-weight:800;letter-spacing:-.03em;margin:6px 0 2px" id="balBig">0 ₽</div>
-      <div class="row" style="border-bottom:0;justify-content:center;gap:8px;padding-top:0">
-        <span class="k">Подключено устройств</span>
-        <span class="v mono" id="devCount">0 / 2</span>
-      </div>
+    <div class="actions">
+      <button class="btn" type="button" data-open="setupModal">Настроить VPN</button>
+      <button class="btn btn-accent" type="button" data-open="payModal">Оплатить подписку</button>
     </div>
+  </div>
+</main>
 
-    <button class="btn" data-nav="buy" style="margin-bottom:10px">Оплатить подписку</button>
-    <button class="btn btn-ghost" data-nav="setup">Настроить VPN</button>
+<button class="profile-btn" type="button" data-open="profileModal" aria-label="Профиль" id="profileBtn">
+  <svg id="profileIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <circle cx="12" cy="8" r="4"></circle>
+    <path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"></path>
+  </svg>
+</button>
 
-    <button class="btn btn-ghost support-wide" data-nav="support">🛟 Поддержка</button>
-
-    <div class="notify" id="userInfo">Загрузка…</div>
-  </section>
-
-  <!-- ЭКРАН: настройка VPN -->
-  <section id="scr-setup" class="screen hidden">
-    <div class="topbar"><button class="back" data-nav="home" aria-label="Назад">←</button><h1>Настроить VPN</h1></div>
-    <div class="card">
-      <b style="font-size:16px">Подключение</b>
-      <p class="muted" style="font-size:14px;margin:6px 0 10px">Скоро здесь будут инструкции и конфигурация для iOS, Android, Windows, macOS и Linux.</p>
-      <div class="kv"><span>iOS</span><span>Android</span><span>Windows</span><span>macOS</span><span>Linux</span></div>
+<div class="modal-overlay" id="payModal" role="dialog" aria-modal="true" aria-label="Оплатить подписку">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">Выберите тариф</div>
+      <button class="modal-close" type="button" data-close aria-label="Закрыть">&times;</button>
     </div>
-    <button class="btn btn-ghost" data-nav="home">← Назад</button>
-  </section>
-
-  <!-- ЭКРАН: поддержка -->
-  <section id="scr-support" class="screen hidden">
-    <div class="topbar"><button class="back" data-nav="home" aria-label="Назад">←</button><h1>Поддержка</h1></div>
-    <div class="card">
-      <b style="font-size:16px">Служба поддержки</b>
-      <p class="muted" style="font-size:14px;margin:6px 0 12px">Напишите нам — поможем с подпиской, платежом и настройкой.</p>
-      <a class="btn" href="https://t.me/deepmintvpn_support" target="_blank" rel="noopener">Открыть чат в Telegram</a>
+    <div class="plans" id="plans">
+      <button class="plan" type="button" data-days="trial" data-price="0 ₽" data-label="Пробная">
+        <span><span class="plan-name">Пробная</span><br><span class="plan-sub">48 часов</span></span>
+        <span class="plan-price">0 ₽</span>
+      </button>
+      <button class="plan" type="button" data-days="30" data-price="199 ₽" data-label="30 дней">
+        <span><span class="plan-name">30 дней</span></span>
+        <span class="plan-price">199 ₽</span>
+      </button>
+      <button class="plan" type="button" data-days="90" data-price="549 ₽" data-label="90 дней">
+        <span><span class="plan-name">90 дней</span></span>
+        <span class="plan-price">549 ₽</span>
+      </button>
+      <button class="plan" type="button" data-days="180" data-price="999 ₽" data-label="180 дней">
+        <span><span class="plan-name">180 дней</span></span>
+        <span class="plan-price">999 ₽</span>
+      </button>
+      <button class="plan" type="button" data-days="360" data-price="1799 ₽" data-label="360 дней">
+        <span><span class="plan-name">360 дней</span></span>
+        <span class="plan-price">1 799 ₽</span>
+      </button>
     </div>
-    <button class="btn btn-ghost" data-nav="home">← Назад</button>
-  </section>
+    <button class="btn btn-accent" type="button" id="payBtn" style="width:100%" disabled>Оплатить</button>
+  </div>
+</div>
 
-  <!-- ЭКРАН: тарифы -->
-  <section id="scr-buy" class="screen hidden">
-    <div class="topbar"><button class="back" data-nav="home" aria-label="Назад">←</button><h1>Купить подписку</h1></div>
-
-    <div class="plan" style="border-color:var(--good)">
-      <div class="plan-head"><span class="plan-name">🎁 Пробная</span><span class="plan-price">0 ₽</span></div>
-      <div class="plan-per">48 часов · без привязки карты</div>
-      <ul><li>2 устройства</li></ul>
-      <div class="spacer"></div>
-      <button class="btn" data-trial>Активировать пробный</button>
+<div class="modal-overlay" id="setupModal" role="dialog" aria-modal="true" aria-label="Настроить VPN">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">Как настроить VPN</div>
+      <button class="modal-close" type="button" data-close aria-label="Закрыть">&times;</button>
     </div>
-
-    <div class="plan">
-      <div class="plan-head"><span class="plan-name">30 дней</span><span class="plan-price">199 ₽</span></div>
-      <div class="plan-per">≈ 6.6 ₽/день</div>
-      <ul><li>2 устройства включены</li><li>Доп. устройство — 1.39 ₽/день</li></ul>
-      <div class="spacer"></div>
-      <button class="btn btn-ghost" data-buy="30">Купить за 199 ₽</button>
+    <div class="steps">
+      <div class="step"><span class="step-num">1</span><span class="step-text">Выберите тариф или пробную версию — <a href="#" id="toPlans">открыть тарифы</a></span></div>
+      <div class="step"><span class="step-num">2</span><span class="step-text">Скачайте приложение WireGuard или OpenVPN</span></div>
+      <div class="step"><span class="step-num">3</span><span class="step-text">Получите ключ доступа в боте <a href="https://t.me/deepmintvpn_bot" target="_blank" rel="noopener">@deepmintvpn_bot</a></span></div>
+      <div class="step"><span class="step-num">4</span><span class="step-text">Вставьте ключ в приложение — готово</span></div>
     </div>
+    <button class="btn" type="button" data-close style="width:100%">Понятно</button>
+  </div>
+</div>
 
-    <div class="plan">
-      <div class="plan-head"><span class="plan-name">90 дней</span><span class="plan-price">549 ₽</span></div>
-      <div class="plan-per">≈ 6.1 ₽/день</div>
-      <ul><li>2 устройства включены</li><li>Доп. устройство — 1.39 ₽/день</li></ul>
-      <div class="spacer"></div>
-      <button class="btn btn-ghost" data-buy="90">Купить за 549 ₽</button>
+<div class="modal-overlay profile-modal" id="profileModal" role="dialog" aria-modal="true" aria-label="Профиль">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">Профиль</div>
+      <button class="modal-close" type="button" data-close aria-label="Закрыть">&times;</button>
     </div>
-
-    <div class="plan">
-      <div class="plan-head"><span class="plan-name">180 дней</span><span class="plan-price">999 ₽</span></div>
-      <div class="plan-per">≈ 5.6 ₽/день</div>
-      <ul><li>2 устройства включены</li><li>Доп. устройство — 1.39 ₽/день</li></ul>
-      <div class="spacer"></div>
-      <button class="btn btn-ghost" data-buy="180">Купить за 999 ₽</button>
+    <div class="tg-avatar" id="profileAvatarBig">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="8" r="4"></circle>
+        <path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"></path>
+      </svg>
     </div>
-
-    <div class="plan" style="border-color:var(--acc)">
-      <div class="plan-head"><span class="plan-name">360 дней</span><span class="plan-price">1799 ₽</span></div>
-      <div class="plan-per">≈ 5 ₽/день — выгоднее всего</div>
-      <ul><li>2 устройства включены</li><li>Доп. устройство — 1.39 ₽/день</li></ul>
-      <div class="spacer"></div>
-      <button class="btn" data-buy="360">Купить за 1799 ₽</button>
+    <div class="profile-name" id="profileName">—</div>
+    <div class="profile-login" id="profileLogin">вход через Telegram</div>
+    <div class="profile-balance-box">
+      <span class="profile-balance-label">Баланс</span>
+      <span class="profile-balance-value" id="profileBalance">1 250 ₽</span>
     </div>
-    <p class="demo-note">Демо: оплата не проводится. Кнопки показывают статус, данные хранятся только на этом устройстве.</p>
-  </section>
+    <button class="btn btn-danger" type="button" id="logoutBtn">Выйти</button>
+  </div>
+</div>
 
-  <!-- ЭКРАН: баланс -->
-  <section id="scr-balance" class="screen hidden">
-    <div class="topbar"><button class="back" data-nav="home" aria-label="Назад">←</button><h1>Баланс</h1></div>
-    <div class="card">
-      <div class="muted" style="font-size:13px">Текущий баланс</div>
-      <div class="mono" style="font-size:34px;font-weight:800;letter-spacing:-.03em;margin:4px 0 12px" id="balanceBig">0 ₽</div>
-      <button class="btn" data-topup>💳 Пополнить баланс</button>
-      <p class="demo-note">Пополнение пока не работает — скоро карта/СБП.</p>
+<div class="modal-overlay" id="emailModal" role="dialog" aria-modal="true" aria-label="Войти по почте">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">Войти по почте</div>
+      <button class="modal-close" type="button" data-close aria-label="Закрыть">&times;</button>
     </div>
-  </section>
+    <label class="field-label" for="emailInput">Почта</label>
+    <input class="field-input" id="emailInput" type="email" placeholder="you@example.com" autocomplete="email" inputmode="email">
+    <div class="field-error" id="emailError"></div>
+    <button class="btn btn-accent auth-btn" type="button" id="emailLoginBtn">Войти</button>
+    <div class="field-hint">Демо-вход: письмо не отправляется</div>
+  </div>
+</div>
 
-  <!-- ЭКРАН: пригласить друзей -->
-  <section id="scr-invite" class="screen hidden">
-    <div class="topbar"><button class="back" data-nav="home" aria-label="Назад">←</button><h1>Пригласить друзей</h1></div>
-    <div class="card">
-      <b style="font-size:16px">👥 Заработать с deepmint.vpn</b>
-      <p class="muted" style="font-size:14px;margin:6px 0 12px">Приглашай друзей и получай <b style="color:var(--acc)">20%</b> с их оплат.</p>
-      <div class="row"><span class="k">Друзей приглашено</span><span class="v mono">0</span></div>
-      <div class="row"><span class="k">Активировали пробный</span><span class="v mono">0</span></div>
-      <div class="row"><span class="k">Заработано с рефералов</span><span class="v mono">0 ₽</span></div>
-      <p class="k" style="margin:14px 0 6px;font-size:13px">🔗 Ваша реферальная ссылка:</p>
-      <div class="link-wrap" id="refLink">https://t.me/deepmintvpn_bot?start=…</div>
-      <button class="btn btn-ghost" data-copy>Копировать ссылку</button>
+<div class="toast" id="toast"></div>
+
+<div class="auth-screen" id="authScreen">
+  <div class="auth-card">
+    <div class="auth-title">deepmint.vpn</div>
+    <div class="auth-sub" id="authSub">Войдите через Telegram</div>
+    <div class="auth-methods">
+      <a class="btn btn-accent auth-btn" href="https://t.me/deepmintvpn_bot" target="_blank" rel="noopener" id="tgOpenBtn" style="text-decoration:none">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M22 2 11 13"></path>
+          <path d="M22 2 15 22l-4-9-9-4z"></path>
+        </svg>
+        Открыть в Telegram
+      </a>
+      <div class="sep"><span class="sep-line"></span><span class="sep-text">или</span><span class="sep-line"></span></div>
+      <button class="btn auth-btn" type="button" data-open="emailModal">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+          <path d="m22 7-10 5L2 7"></path>
+        </svg>
+        Войти по почте
+      </button>
+      <div class="tg-note">Вы уже в Telegram? Приложение определит профиль автоматически — просто откройте его через бота.</div>
     </div>
-  </section>
-
-  <!-- ЭКРАН: документы -->
-  <section id="scr-docs" class="screen hidden">
-    <div class="topbar"><button class="back" data-nav="home" aria-label="Назад">←</button><h1>Документы</h1></div>
-    <a class="doc-item" href="https://telegra.ph/Politika-konfidencialnosti--deepmint-vpn-10-27" target="_blank" rel="noopener">Политика конфиденциальности</a>
-    <a class="doc-item" href="https://telegra.ph/Polzovatelskoe-soglashenie--deepmint-vpn-10-27" target="_blank" rel="noopener">Условия использования</a>
-    <a class="doc-item" href="https://telegra.ph/Usloviya-vozvrata--deepmint-vpn-10-27" target="_blank" rel="noopener">Условия возврата</a>
-    <a class="doc-item" href="https://telegra.ph/Politika-bota--deepmint-vpn-10-27" target="_blank" rel="noopener">Политика бота</a>
-    <button class="btn btn-ghost" style="margin-top:14px" data-nav="home">← Назад в меню</button>
-  </section>
-
-  <div class="footer">deepmint.vpn · демо-приложение</div>
+  </div>
 </div>
 
 <script>
 (function(){
-  "use strict";
-  var tg = window.Telegram && window.Telegram.WebApp;
-  if (tg) {
-    tg.ready();
-    tg.expand();
-    try { tg.setHeaderColor("#0d0f11"); tg.setBackgroundColor("#0d0f11"); } catch(e){}
-  }
-  var $ = function(s){ return document.querySelector(s); };
-  var $$ = function(s){ return Array.prototype.slice.call(document.querySelectorAll(s)); };
-  var screens = $$(".screen");
-  function nav(name){
-    screens.forEach(function(s){
-      var show = s.id === ("scr-" + name);
-      s.classList.toggle("hidden", !show);
-      window.scrollTo(0, 0);
-    });
-  }
+  var TG=null;
+  try{ TG=window.Telegram && window.Telegram.WebApp; }catch(e){}
+  if(TG){ try{ TG.ready(); TG.expand(); }catch(e){} }
 
-  var state = { balance: 0, trialActive: false, plan: null };
-  try {
-    var saved = JSON.parse(localStorage.getItem("deepmint-app") || "null");
-    if (saved) state = Object.assign(state, saved);
-  } catch(e){}
-  function persist(){ try{ localStorage.setItem("deepmint-app", JSON.stringify(state)); }catch(e){} }
+  var toast=document.getElementById('toast');
+  var toastTimer=null;
+  var session=null;
+  try{ session=JSON.parse(localStorage.getItem('deepmint_session')||'null'); }catch(e){ session=null; }
 
-  function storeBalance(){
-    var big = $("#balBig"), menu = $("#balanceBig"), dev = $("#devCount");
-    var txt = state.balance + " ₽";
-    if (big) big.textContent = txt;
-    if (menu) menu.textContent = txt;
-    if (dev) dev.textContent = (state.devices || 0) + " / 2";
+  function saveSession(s){ session=s; try{ localStorage.setItem('deepmint_session',JSON.stringify(s)); }catch(e){} }
+  function clearSession(){ session=null; try{ localStorage.removeItem('deepmint_session'); }catch(e){} }
+
+  function openModal(el){
+    document.querySelectorAll('.modal-overlay.open').forEach(function(o){o.classList.remove('open')});
+    el.classList.add('open');
+  }
+  function closeModals(){ document.querySelectorAll('.modal-overlay.open').forEach(function(o){o.classList.remove('open')}); }
+  function showToast(html){
+    toast.innerHTML=html;
+    toast.classList.add('show');
+    if(toastTimer)clearTimeout(toastTimer);
+    toastTimer=setTimeout(function(){toast.classList.remove('show')},6000);
   }
 
-  // telegram initData: user/first_name, start_param
-  var user = null, startParam = "";
-  try {
-    var initData = tg ? tg.initDataUnsafe || {} : {};
-    user = initData.user || null;
-    startParam = initData.start_param || "";
-  } catch(e){}
-  var uinfo = $("#userInfo");
-  if (uinfo) {
-    if (user) {
-      var name = [user.first_name, user.last_name].filter(Boolean).join(" ");
-      var ref = startParam ? " · пришёл по ссылке @" + startParam : "";
-      uinfo.innerHTML = "👋 <b>" + escapeHtml(name) + "</b>" + escapeHtml(ref);
+  function tgUser(){
+    try{ return TG && TG.initDataUnsafe && TG.initDataUnsafe.user; }catch(e){ return null; }
+  }
+
+  function displayName(u){
+    if(!u) return null;
+    var name=[u.first_name,u.last_name].filter(Boolean).join(' ');
+    return name || u.username || String(u.id);
+  }
+
+  function applySession(){
+    var auth=document.getElementById('authScreen');
+    var inTG = !!tgUser();
+    var logged = inTG || (session && session.method==='email');
+    auth.classList.toggle('hidden',!!logged);
+    if(inTG){
+      var u=tgUser();
+      var name=displayName(u);
+      var loginEl=document.getElementById('profileLogin');
+      var nameEl=document.getElementById('profileName');
+      nameEl.textContent=name;
+      loginEl.textContent=u.username ? '@'+u.username : ('Telegram ID '+u.id);
+      if(u.photo_url){
+        document.getElementById('profileAvatarBig').innerHTML='<img src="'+u.photo_url+'" alt="">';
+        document.getElementById('profileBtn').innerHTML='<img src="'+u.photo_url+'" alt="">';
+      }
+    } else if(session && session.method==='email'){
+      document.getElementById('profileName').textContent=session.email||'пользователь';
+      document.getElementById('profileLogin').textContent='вход по почте';
     } else {
-      uinfo.innerHTML = "👋 Привет! Это демо-открытие вне Telegram. Внутри Telegram будет виден ваш профиль и реферальная ссылка.";
+      document.getElementById('profileName').textContent='—';
+      document.getElementById('profileLogin').textContent='вход через Telegram';
     }
   }
 
-  function escapeHtml(s){
-    return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){
-      return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
-    });
-  }
-
-  var refLink = $("#refLink");
-  function updateRef(){
-    if (!refLink) return;
-    var id = user ? user.id : (startParam || "your_id");
-    refLink.textContent = "https://t.me/deepmintvpn_bot?start=" + id;
-  }
-  updateRef();
-
-  // навигация
-  $$("[data-nav]").forEach(function(b){
-    b.addEventListener("click", function(){ nav(b.dataset.nav); });
-  });
-
-  // копирование ссылки
-  $("#invite") && null;
-  var copyBtn = $("[data-copy]");
-  if (copyBtn) {
-    copyBtn.addEventListener("click", function(){
-      var text = refLink ? refLink.textContent : "";
-      var done = false;
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(function(){ done = true; });
-      }
-      copyBtn.textContent = done ? "Скопировано ✓" : "Ссылка скопирована ✓";
-      setTimeout(function(){ copyBtn.textContent = "Копировать ссылку"; }, 1600);
-    });
-  }
-
-  // кнопки покупки
-  $$("[data-buy]").forEach(function(b){
-    b.addEventListener("click", function(){
-      var name = b.dataset.buy;
-      b.textContent = "✕ Оплата пока недоступна";
-      b.classList.add("btn-danger");
-      setTimeout(function(){
-        b.textContent = "Купить за " + priceOf(name) + " ₽";
-        b.classList.remove("btn-danger");
-      }, 2200);
-      b.setAttribute("disabled", "disabled");
-      setTimeout(function(){ b.removeAttribute("disabled"); }, 2200);
+  document.querySelectorAll('[data-open]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var el=document.getElementById(btn.getAttribute('data-open'));
+      if(el)openModal(el);
     });
   });
+  document.querySelectorAll('[data-close]').forEach(function(btn){ btn.addEventListener('click',closeModals); });
+  document.querySelectorAll('.modal-overlay').forEach(function(ov){
+    ov.addEventListener('click',function(e){ if(e.target===ov)closeModals(); });
+  });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape')closeModals(); });
 
-  var PRICES = { "30":199, "90":549, "180":999, "360":1799 };
-  function priceOf(k){ return PRICES[k] || 0; }
-
-  // пробная подписка
-  var trialBtn = $("[data-trial]");
-  if (trialBtn) {
-    trialBtn.addEventListener("click", function(){
-      if (!state.trialActive) {
-        state.trialActive = true;
-        state.trialUntil = Date.now() + 48*60*60*1000;
-        persist();
-      }
-      trialBtn.textContent = "Пробный активирован на 48 часов ✓";
-      setTimeout(function(){ trialBtn.textContent = "Активировать пробный"; }, 4000);
+  var plans=document.querySelectorAll('.plan');
+  var payBtn=document.getElementById('payBtn');
+  var selected=null;
+  plans.forEach(function(plan){
+    plan.addEventListener('click',function(){
+      plans.forEach(function(p){p.classList.remove('selected')});
+      plan.classList.add('selected');
+      selected=plan;
+      payBtn.disabled=false;
     });
-  }
+  });
+  payBtn.addEventListener('click',function(){
+    if(!selected)return;
+    if(selected.getAttribute('data-days')==='trial'){
+      showToast('Пробная подписка активируется в боте: <a href="https://t.me/deepmintvpn_bot" target="_blank" rel="noopener">@deepmintvpn_bot</a>');
+    }else{
+      showToast('Оплата '+selected.getAttribute('data-label')+' — '+selected.getAttribute('data-price')+'. Переведите сумму боту: <a href="https://t.me/deepmintvpn_bot" target="_blank" rel="noopener">@deepmintvpn_bot</a>');
+    }
+    closeModals();
+  });
+  document.getElementById('toPlans').addEventListener('click',function(e){
+    e.preventDefault();
+    openModal(document.getElementById('payModal'));
+  });
 
-  // пополнение
-  var topup = $("[data-topup]");
-  if (topup) {
-    topup.addEventListener("click", function(){
-      topup.textContent = "Пополнение пока не работает";
-      setTimeout(function(){ topup.textContent = "💳 Пополнить баланс"; }, 2000);
-    });
+  var emailInput=document.getElementById('emailInput');
+  var emailError=document.getElementById('emailError');
+  function validateEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+  function loginByEmail(){
+    closeModals();
+    var v=emailInput.value.trim();
+    if(!validateEmail(v)){ emailError.textContent='Введите корректную почту'; return; }
+    emailError.textContent='';
+    saveSession({method:'email',email:v});
+    applySession();
+    showToast('Вы вошли как '+v);
+    emailInput.value='';
   }
+  document.getElementById('emailLoginBtn').addEventListener('click',loginByEmail);
+  emailInput.addEventListener('keydown',function(e){ if(e.key==='Enter')loginByEmail(); });
 
-  storeBalance();
-  nav("home");
+  document.getElementById('logoutBtn').addEventListener('click',function(){
+    closeModals();
+    clearSession();
+    applySession();
+    showToast('Вы вышли из аккаунта');
+  });
+
+  applySession();
 })();
 </script>
 </body>
