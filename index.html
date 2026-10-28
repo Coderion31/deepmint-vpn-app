@@ -3573,6 +3573,26 @@ main{min-height:100vh;min-height:100dvh;background:#101010;color:#fff;display:fl
 .sep-text{font-family:'SF Pro Rounded',sans-serif;font-size:12px;font-weight:600;color:#6e6e6e}
 .tg-note{font-family:'SF Pro Rounded',sans-serif;font-size:12px;font-weight:600;color:#6e6e6e;margin-top:16px;line-height:1.5}
 .hidden{display:none!important}
+.setup-screen{position:fixed;inset:0;z-index:65;background:#101010;overflow-y:auto;padding:1.2rem;padding-bottom:calc(2rem + env(safe-area-inset-bottom))}
+.setup-inner{max-width:560px;margin:0 auto;padding-top:1rem}
+.setup-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem}
+.setup-back{background:#202020;border:none;color:#fff;width:36px;height:36px;border-radius:50%;font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background-color .15s ease}
+.setup-back:hover{background:#2a2a2a}
+.setup-title{font-family:'SF Pro Rounded',sans-serif;font-size:20px;font-weight:600;color:#fff}
+.device-card{display:flex;align-items:center;gap:14px;background:#181818;border:1px solid #2a2a2a;border-radius:18px;padding:18px;margin-bottom:1.2rem}
+.device-icon{flex:none;width:52px;height:52px;border-radius:14px;background:#202020;color:#0084ff;display:flex;align-items:center;justify-content:center}
+.device-name{font-family:'SF Pro Rounded',sans-serif;font-size:17px;font-weight:600;color:#fff}
+.device-detect{font-family:'SF Pro Rounded',sans-serif;font-size:12px;font-weight:600;color:#8e8e8e;margin-top:2px}
+.os-switch{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1.2rem}
+.os-chip{font-family:'SF Pro Rounded',sans-serif;font-size:13px;font-weight:600;color:#c9c9c9;background:#202020;border:1px solid #2e2e2e;border-radius:9999px;padding:8px 14px;cursor:pointer;transition:background-color .15s ease,color .15s ease,border-color .15s ease}
+.os-chip.active{background:#1c2836;border-color:#0084ff;color:#fff}
+.os-chip:hover{background:#282828}
+.setup-steps{display:flex;flex-direction:column;gap:12px}
+.step{display:flex;gap:12px;align-items:flex-start;text-align:left;background:#181818;border:1px solid #2a2a2a;border-radius:14px;padding:14px}
+.step-num{flex:none;width:26px;height:26px;border-radius:50%;background:#202020;color:#0084ff;font-family:'SF Pro Rounded',sans-serif;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.step-title{font-family:'SF Pro Rounded',sans-serif;font-size:15px;font-weight:600;color:#fff}
+.step-desc{font-family:'SF Pro Rounded',sans-serif;font-size:13px;font-weight:600;color:#a9a9a9;margin-top:4px;line-height:1.45}
+.step-desc a{color:#0084ff;text-decoration:none}
 </style>
 </head>
 <body>
@@ -3589,10 +3609,10 @@ main{min-height:100vh;min-height:100dvh;background:#101010;color:#fff;display:fl
     </a>
     <div class="balance">
       <div class="balance-label">Баланс</div>
-      <div class="balance-amount" id="balanceAmount">1 250 ₽</div>
+      <div class="balance-amount" id="balanceAmount">0 ₽</div>
     </div>
     <div class="actions">
-      <button class="btn" type="button" data-open="setupModal">Настроить VPN</button>
+      <button class="btn" type="button" data-open="setupScreen">Настроить VPN</button>
       <button class="btn btn-accent" type="button" data-open="payModal">Оплатить подписку</button>
     </div>
   </div>
@@ -3637,22 +3657,6 @@ main{min-height:100vh;min-height:100dvh;background:#101010;color:#fff;display:fl
   </div>
 </div>
 
-<div class="modal-overlay" id="setupModal" role="dialog" aria-modal="true" aria-label="Настроить VPN">
-  <div class="modal">
-    <div class="modal-head">
-      <div class="modal-title">Как настроить VPN</div>
-      <button class="modal-close" type="button" data-close aria-label="Закрыть">&times;</button>
-    </div>
-    <div class="steps">
-      <div class="step"><span class="step-num">1</span><span class="step-text">Выберите тариф или пробную версию — <a href="#" id="toPlans">открыть тарифы</a></span></div>
-      <div class="step"><span class="step-num">2</span><span class="step-text">Скачайте приложение WireGuard или OpenVPN</span></div>
-      <div class="step"><span class="step-num">3</span><span class="step-text">Получите ключ доступа в боте <a href="https://t.me/deepmintvpn_bot" target="_blank" rel="noopener">@deepmintvpn_bot</a></span></div>
-      <div class="step"><span class="step-num">4</span><span class="step-text">Вставьте ключ в приложение — готово</span></div>
-    </div>
-    <button class="btn" type="button" data-close style="width:100%">Понятно</button>
-  </div>
-</div>
-
 <div class="modal-overlay profile-modal" id="profileModal" role="dialog" aria-modal="true" aria-label="Профиль">
   <div class="modal">
     <div class="modal-head">
@@ -3669,7 +3673,7 @@ main{min-height:100vh;min-height:100dvh;background:#101010;color:#fff;display:fl
     <div class="profile-login" id="profileLogin">вход через Telegram</div>
     <div class="profile-balance-box">
       <span class="profile-balance-label">Баланс</span>
-      <span class="profile-balance-value" id="profileBalance">1 250 ₽</span>
+      <span class="profile-balance-value" id="profileBalance">0 ₽</span>
     </div>
     <button class="btn btn-danger" type="button" id="logoutBtn">Выйти</button>
   </div>
@@ -3690,6 +3694,33 @@ main{min-height:100vh;min-height:100dvh;background:#101010;color:#fff;display:fl
 </div>
 
 <div class="toast" id="toast"></div>
+
+<div class="setup-screen hidden" id="setupScreen">
+  <div class="setup-inner">
+    <div class="setup-head">
+      <button class="setup-back" type="button" id="setupBack" aria-label="Назад">&larr;</button>
+      <div class="setup-title">Настройка VPN</div>
+      <div style="width:36px"></div>
+    </div>
+    <div class="device-card">
+      <div class="device-icon" id="deviceIcon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" id="deviceIconSvg"><rect x="7" y="2" width="10" height="20" rx="2"></rect></svg>
+      </div>
+      <div>
+        <div class="device-name" id="deviceName">Ваше устройство</div>
+        <div class="device-detect" id="deviceDetect">определено автоматически</div>
+      </div>
+    </div>
+    <div class="os-switch" id="osSwitch">
+      <button class="os-chip" type="button" data-os="android">Android</button>
+      <button class="os-chip" type="button" data-os="ios">iPhone / iPad</button>
+      <button class="os-chip" type="button" data-os="windows">Windows</button>
+      <button class="os-chip" type="button" data-os="macos">macOS</button>
+      <button class="os-chip" type="button" data-os="linux">Linux</button>
+    </div>
+    <div class="setup-steps" id="setupSteps"></div>
+  </div>
+</div>
 
 <div class="auth-screen" id="authScreen">
   <div class="auth-card">
@@ -3779,6 +3810,10 @@ main{min-height:100vh;min-height:100dvh;background:#101010;color:#fff;display:fl
 
   document.querySelectorAll('[data-open]').forEach(function(btn){
     btn.addEventListener('click',function(){
+      if(btn.getAttribute('data-open')==='setupScreen'){
+        openSetup();
+        return;
+      }
       var el=document.getElementById(btn.getAttribute('data-open'));
       if(el)openModal(el);
     });
@@ -3809,11 +3844,6 @@ main{min-height:100vh;min-height:100dvh;background:#101010;color:#fff;display:fl
     }
     closeModals();
   });
-  document.getElementById('toPlans').addEventListener('click',function(e){
-    e.preventDefault();
-    openModal(document.getElementById('payModal'));
-  });
-
   var emailInput=document.getElementById('emailInput');
   var emailError=document.getElementById('emailError');
   function validateEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
@@ -3835,6 +3865,79 @@ main{min-height:100vh;min-height:100dvh;background:#101010;color:#fff;display:fl
     clearSession();
     applySession();
     showToast('Вы вышли из аккаунта');
+  });
+
+  var setupScreen=document.getElementById('setupScreen');
+  var setupSteps=document.getElementById('setupSteps');
+  var osData={
+    android:{name:'Android',icon:'<rect x="7" y="2" width="10" height="20" rx="2"></rect>',steps:[
+      ['Скачайте приложение','Установите <a href="https://play.google.com/store/apps/details?id=com.wireguard.android" target="_blank" rel="noopener">WireGuard</a> или <a href="https://play.google.com/store/apps/details?id=net.openvpn.openvpn" target="_blank" rel="noopener">OpenVPN</a> из Google Play.'],
+      ['Получите ключ','Откройте бота <a href="https://t.me/deepmintvpn_bot" target="_blank" rel="noopener">@deepmintvpn_bot</a>, выберите тариф — ключ придёт в чат.'],
+      ['Импортируйте ключ','Скопируйте ключ и добавьте его в приложение (значок «+» → Импорт из буфера).'],
+      ['Подключитесь','Нажмите переключатель — VPN включён. Готово!']
+    ]},
+    ios:{name:'iPhone / iPad',icon:'<rect x="5" y="2" width="14" height="20" rx="2"></rect><line x1="10" y1="18" x2="14" y2="18"></line>',steps:[
+      ['Скачайте приложение','Установите <a href="https://apps.apple.com/app/wireguard/id1441195209" target="_blank" rel="noopener">WireGuard</a> или <a href="https://apps.apple.com/app/openvpn-connect/id590379981" target="_blank" rel="noopener">OpenVPN Connect</a> из App Store.'],
+      ['Получите ключ','Откройте бота <a href="https://t.me/deepmintvpn_bot" target="_blank" rel="noopener">@deepmintvpn_bot</a>, выберите тариф — ключ придёт в чат.'],
+      ['Импортируйте ключ','Скопируйте ключ, откройте WireGuard и нажмите «+» → «Создать из буфера обмена».'],
+      ['Подключитесь','Активируйте туннель. При первом запуске разрешите добавить VPN-конфигурацию. Готово!']
+    ]},
+    windows:{name:'Windows',icon:'<rect x="2" y="4" width="20" height="14" rx="2"></rect><line x1="2" y1="9" x2="22" y2="9"></line>',steps:[
+      ['Скачайте приложение','Установите <a href="https://www.wireguard.com/install/" target="_blank" rel="noopener">WireGuard для Windows</a> с официального сайта.'],
+      ['Получите ключ','Откройте бота <a href="https://t.me/deepmintvpn_bot" target="_blank" rel="noopener">@deepmintvpn_bot</a>, выберите тариф — ключ придёт в чат.'],
+      ['Импортируйте ключ','Нажмите «Импортировать туннели из файла» или вставьте конфигурацию вручную.'],
+      ['Подключитесь','Нажмите «Активировать» — VPN включён. Готово!']
+    ]},
+    macos:{name:'macOS',icon:'<rect x="4" y="4" width="16" height="12" rx="2"></rect><path d="M12 16v3"></path><path d="M8 22h8"></path>',steps:[
+      ['Скачайте приложение','Установите <a href="https://apps.apple.com/app/wireguard/id1451685025" target="_blank" rel="noopener">WireGuard из App Store</a> или с wireguard.com.'],
+      ['Получите ключ','Откройте бота <a href="https://t.me/deepmintvpn_bot" target="_blank" rel="noopener">@deepmintvpn_bot</a>, выберите тариф — ключ придёт в чат.'],
+      ['Импортируйте ключ','Нажмите «Импорт туннелей из файла» или вставьте конфигурацию.'],
+      ['Подключитесь','Включите туннель. При запросе разрешите доступ — Готово!']
+    ]},
+    linux:{name:'Linux',icon:'<path d="M3 12h18"></path><path d="M12 3v18"></path>',steps:[
+      ['Установите WireGuard','Выполните: <b>sudo apt install wireguard</b> (Debian/Ubuntu) или из репозитория вашего дистрибутива.'],
+      ['Получите ключ','Откройте бота <a href="https://t.me/deepmintvpn_bot" target="_blank" rel="noopener">@deepmintvpn_bot</a>, выберите тариф — ключ придёт в чат.'],
+      ['Добавьте конфиг','Сохраните ключ в /etc/wireguard/wg0.conf командой <b>sudo nano /etc/wireguard/wg0.conf</b>.'],
+      ['Подключитесь','Запустите <b>sudo wg-quick up wg0</b>. Готово!']
+    ]}
+  };
+  function detectOS(){
+    var ua=navigator.userAgent||'';
+    if(/Android/i.test(ua)) return 'android';
+    if(/iPhone|iPad|iPod/i.test(ua)) return 'ios';
+    if(/Windows/i.test(ua)) return 'windows';
+    if(/Macintosh|Mac OS X/i.test(ua)) return 'macos';
+    if(/Linux/i.test(ua)) return 'linux';
+    return 'windows';
+  }
+  var currentOS=detectOS();
+  function renderOS(os){
+    currentOS=os;
+    var d=osData[os];
+    document.getElementById('deviceName').textContent=d.name;
+    document.getElementById('deviceDetect').textContent=os===detectOS()?'определено автоматически':'выбрано вручную';
+    document.getElementById('deviceIconSvg').innerHTML=d.icon;
+    document.querySelectorAll('#osSwitch .os-chip').forEach(function(chip){
+      chip.classList.toggle('active',chip.getAttribute('data-os')===os);
+    });
+    var html='';
+    d.steps.forEach(function(s,i){
+      html+='<div class="step"><span class="step-num">'+(i+1)+'</span><div><div class="step-title">'+s[0]+'</div><div class="step-desc">'+s[1]+'</div></div></div>';
+    });
+    setupSteps.innerHTML=html;
+  }
+  document.querySelectorAll('#osSwitch .os-chip').forEach(function(chip){
+    chip.addEventListener('click',function(){ renderOS(chip.getAttribute('data-os')); });
+  });
+  document.getElementById('setupBack').addEventListener('click',function(){
+    setupScreen.classList.add('hidden');
+  });
+  function openSetup(){
+    renderOS(detectOS());
+    setupScreen.classList.remove('hidden');
+  }
+  document.querySelectorAll('[data-open="setupScreen"]').forEach(function(b){
+    b.addEventListener('click',openSetup);
   });
 
   applySession();
