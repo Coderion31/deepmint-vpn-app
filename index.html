@@ -3497,7 +3497,7 @@
 @font-face{font-family:'SF Pro Rounded';src:url('https://raw.githubusercontent.com/Coderion31/deepmint-vpn-app/main/spider-assets/SF-Pro-Rounded-Semibold.otf') format('opentype');font-weight:600;font-style:normal;font-display:swap}
 html,body{margin:0;padding:0;background-color:#101010}body{background-image:radial-gradient(circle, rgba(255,255,255,0.10) 1px, transparent 1px);background-size:24px 24px;background-position:12px 12px;background-attachment:fixed;position:relative;min-height:100%}html{min-height:100%}
 *{box-sizing:border-box}
-main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;padding-top:16vh;padding-bottom:calc(8rem + env(safe-area-inset-bottom));padding-left:1rem;padding-right:1rem;position:relative;overflow-x:hidden;font-family:'SF Pro Rounded',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;padding-top:16vh;padding-bottom:calc(8rem + env(safe-area-inset-bottom));padding-left:calc(72px + 1rem);padding-right:1rem;position:relative;overflow-x:hidden;font-family:'SF Pro Rounded',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 .dotgrid{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;user-select:none;z-index:0;background-image:radial-gradient(circle, rgba(255,255,255,0.10) 1px, transparent 1px);background-size:24px 24px;background-position:12px 12px}
 .hero{position:relative;width:100%;max-width:950px;display:flex;flex-direction:column;align-items:flex-start;text-align:left;z-index:2;padding-left:8%}
 .title{position:relative;min-height:52px;display:inline-flex;align-items:center;justify-content:center;text-align:center;letter-spacing:-.025em;color:#fff;line-height:1.15;font-family:'SF Pro Rounded',-apple-system,BlinkMacSystemFont,sans-serif;font-size:22px;font-weight:600;user-select:none;text-decoration:none}
@@ -3549,6 +3549,14 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
 .toast{position:fixed;left:50%;bottom:calc(28px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);background:#202020;border:1px solid #2a2a2a;color:#fff;font-family:'SF Pro Rounded',sans-serif;font-size:14px;font-weight:600;padding:12px 18px;border-radius:12px;opacity:0;pointer-events:none;transition:opacity .25s ease,transform .25s ease;z-index:60;max-width:90vw;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast a{color:#0084ff;text-decoration:none}
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:72px;background:#0d0d0d;border-right:1px solid #1f1f1f;display:flex;flex-direction:column;align-items:center;padding:18px 0;z-index:30}
+.side-logo{width:40px;height:40px;border-radius:12px;background:#181818;border:1px solid #2a2a2a;color:#0084ff;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-bottom:24px;transition:background-color .15s}
+.side-logo:hover{background:#202020}
+.side-nav{display:flex;flex-direction:column;gap:8px;flex:1}
+.side-item{width:44px;height:44px;border-radius:12px;background:transparent;border:none;color:#6e6e6e;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:color .15s,background-color .15s}
+.side-item:hover{color:#fff;background:#181818}
+.side-item.active{color:#0084ff;background:#0d1c26}
+.side-exit{margin-top:auto}
 .profile-btn{position:fixed;top:calc(16px + env(safe-area-inset-top));right:16px;z-index:40;width:40px;height:40px;border-radius:50%;background:#202020;border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background-color .15s ease,transform .15s ease;overflow:hidden;padding:0}
 .profile-btn:hover{background:#282828}
 .profile-btn:active{transform:scale(.95)}
@@ -3656,6 +3664,18 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
 <body>
 
 <main>
+  <aside class="sidebar" id="sidebar">
+    <button class="side-logo" type="button" data-open="homeModal" aria-label="deepmint" title="deepmint.vpn">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0084ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 3v6c0 5-3.5 9.5-8 11-4.5-1.5-8-6-8-11V5z"/></svg>
+    </button>
+    <nav class="side-nav">
+      <button class="side-item active" type="button" data-side="home" aria-label="Главная" title="Главная"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></button>
+      <button class="side-item" type="button" data-side="gift" aria-label="Бонусы" title="Бонусы"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"/></svg></button>
+      <button class="side-item" type="button" data-side="support" aria-label="Поддержка" title="Поддержка"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></button>
+      <button class="side-item" type="button" data-side="settings" aria-label="Настройки" title="Настройки"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+    </nav>
+    <button class="side-item side-exit" type="button" id="sideExit" aria-label="Выйти" title="Выйти"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
+  </aside>
   <div class="hero">
     <a href="#" class="title" title="deepmint.vpn">
       <span class="morph-track"><span class="morph-slot expanded"><span class="morph-inner">deepmint.vpn</span></span></span>
@@ -4229,6 +4249,32 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
   });
   document.querySelectorAll('[data-open="setupScreen"]').forEach(function(b){
     b.addEventListener('click',openSetup);
+  });
+
+  document.querySelectorAll('.side-item').forEach(function(item){
+    item.addEventListener('click',function(){
+      if(item.id==='sideExit'){
+        closeModals();
+        clearSession();
+        applySession();
+        showToast('Вы вышли из аккаунта');
+        return;
+      }
+      document.querySelectorAll('.side-item').forEach(function(i){i.classList.remove('active')});
+      item.classList.add('active');
+      var side=item.getAttribute('data-side');
+      if(side==='home'){
+        setupScreen.classList.add('hidden');
+        document.querySelectorAll('.modal-overlay.open').forEach(function(o){o.classList.remove('open')});
+        document.querySelector('.hero').scrollIntoView({behavior:'smooth',block:'start'});
+      }else if(side==='gift'){
+        showToast('Бонусы скоро появятся. Следите за новостями в канале <a href="https://t.me/deepmintvpn" target="_blank" rel="noopener">@deepmintvpn</a>');
+      }else if(side==='support'){
+        window.open('https://t.me/deepminthelp','_blank');
+      }else if(side==='settings'){
+        openModal(document.getElementById('profileModal'));
+      }
+    });
   });
 
   applySession();
