@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: deepmint-vpn-email
+    runtime: python
+    repo: https://github.com/Coderion31/deepmint-vpn-app
+    plan: free
+    region: frankfurt
+    buildCommand: pip install -r email-requirements.txt
+    startCommand: python email_server.py
+    healthCheckPath: /api/health
+    envVars:
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_APP_PASS
+        sync: false
+      - key: EMAIL_SERVER_PORT
+        value: "10000"
