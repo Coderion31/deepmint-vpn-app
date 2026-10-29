@@ -3528,14 +3528,14 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
 .btn[disabled]{opacity:.4;cursor:default;transform:none}
 .modal-overlay{position:fixed;inset:0;background:#101010;display:flex;align-items:center;justify-content:center;z-index:80;padding:1rem;opacity:0;pointer-events:none;transition:opacity .2s ease}
 .modal-overlay.open{opacity:1;pointer-events:auto}
-.modal{background:#181818;border:1px solid #2a2a2a;border-radius:20px;width:100%;max-width:400px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.5);transform:translateY(10px) scale(.98);transition:transform .2s ease}
+.modal{background:#181818;border:1px solid #2a2a2a;border-radius:28px;width:100%;max-width:400px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.5);transform:translateY(10px) scale(.98);transition:transform .2s ease}
 .modal-overlay.open .modal{transform:translateY(0) scale(1)}
 .modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
 .modal-title{font-family:'SF Pro Rounded',sans-serif;font-size:18px;font-weight:600;color:#fff}
 .modal-close{background:#202020;border:none;color:#fff;width:30px;height:30px;border-radius:50%;font-size:16px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background-color .15s ease}
 .modal-close:hover{background:#2a2a2a}
 .plans{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
-.plan{display:flex;align-items:center;justify-content:space-between;background:#202020;border:1px solid transparent;border-radius:14px;padding:12px 14px;cursor:pointer;transition:border-color .15s ease,background-color .15s ease;text-align:left;color:#fff;font:inherit}
+.plan{display:flex;align-items:center;justify-content:space-between;background:#202020;border:1px solid transparent;border-radius:20px;padding:12px 14px;cursor:pointer;transition:border-color .15s ease,background-color .15s ease;text-align:left;color:#fff;font:inherit}
 .plan:hover{background:#242424}
 .plan.selected{border-color:#dfe3e6;background:#1c2836}
 .plan-name{font-family:'SF Pro Rounded',sans-serif;font-size:15px;font-weight:600;color:#fff}
@@ -3546,7 +3546,7 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
 .step-num{flex:none;width:24px;height:24px;border-radius:50%;background:#202020;color:#dfe3e6;font-family:'SF Pro Rounded',sans-serif;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;margin-top:1px}
 .step-text{font-family:'SF Pro Rounded',sans-serif;font-size:14px;font-weight:600;color:#e5e5e5;line-height:1.45}
 .step-text a{color:#dfe3e6;text-decoration:none}
-.toast{position:fixed;left:50%;bottom:calc(28px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);background:#202020;border:1px solid #2a2a2a;color:#fff;font-family:'SF Pro Rounded',sans-serif;font-size:14px;font-weight:600;padding:12px 18px;border-radius:12px;opacity:0;pointer-events:none;transition:opacity .25s ease,transform .25s ease;z-index:90;max-width:90vw;text-align:center}
+.toast{position:fixed;left:50%;bottom:calc(28px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);background:#202020;border:1px solid #2a2a2a;color:#fff;font-family:'SF Pro Rounded',sans-serif;font-size:14px;font-weight:600;padding:12px 18px;border-radius:20px;opacity:0;pointer-events:none;transition:opacity .25s ease,transform .25s ease;z-index:90;max-width:90vw;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast a{color:#dfe3e6;text-decoration:none}
 .home-btn{position:fixed;top:16px;left:16px;z-index:40;width:44px;height:44px;border-radius:50%;background:#202020;border:1px solid #2e2e2e;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background-color .15s ease,transform .15s ease}
@@ -3572,7 +3572,7 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
 .profile-avatar img{width:100%;height:100%;object-fit:cover}
 .profile-name{font-family:'SF Pro Rounded',sans-serif;font-size:18px;font-weight:600;color:#fff;text-align:center;word-break:break-word}
 .profile-login{font-family:'SF Pro Rounded',sans-serif;font-size:13px;font-weight:600;color:#8e8e8e;text-align:center;margin-top:4px}
-.profile-balance-box{margin-top:18px;background:#202020;border-radius:14px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between}
+.profile-balance-box{margin-top:18px;background:#202020;border-radius:20px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between}
 .profile-balance-label{font-family:'SF Pro Rounded',sans-serif;font-size:13px;font-weight:600;color:#8e8e8e}
 .profile-balance-value{font-family:'SF Pro Rounded',sans-serif;font-size:16px;font-weight:600;color:#fff}
 .btn-danger{margin-top:14px;width:100%;background:#202020}
@@ -3614,8 +3614,8 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
 .setup-back{background:#202020;border:none;color:#fff;width:36px;height:36px;border-radius:50%;font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background-color .15s ease}
 .setup-back:hover{background:#2a2a2a}
 .setup-title{font-family:'SF Pro Rounded',sans-serif;font-size:20px;font-weight:600;color:#fff}
-.device-card{display:flex;align-items:center;gap:14px;background:#181818;border:1px solid #2a2a2a;border-radius:18px;padding:18px;margin-bottom:1.2rem}
-.device-icon{flex:none;width:52px;height:52px;border-radius:14px;background:#202020;color:#dfe3e6;display:flex;align-items:center;justify-content:center}
+.device-card{display:flex;align-items:center;gap:14px;background:#181818;border:1px solid #2a2a2a;border-radius:26px;padding:18px;margin-bottom:1.2rem}
+.device-icon{flex:none;width:52px;height:52px;border-radius:18px;background:#202020;color:#dfe3e6;display:flex;align-items:center;justify-content:center}
 .device-name{font-family:'SF Pro Rounded',sans-serif;font-size:17px;font-weight:600;color:#fff}
 .device-detect{font-family:'SF Pro Rounded',sans-serif;font-size:12px;font-weight:600;color:#8e8e8e;margin-top:2px}
 .os-switch{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1.2rem}
@@ -3623,7 +3623,7 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
 .os-chip.active{background:#1c2836;border-color:#dfe3e6;color:#fff}
 .os-chip:hover{background:#282828}
 .setup-steps{display:flex;flex-direction:column;gap:12px}
-.step{display:flex;gap:12px;align-items:flex-start;text-align:left;background:#181818;border:1px solid #2a2a2a;border-radius:14px;padding:14px}
+.step{display:flex;gap:12px;align-items:flex-start;text-align:left;background:#181818;border:1px solid #2a2a2a;border-radius:22px;padding:14px}
 .step-num{flex:none;width:26px;height:26px;border-radius:50%;background:#202020;color:#dfe3e6;font-family:'SF Pro Rounded',sans-serif;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;margin-top:1px}
 .step-title{font-family:'SF Pro Rounded',sans-serif;font-size:15px;font-weight:600;color:#fff}
 .step-desc{font-family:'SF Pro Rounded',sans-serif;font-size:13px;font-weight:600;color:#a9a9a9;margin-top:4px;line-height:1.45}
@@ -3703,24 +3703,6 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
           <div class="setting-row-sub">Напомнить за 3 дня до окончания</div>
         </div>
         <button class="toggle on" id="toggleExpire" type="button" aria-label="Конец подписки"></button>
-      </div>
-    </div>
-
-    <div class="setting-group">
-      <div class="setting-group-title">Подключение</div>
-      <div class="setting-row" id="rowAutoReconnect">
-        <div>
-          <div class="setting-row-label">Автоподключение</div>
-          <div class="setting-row-sub">При запуске устройства</div>
-        </div>
-        <button class="toggle" id="toggleAuto" type="button" aria-label="Автоподключение"></button>
-      </div>
-      <div class="setting-row">
-        <div>
-          <div class="setting-row-label">Протокол</div>
-          <div class="setting-row-sub" id="protocolValue">WireGuard</div>
-        </div>
-        <span style="color:#dfe3e6;font-size:20px;cursor:pointer" id="protocolArrow">›</span>
       </div>
     </div>
 
@@ -4095,10 +4077,6 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
     t.addEventListener('click',function(){
       t.classList.toggle('on');
     });
-  });
-  document.getElementById('protocolArrow').addEventListener('click',function(){
-    var p=document.getElementById('protocolValue');
-    p.textContent = p.textContent==='WireGuard' ? 'OpenVPN' : 'WireGuard';
   });
 
   applySession();
