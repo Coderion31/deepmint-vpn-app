@@ -3495,11 +3495,11 @@
 })();
 </script><style>
 @font-face{font-family:'SF Pro Rounded';src:url('https://raw.githubusercontent.com/Coderion31/deepmint-vpn-app/main/spider-assets/SF-Pro-Rounded-Semibold.otf') format('opentype');font-weight:600;font-style:normal;font-display:swap}
-html,body{margin:0;padding:0;background-color:#101010}body{position:relative;min-height:100%}html{min-height:100%}
+html,body{margin:0;padding:0;background-color:#101010}body{background-image:radial-gradient(circle, rgba(255,255,255,0.10) 1px, transparent 1px);background-size:24px 24px;background-position:12px 12px;background-attachment:fixed;position:relative;min-height:100%}html{min-height:100%}
 *{box-sizing:border-box}
-main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;padding-top:16vh;padding-bottom:calc(8rem + env(safe-area-inset-bottom));padding-left:calc(72px + 1rem);padding-right:1rem;position:relative;overflow-x:hidden;font-family:'SF Pro Rounded',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-.dotgrid{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;user-select:none;z-index:0}
-.hero{position:relative;width:100%;max-width:none;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;text-align:left;z-index:2;padding:40px 48px;margin-right:0;min-height:calc(100vh - 18vh);background:#121212;border:1px solid #1f1f1f;border-radius:28px;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:16vh;padding-bottom:calc(8rem + env(safe-area-inset-bottom));padding-left:1rem;padding-right:1rem;position:relative;overflow-x:hidden;font-family:'SF Pro Rounded',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+.dotgrid{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;user-select:none;z-index:0;background-image:radial-gradient(circle, rgba(255,255,255,0.10) 1px, transparent 1px);background-size:24px 24px;background-position:12px 12px}
+.hero{position:relative;width:100%;max-width:950px;display:flex;flex-direction:column;align-items:center;text-align:center;z-index:2}
 .title{position:relative;min-height:52px;display:inline-flex;align-items:center;justify-content:center;text-align:center;letter-spacing:-.025em;color:#fff;line-height:1.15;font-family:'SF Pro Rounded',-apple-system,BlinkMacSystemFont,sans-serif;font-size:22px;font-weight:600;user-select:none;text-decoration:none}
 @media(min-width:640px){.title{font-size:32px}}
 @media(min-width:768px){.title{font-size:40px}}
@@ -3507,10 +3507,10 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
 .morph-slot{display:inline-grid;grid-template-columns:0fr;min-width:0;max-width:0;opacity:0;overflow:hidden;white-space:nowrap;transition:grid-template-columns .32s cubic-bezier(.25,1,.5,1),max-width .32s cubic-bezier(.25,1,.5,1),opacity .24s cubic-bezier(.25,1,.5,1)}
 .morph-slot.expanded{opacity:1;grid-template-columns:1fr;max-width:1200px}
 .morph-inner{display:inline-block;min-width:0;overflow:hidden;white-space:nowrap;letter-spacing:-.01em}
-.balance{margin-top:28px;display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+.balance{margin-top:28px;display:flex;flex-direction:column;align-items:center;gap:6px}
 .balance-label{font-family:'SF Pro Rounded',sans-serif;font-size:14px;font-weight:600;color:#8e8e8e;letter-spacing:.02em}
 .balance-amount{font-family:'SF Pro Rounded',sans-serif;font-size:36px;font-weight:600;color:#fff;letter-spacing:-.02em;line-height:1.1}
-.banner{margin-top:18px;display:flex;align-items:center;justify-content:flex-start;gap:10px;width:100%;max-width:340px}
+.banner{margin-top:18px;display:flex;align-items:center;justify-content:center;gap:10px;width:100%;max-width:340px}
 .banner-item{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;font-family:'SF Pro Rounded',sans-serif;font-size:12.5px;font-weight:600;color:#c9c9c9;white-space:nowrap;background:#181818;border:1px solid #2a2a2a;border-radius:999px;padding:9px 12px}
 .banner-dot{width:1px;height:16px;background:#3a3a3a}
 .banner-item strong{color:#fff;font-weight:600}
@@ -3519,14 +3519,14 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
 .mini-card:hover{background:#282828}
 .mini-card:active{transform:scale(.97)}
 .mini-card a{color:#fff;text-decoration:none;display:flex;align-items:center;gap:7px}
-.actions{margin-top:26px;display:flex;flex-direction:column;justify-content:flex-start;gap:14px;width:100%;max-width:280px}
+.actions{margin-top:26px;display:flex;flex-direction:column;justify-content:center;gap:14px;width:100%;max-width:280px}
 .btn{font-family:'SF Pro Rounded',sans-serif;font-size:14px;font-weight:600;color:#fff;background:#202020;border:none;border-radius:9999px;padding:0 22px;height:46px;width:100%;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;transition:background-color .15s ease,transform .15s ease;user-select:none;-webkit-tap-highlight-color:transparent}
 .btn:hover{background:#282828}
 .btn:active{transform:scale(.97)}
 .btn-accent{background:#0084ff}
 .btn-accent:hover{background:#1a90ff}
 .btn[disabled]{opacity:.4;cursor:default;transform:none}
-.modal-overlay{position:fixed;inset:0;background:#101010;display:flex;align-items:center;justify-content:center;z-index:80;padding:1rem;opacity:0;pointer-events:none;transition:opacity .2s ease}
+.modal-overlay{position:fixed;inset:0;background:#101010;display:flex;align-items:center;justify-content:center;z-index:50;padding:1rem;opacity:0;pointer-events:none;transition:opacity .2s ease}
 .modal-overlay.open{opacity:1;pointer-events:auto}
 .modal{background:#181818;border:1px solid #2a2a2a;border-radius:20px;width:100%;max-width:400px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.5);transform:translateY(10px) scale(.98);transition:transform .2s ease}
 .modal-overlay.open .modal{transform:translateY(0) scale(1)}
@@ -3549,14 +3549,6 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
 .toast{position:fixed;left:50%;bottom:calc(28px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);background:#202020;border:1px solid #2a2a2a;color:#fff;font-family:'SF Pro Rounded',sans-serif;font-size:14px;font-weight:600;padding:12px 18px;border-radius:12px;opacity:0;pointer-events:none;transition:opacity .25s ease,transform .25s ease;z-index:60;max-width:90vw;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast a{color:#0084ff;text-decoration:none}
-.sidebar{position:fixed;top:0;left:0;bottom:0;width:72px;background:#0d0d0d;border-right:1px solid #1f1f1f;display:flex;flex-direction:column;align-items:center;padding:18px 0;z-index:30}
-.side-logo{width:40px;height:40px;border-radius:12px;background:#181818;border:1px solid #2a2a2a;color:#0084ff;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-bottom:24px;transition:background-color .15s}
-.side-logo:hover{background:#202020}
-.side-nav{display:flex;flex-direction:column;gap:8px;flex:1}
-.side-item{width:44px;height:44px;border-radius:12px;background:transparent;border:none;color:#6e6e6e;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:color .15s,background-color .15s}
-.side-item:hover{color:#fff;background:#181818}
-.side-item.active{color:#0084ff;background:#0d1c26}
-.side-exit{margin-top:auto}
 .profile-btn{position:fixed;top:calc(16px + env(safe-area-inset-top));right:16px;z-index:40;width:40px;height:40px;border-radius:50%;background:#202020;border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background-color .15s ease,transform .15s ease;overflow:hidden;padding:0}
 .profile-btn:hover{background:#282828}
 .profile-btn:active{transform:scale(.95)}
@@ -3577,7 +3569,7 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
 .auth-sub{font-family:'SF Pro Rounded',sans-serif;font-size:14px;font-weight:600;color:#8e8e8e;margin-top:8px;margin-bottom:28px}
 .auth-methods{display:flex;flex-direction:column;gap:10px;width:100%}
 .field-label{font-family:'SF Pro Rounded',sans-serif;font-size:13px;font-weight:600;color:#8e8e8e;margin-bottom:6px;display:block}
-.field-input{width:100%;box-sizing:border-box;background:#202020;border:1px solid #2e2e2e;border-radius:999px;color:#fff;font-family:'SF Pro Rounded',sans-serif;font-size:15px;font-weight:600;padding:12px 18px;outline:none;transition:border-color .15s ease;margin-bottom:12px}
+.field-input{width:100%;box-sizing:border-box;background:#202020;border:1px solid #2e2e2e;border-radius:12px;color:#fff;font-family:'SF Pro Rounded',sans-serif;font-size:15px;font-weight:600;padding:12px 14px;outline:none;transition:border-color .15s ease;margin-bottom:12px}
 .field-input:focus{border-color:#0084ff}
 .field-input::placeholder{color:#6e6e6e}
 .field-error{font-family:'SF Pro Rounded',sans-serif;font-size:12px;font-weight:600;color:#ff6b6b;margin-bottom:10px;min-height:16px}
@@ -3590,62 +3582,13 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
 .sep-text{font-family:'SF Pro Rounded',sans-serif;font-size:12px;font-weight:600;color:#6e6e6e}
 .tg-note{font-family:'SF Pro Rounded',sans-serif;font-size:12px;font-weight:600;color:#6e6e6e;margin-top:16px;line-height:1.5}
 .hidden{display:none!important}
-.setup-screen{position:fixed;top:0;left:0;right:0;bottom:0;z-index:60;background-color:#101010;overflow-y:auto;padding:1.2rem;padding-bottom:calc(2rem + env(safe-area-inset-bottom));animation:setupIn .4s cubic-bezier(.25,1,.5,1);}@keyframes setupIn{from{transform:translateY(12px)}to{transform:translateY(0)}}
+.setup-screen{position:fixed;top:0;left:0;right:0;bottom:0;z-index:60;background-color:#101010;background-image:radial-gradient(circle, rgba(255,255,255,0.10) 1px, transparent 1px);background-size:24px 24px;background-position:12px 12px;background-attachment:fixed;overflow-y:auto;padding:1.2rem;padding-bottom:calc(2rem + env(safe-area-inset-bottom));animation:setupIn .4s cubic-bezier(.25,1,.5,1);}@keyframes setupIn{from{transform:translateY(12px)}to{transform:translateY(0)}}
 .setup-inner{max-width:560px;margin:0 auto;padding-top:1rem}
 .setup-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem}
 .setup-back{background:#202020;border:none;color:#fff;width:36px;height:36px;border-radius:50%;font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background-color .15s ease}
 .setup-back:hover{background:#2a2a2a}
 .setup-title{font-family:'SF Pro Rounded',sans-serif;font-size:20px;font-weight:600;color:#fff}
 .device-card{display:flex;align-items:center;gap:14px;background:#181818;border:1px solid #2a2a2a;border-radius:18px;padding:18px;margin-bottom:1.2rem}
-.device-pick{display:flex;flex-direction:column;gap:10px;margin-bottom:1.2rem}
-.device-pick-title{font-family:'SF Pro Rounded',sans-serif;font-size:16px;font-weight:600;color:#fff;margin-bottom:4px}
-.device-pick-card{display:flex;align-items:center;gap:14px;background:#181818;border:1px solid #2a2a2a;border-radius:18px;padding:16px;cursor:pointer;font-family:'SF Pro Rounded',sans-serif;color:#fff;text-align:left;transition:background-color .15s ease,border-color .15s ease}
-.device-pick-card:hover{background:#202020;border-color:#0084ff}
-.device-pick-icon{flex:none;width:46px;height:46px;border-radius:14px;background:#202020;color:#0084ff;display:flex;align-items:center;justify-content:center}
-.device-pick-name{font-family:'SF Pro Rounded',sans-serif;font-size:15px;font-weight:600;color:#fff}
-.device-pick-sub{font-family:'SF Pro Rounded',sans-serif;font-size:12px;font-weight:600;color:#8e8e8e;margin-top:2px}
-.app-step-title{font-family:'SF Pro Rounded',sans-serif;font-size:16px;font-weight:600;color:#fff;margin-bottom:14px;text-align:left}
-.device-card .device-pick-card{margin-bottom:10px;width:100%}
-.soon-badge{font-size:10px;font-weight:700;color:#0084ff;border:1px solid #0084ff59;border-radius:99px;padding:2px 8px;vertical-align:middle}
-.key-box{background:#202020;border:1px solid #2a2a2a;border-radius:14px;padding:12px 14px;font-family:'SF Pro Rounded',sans-serif;font-size:13px;font-weight:600;color:#fff;margin-bottom:14px;word-break:break-all;text-align:left;user-select:all}
-.step-view{display:flex;flex-direction:column;align-items:center;text-align:center}
-.step-icon{width:84px;height:84px;border-radius:24px;background:#181818;border:1px solid #2a2a2a;display:flex;align-items:center;justify-content:center;margin:10px auto 18px}
-.step-icon.ok{background:#0d2226;border-color:#0084ff59}
-.step-h1{font-family:'SF Pro Rounded',sans-serif;font-size:24px;font-weight:600;color:#fff}
-.step-sub{font-family:'SF Pro Rounded',sans-serif;font-size:13px;font-weight:600;color:#8e8e8e;margin-top:8px;max-width:280px;line-height:1.4}
-.pick-cards{display:flex;flex-direction:column;gap:12px;width:100%;margin-top:28px}
-.pick-card{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#181818;border:1px solid #2a2a2a;border-radius:18px;padding:16px 18px;cursor:pointer;font-family:'SF Pro Rounded',sans-serif;color:#fff;text-align:left;transition:border-color .15s,background-color .15s}
-.pick-card:hover{background:#202020}
-.pick-card.selected{border-color:#0084ff;background:#0d1c26}
-.pick-card-body{display:flex;flex-direction:column;gap:6px}
-.pick-card-name{font-family:'SF Pro Rounded',sans-serif;font-size:15px;font-weight:600;color:#fff}
-.pick-card-tag{font-family:'SF Pro Rounded',sans-serif;font-size:12px;font-weight:600;color:#8e8e8e;background:#202020;border-radius:99px;padding:4px 10px;display:inline-block;width:fit-content}
-.pick-card-arrow{color:#0084ff;display:flex;align-items:center}
-.app-cards{display:flex;gap:12px;width:100%;margin-top:28px}
-.app-card{flex:1;display:flex;flex-direction:column;align-items:center;gap:10px;background:#181818;border:1px solid #2a2a2a;border-radius:20px;padding:20px 12px;cursor:pointer;font-family:'SF Pro Rounded',sans-serif;color:#fff;transition:border-color .15s,background-color .15s}
-.app-card:hover{background:#202020}
-.app-card.selected{border-color:#0084ff;background:#0d1c26}
-.app-card-top{display:flex;flex-direction:column;align-items:center;gap:8px}
-.app-card-logoH,.app-card-logoD{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;color:#fff}
-.app-card-logoH{background:linear-gradient(135deg,#0fb5ff,#0084ff)}
-.app-card-logoD{background:#202020;border:1px solid #2a2a2a}
-.app-card-name{font-family:'SF Pro Rounded',sans-serif;font-size:14px;font-weight:600;color:#fff}
-.app-card-tag{font-family:'SF Pro Rounded',sans-serif;font-size:11px;font-weight:600;color:#fff;background:#0084ff;border-radius:99px;padding:4px 10px}
-.app-card-tag.off{background:#202020;color:#8e8e8e}
-.soon{color:#0084ff}
-.btn-bottom{width:100%;margin-top:28px}
-.btn-bottom2{width:100%;margin-top:10px}
-.btn-light{background:#fff;color:#000}
-.btn-light:hover{background:#f0f0f0}
-.btn-ghost{background:transparent;color:#fff;border:1px solid #2a2a2a}
-.btn-ghost:hover{background:#202020;color:#0084ff}
-.key-field{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:#202020;border:1px solid #2a2a2a;border-radius:16px;padding:14px 16px;margin-top:24px;cursor:pointer;font-family:'SF Pro Rounded',sans-serif;font-size:13px;font-weight:600;color:#0084ff;word-break:break-all;user-select:all}
-.key-copy{color:#8e8e8e;display:flex;align-items:center;flex-shrink:0}
-.key-hint{font-family:'SF Pro Rounded',sans-serif;font-size:12px;font-weight:600;color:#6e6e6e;margin-top:10px}
-.done-card{width:100%;background:#181818;border:1px solid #2a2a2a;border-radius:18px;padding:22px;margin-top:28px;display:flex;flex-direction:column;align-items:center;gap:8px}
-.done-device-icon{width:48px;height:48px;border-radius:50%;background:#202020;color:#0084ff;display:flex;align-items:center;justify-content:center}
-.done-device-name{font-family:'SF Pro Rounded',sans-serif;font-size:16px;font-weight:600;color:#fff;word-break:break-all}
-.done-device-sub{font-family:'SF Pro Rounded',sans-serif;font-size:12px;font-weight:600;color:#8e8e8e}
 .device-icon{flex:none;width:52px;height:52px;border-radius:14px;background:#202020;color:#0084ff;display:flex;align-items:center;justify-content:center}
 .device-name{font-family:'SF Pro Rounded',sans-serif;font-size:17px;font-weight:600;color:#fff}
 .device-detect{font-family:'SF Pro Rounded',sans-serif;font-size:12px;font-weight:600;color:#8e8e8e;margin-top:2px}
@@ -3664,18 +3607,6 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
 <body>
 
 <main>
-  <aside class="sidebar" id="sidebar">
-    <button class="side-logo" type="button" data-open="homeModal" aria-label="deepmint" title="deepmint.vpn">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0084ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 3v6c0 5-3.5 9.5-8 11-4.5-1.5-8-6-8-11V5z"/></svg>
-    </button>
-    <nav class="side-nav">
-      <button class="side-item active" type="button" data-side="home" aria-label="Главная" title="Главная"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></button>
-      <button class="side-item" type="button" data-side="gift" aria-label="Бонусы" title="Бонусы"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"/></svg></button>
-      <button class="side-item" type="button" data-side="support" aria-label="Поддержка" title="Поддержка"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></button>
-      <button class="side-item" type="button" data-side="settings" aria-label="Настройки" title="Настройки"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
-    </nav>
-    <button class="side-item side-exit" type="button" id="sideExit" aria-label="Выйти" title="Выйти"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
-  </aside>
   <div class="hero">
     <a href="#" class="title" title="deepmint.vpn">
       <span class="morph-track"><span class="morph-slot expanded"><span class="morph-inner">deepmint.vpn</span></span></span>
@@ -3703,79 +3634,7 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
       <div class="setup-title">Настройка VPN</div>
       <div style="width:36px"></div>
     </div>
-
-    <!-- Шаг 1: Где настраиваем? -->
-    <div class="step-view" id="viewDevice">
-      <div class="step-icon"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#0084ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"></rect><line x1="11" y1="18" x2="13" y2="18"></line></svg></div>
-      <div class="step-h1">Где настраиваем?</div>
-      <div class="step-sub">Выберите устройство, на котором требуется настройка</div>
-      <div class="pick-cards">
-        <button class="pick-card selected" type="button" id="pickThis">
-          <span class="pick-card-body">
-            <span class="pick-card-name">На этом устройстве</span>
-            <span class="pick-card-tag" id="pickThisName">Windows</span>
-          </span>
-          <span class="pick-card-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></span>
-        </button>
-        <button class="pick-card" type="button" id="pickOther">
-          <span class="pick-card-body">
-            <span class="pick-card-name">На другом устройстве</span>
-            <span class="pick-card-tag">Play Store, App Store, Windows и др.</span>
-          </span>
-          <span class="pick-card-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></span>
-        </button>
-      </div>
-      <button class="btn btn-accent btn-bottom" type="button" id="setThisBtn">Далее</button>
-    </div>
-
-    <!-- Шаг 2: Какое приложение? -->
-    <div class="step-view hidden" id="viewApp">
-      <div class="step-icon"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#0084ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg></div>
-      <div class="step-h1">Какое приложение?</div>
-      <div class="step-sub">Установите приложение, которое подходит под ваши задачи</div>
-      <div class="app-cards">
-        <button class="app-card selected" type="button" id="appHapp">
-          <span class="app-card-top"><span class="app-card-logoH">H</span><span class="app-card-name">Happ</span></span>
-          <span class="app-card-tag rec">Рекомендуем</span>
-        </button>
-        <button class="app-card" type="button" id="appDeep">
-          <span class="app-card-top"><span class="app-card-logoD">D</span><span class="app-card-name">DeepmintUS</span></span>
-          <span class="app-card-tag">Поддерживается <span class="soon">· скоро</span></span>
-        </button>
-      </div>
-      <button class="btn btn-accent btn-bottom" type="button" id="installBtn">Установить Happ</button>
-      <button class="btn btn-ghost btn-bottom2" type="button" id="haveAppBtn">У меня уже есть приложение</button>
-    </div>
-
-    <!-- Шаг 3: Ваш ключ -->
-    <div class="step-view hidden" id="viewKey">
-      <div class="step-icon"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#0084ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7.5" cy="15.5" r="5.5"></circle><path d="m21 2-9.6 9.6"></path><path d="m15.5 7.5 3 3L22 7l-3-3Z"></path></svg></div>
-      <div class="step-h1">Ваш ключ</div>
-      <div class="step-sub">Нажмите «Добавить в приложение», чтобы автоматически добавить ключ</div>
-      <div class="key-field" id="keyBox">https://subs.deepmint.ru/jc526f758e124a6f4
-        <span class="key-copy"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></span>
-      </div>
-      <div class="key-hint">Либо нажмите на поле, чтобы скопировать ключ</div>
-      <button class="btn btn-light btn-bottom" type="button" id="addToAppBtn">Добавить в приложение</button>
-      <button class="btn btn-ghost btn-bottom2" type="button" id="finishBtn">Завершить</button>
-    </div>
-
-    <!-- Шаг 4: Готово! -->
-    <div class="step-view hidden" id="viewDone">
-      <div class="step-icon ok"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#0084ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></div>
-      <div class="step-h1">Готово!</div>
-      <div class="step-sub">Поздравляем, VPN подключен — пользуйтесь интернетом без ограничений</div>
-      <div class="done-card">
-        <div class="done-device-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"></rect><line x1="11" y1="18" x2="13" y2="18"></line></svg></div>
-        <div class="done-device-name" id="doneDeviceName">Моё устройство</div>
-        <div class="done-device-sub" id="doneDeviceSub">Windows — Happ</div>
-      </div>
-      <button class="btn btn-light btn-bottom" type="button" id="goHomeBtn">На главную</button>
-      <button class="btn btn-ghost btn-bottom2" type="button" id="addDeviceBtn">Добавить ещё устройство</button>
-    </div>
-
-    <!-- Левый флоу (другое устройство): выбор ОС + инструкции -->
-    <div class="device-card hidden" id="deviceCard">
+    <div class="device-card">
       <div class="device-icon" id="deviceIcon">
         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" id="deviceIconSvg"><rect x="7" y="2" width="10" height="20" rx="2"></rect></svg>
       </div>
@@ -3784,7 +3643,7 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
         <div class="device-detect" id="deviceDetect">определено автоматически</div>
       </div>
     </div>
-    <div class="os-switch hidden" id="osSwitch">
+    <div class="os-switch" id="osSwitch">
       <button class="os-chip" type="button" data-os="android">Android</button>
       <button class="os-chip" type="button" data-os="ios">iPhone / iPad</button>
       <button class="os-chip" type="button" data-os="windows">Windows</button>
@@ -3797,6 +3656,13 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
 
 </div>
 </main>
+
+<button class="profile-btn" type="button" data-open="profileModal" aria-label="Профиль" id="profileBtn">
+  <svg id="profileIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <circle cx="12" cy="8" r="4"></circle>
+    <path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"></path>
+  </svg>
+</button>
 
 <div class="modal-overlay" id="payModal" role="dialog" aria-modal="true" aria-label="Оплатить подписку">
   <div class="modal">
@@ -3858,20 +3724,11 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
       <div class="modal-title">Войти по почте</div>
       <button class="modal-close" type="button" data-close aria-label="Закрыть">&times;</button>
     </div>
-    <div id="emailStep1">
-      <label class="field-label" for="emailInput">Почта</label>
-      <input class="field-input" id="emailInput" type="email" placeholder="you@example.com" autocomplete="email" inputmode="email">
-      <div class="field-error" id="emailError"></div>
-      <button class="btn btn-accent auth-btn" type="button" id="emailSendBtn">Получить код</button>
-    </div>
-    <div id="emailStep2" class="hidden">
-      <div class="field-hint" id="emailSentHint" style="margin-top:0;margin-bottom:12px;text-align:left"></div>
-      <label class="field-label" for="codeInput">Код из письма</label>
-      <input class="field-input" id="codeInput" type="text" inputmode="numeric" autocomplete="one-time-code" placeholder="000000" maxlength="6" style="letter-spacing:.4em;font-weight:700">
-      <div class="field-error" id="codeError"></div>
-      <button class="btn btn-accent auth-btn" type="button" id="emailLoginBtn">Войти</button>
-      <button class="btn auth-btn" type="button" id="codeBackBtn" style="margin-top:8px">Назад</button>
-    </div>
+    <label class="field-label" for="emailInput">Почта</label>
+    <input class="field-input" id="emailInput" type="email" placeholder="you@example.com" autocomplete="email" inputmode="email">
+    <div class="field-error" id="emailError"></div>
+    <button class="btn btn-accent auth-btn" type="button" id="emailLoginBtn">Войти</button>
+    <div class="field-hint">Демо-вход: письмо не отправляется</div>
   </div>
 </div>
 
@@ -4001,74 +3858,19 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
   });
   var emailInput=document.getElementById('emailInput');
   var emailError=document.getElementById('emailError');
-  var emailStep1=document.getElementById('emailStep1');
-  var emailStep2=document.getElementById('emailStep2');
-  var codeInput=document.getElementById('codeInput');
-  var codeError=document.getElementById('codeError');
-  var emailSentHint=document.getElementById('emailSentHint');
-  var pendingEmail='';
-  var EMAIL_API='http://127.0.0.1:8765';
   function validateEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
-  function emailRequest(path,payload,cb){
-    fetch(EMAIL_API+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
-      .then(function(res){ return res.json().then(function(d){ return {code:res.status,d:d}; }); })
-      .then(function(r){ cb(r.code,r.d); })
-      .catch(function(e){ cb(0,{error:'Сервер недоступен ('+e.message+')'}); });
-  }
-  function sendEmailCode(){
+  function loginByEmail(){
+    closeModals();
     var v=emailInput.value.trim();
     if(!validateEmail(v)){ emailError.textContent='Введите корректную почту'; return; }
     emailError.textContent='';
-    document.getElementById('emailSendBtn').disabled=true;
-    document.getElementById('emailSendBtn').textContent='Отправка…';
-    emailRequest('/api/email/send',{email:v},function(code,d){
-      document.getElementById('emailSendBtn').disabled=false;
-      document.getElementById('emailSendBtn').textContent='Получить код';
-      if(d && d.ok){
-        pendingEmail=v;
-        emailStep1.classList.add('hidden');
-        emailStep2.classList.remove('hidden');
-        emailSentHint.textContent='Код отправлен на '+v+'. Проверьте почту (и папку «Промоакции»).';
-        codeError.textContent='';
-        codeInput.value='';
-        setTimeout(function(){ codeInput.focus(); },100);
-      }else{
-        emailError.textContent=(d&&d.error)||'Не удалось отправить код';
-      }
-    });
+    saveSession({method:'email',email:v});
+    applySession();
+    showToast('Вы вошли как '+v);
+    emailInput.value='';
   }
-  function verifyEmailCode(){
-    var code=codeInput.value.trim();
-    if(!code){ codeError.textContent='Введите код из письма'; return; }
-    codeError.textContent='';
-    document.getElementById('emailLoginBtn').disabled=true;
-    document.getElementById('emailLoginBtn').textContent='Проверка…';
-    emailRequest('/api/email/verify',{email:pendingEmail,code:code},function(resCode,d){
-      document.getElementById('emailLoginBtn').disabled=false;
-      document.getElementById('emailLoginBtn').textContent='Войти';
-      if(d && d.ok){
-        closeModals();
-        saveSession({method:'email',email:d.email});
-        applySession();
-        showToast('Вы вошли как '+d.email);
-        emailInput.value='';
-        pendingEmail='';
-        emailStep2.classList.add('hidden');
-        emailStep1.classList.remove('hidden');
-      }else{
-        codeError.textContent=(d&&d.error)||'Неверный код';
-      }
-    });
-  }
-  document.getElementById('emailSendBtn').addEventListener('click',sendEmailCode);
-  document.getElementById('emailLoginBtn').addEventListener('click',verifyEmailCode);
-  document.getElementById('codeBackBtn').addEventListener('click',function(){
-    emailStep2.classList.add('hidden');
-    emailStep1.classList.remove('hidden');
-    codeError.textContent='';
-  });
-  emailInput.addEventListener('keydown',function(e){ if(e.key==='Enter')sendEmailCode(); });
-  codeInput.addEventListener('keydown',function(e){ if(e.key==='Enter')verifyEmailCode(); });
+  document.getElementById('emailLoginBtn').addEventListener('click',loginByEmail);
+  emailInput.addEventListener('keydown',function(e){ if(e.key==='Enter')loginByEmail(); });
 
   document.getElementById('logoutBtn').addEventListener('click',function(){
     closeModals();
@@ -4142,132 +3944,13 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
   document.getElementById('setupBack').addEventListener('click',function(){
     setupScreen.classList.add('hidden');
   });
-  function hideAllViews(){
-    ['viewDevice','viewApp','viewKey','viewDone'].forEach(function(id){
-      document.getElementById(id).classList.add('hidden');
-    });
-    document.getElementById('deviceCard').classList.add('hidden');
-    document.getElementById('osSwitch').classList.add('hidden');
-    setupSteps.innerHTML='';
-  }
   function openSetup(){
     renderOS(detectOS());
-    hideAllViews();
-    var name=osData[detectOS()].name;
-    document.getElementById('pickThisName').textContent=name;
-    document.getElementById('viewDevice').classList.remove('hidden');
     if(window.scrollTo) window.scrollTo(0,0);
     setupScreen.classList.remove('hidden');
   }
-  var selectedApp='happ';
-  function viewAppStep(){
-    hideAllViews();
-    document.getElementById('viewApp').classList.remove('hidden');
-  }
-  document.getElementById('setThisBtn').addEventListener('click',function(){
-    viewAppStep();
-  });
-  document.getElementById('pickThis').addEventListener('click',function(){
-    document.getElementById('pickThis').classList.add('selected');
-    document.getElementById('pickOther').classList.remove('selected');
-  });
-  document.getElementById('pickOther').addEventListener('click',function(){
-    document.getElementById('pickOther').classList.add('selected');
-    document.getElementById('pickThis').classList.remove('selected');
-    // Другое устройство: показываем выбор ОС
-    hideAllViews();
-    document.getElementById('deviceCard').classList.remove('hidden');
-    document.getElementById('osSwitch').classList.remove('hidden');
-    renderOS(detectOS());
-    document.getElementById('deviceDetect').textContent='выберите систему вручную';
-  });
-  document.getElementById('appHapp').addEventListener('click',function(){
-    selectedApp='happ';
-    document.getElementById('appHapp').classList.add('selected');
-    document.getElementById('appDeep').classList.remove('selected');
-    document.getElementById('installBtn').textContent='Установить Happ';
-  });
-  document.getElementById('appDeep').addEventListener('click',function(){
-    selectedApp='deep';
-    document.getElementById('appDeep').classList.add('selected');
-    document.getElementById('appHapp').classList.remove('selected');
-    document.getElementById('installBtn').textContent='Установить DeepmintUS';
-  });
-  document.getElementById('installBtn').addEventListener('click',function(){
-    var url=selectedApp==='happ'
-      ? 'https://play.google.com/store/apps/details?id=com.happvpn'
-      : 'https://play.google.com/store/apps/details?id=com.deepmintus';
-    if(selectedApp==='happ' && /iPhone|iPad|iPod/i.test(navigator.userAgent)){
-      url='https://apps.apple.com/app/happ-vpn';
-    }
-    window.open(url,'_blank');
-  });
-  document.getElementById('haveAppBtn').addEventListener('click',function(){
-    hideAllViews();
-    document.getElementById('viewKey').classList.remove('hidden');
-  });
-  document.getElementById('keyBox').addEventListener('click',function(){
-    var txt=document.getElementById('keyBox').firstChild.textContent.trim();
-    if(navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(txt).then(function(){ showToast('Ключ скопирован'); },function(){ fallbackCopy(txt); });
-    }else{ fallbackCopy(txt); }
-  });
-  function fallbackCopy(t){
-    var ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta); ta.select();
-    try{ document.execCommand('copy'); showToast('Ключ скопирован'); }catch(e){}
-    document.body.removeChild(ta);
-  }
-  document.getElementById('addToAppBtn').addEventListener('click',function(){
-    hideAllViews();
-    var osName=osData[detectOS()].name;
-    var appName=selectedApp==='happ' ? 'Happ' : 'DeepmintUS';
-    document.getElementById('doneDeviceName').textContent='Моё устройство';
-    document.getElementById('doneDeviceSub').textContent=osName+' — '+appName;
-    document.getElementById('viewDone').classList.remove('hidden');
-  });
-  document.getElementById('finishBtn').addEventListener('click',function(){
-    hideAllViews();
-    var osName=osData[detectOS()].name;
-    var appName=selectedApp==='happ' ? 'Happ' : 'DeepmintUS';
-    document.getElementById('doneDeviceName').textContent='Моё устройство';
-    document.getElementById('doneDeviceSub').textContent=osName+' — '+appName;
-    document.getElementById('viewDone').classList.remove('hidden');
-  });
-  document.getElementById('goHomeBtn').addEventListener('click',function(){
-    setupScreen.classList.add('hidden');
-    showToast('VPN подключен. Добро пожаловать!');
-  });
-  document.getElementById('addDeviceBtn').addEventListener('click',function(){
-    openSetup();
-  });
   document.querySelectorAll('[data-open="setupScreen"]').forEach(function(b){
     b.addEventListener('click',openSetup);
-  });
-
-  document.querySelectorAll('.side-item').forEach(function(item){
-    item.addEventListener('click',function(){
-      if(item.id==='sideExit'){
-        closeModals();
-        clearSession();
-        applySession();
-        showToast('Вы вышли из аккаунта');
-        return;
-      }
-      document.querySelectorAll('.side-item').forEach(function(i){i.classList.remove('active')});
-      item.classList.add('active');
-      var side=item.getAttribute('data-side');
-      if(side==='home'){
-        setupScreen.classList.add('hidden');
-        document.querySelectorAll('.modal-overlay.open').forEach(function(o){o.classList.remove('open')});
-        document.querySelector('.hero').scrollIntoView({behavior:'smooth',block:'start'});
-      }else if(side==='gift'){
-        showToast('Бонусы скоро появятся. Следите за новостями в канале <a href="https://t.me/deepmintvpn" target="_blank" rel="noopener">@deepmintvpn</a>');
-      }else if(side==='support'){
-        window.open('https://t.me/deepminthelp','_blank');
-      }else if(side==='settings'){
-        openModal(document.getElementById('profileModal'));
-      }
-    });
   });
 
   applySession();
