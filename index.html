@@ -3526,7 +3526,7 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
 .btn-accent{background:#0084ff}
 .btn-accent:hover{background:#1a90ff}
 .btn[disabled]{opacity:.4;cursor:default;transform:none}
-.modal-overlay{position:fixed;inset:0;background:#101010;display:flex;align-items:center;justify-content:center;z-index:50;padding:1rem;opacity:0;pointer-events:none;transition:opacity .2s ease}
+.modal-overlay{position:fixed;inset:0;background:#101010;display:flex;align-items:center;justify-content:center;z-index:80;padding:1rem;opacity:0;pointer-events:none;transition:opacity .2s ease}
 .modal-overlay.open{opacity:1;pointer-events:auto}
 .modal{background:#181818;border:1px solid #2a2a2a;border-radius:20px;width:100%;max-width:400px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.5);transform:translateY(10px) scale(.98);transition:transform .2s ease}
 .modal-overlay.open .modal{transform:translateY(0) scale(1)}
@@ -3546,7 +3546,7 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
 .step-num{flex:none;width:24px;height:24px;border-radius:50%;background:#202020;color:#0084ff;font-family:'SF Pro Rounded',sans-serif;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;margin-top:1px}
 .step-text{font-family:'SF Pro Rounded',sans-serif;font-size:14px;font-weight:600;color:#e5e5e5;line-height:1.45}
 .step-text a{color:#0084ff;text-decoration:none}
-.toast{position:fixed;left:50%;bottom:calc(28px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);background:#202020;border:1px solid #2a2a2a;color:#fff;font-family:'SF Pro Rounded',sans-serif;font-size:14px;font-weight:600;padding:12px 18px;border-radius:12px;opacity:0;pointer-events:none;transition:opacity .25s ease,transform .25s ease;z-index:60;max-width:90vw;text-align:center}
+.toast{position:fixed;left:50%;bottom:calc(28px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);background:#202020;border:1px solid #2a2a2a;color:#fff;font-family:'SF Pro Rounded',sans-serif;font-size:14px;font-weight:600;padding:12px 18px;border-radius:12px;opacity:0;pointer-events:none;transition:opacity .25s ease,transform .25s ease;z-index:90;max-width:90vw;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast a{color:#0084ff;text-decoration:none}
 .home-btn{position:fixed;top:16px;left:16px;z-index:40;width:44px;height:44px;border-radius:50%;background:#202020;border:1px solid #2e2e2e;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background-color .15s ease,transform .15s ease}
