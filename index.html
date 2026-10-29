@@ -3589,6 +3589,13 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
 .setup-back:hover{background:#2a2a2a}
 .setup-title{font-family:'SF Pro Rounded',sans-serif;font-size:20px;font-weight:600;color:#fff}
 .device-card{display:flex;align-items:center;gap:14px;background:#181818;border:1px solid #2a2a2a;border-radius:18px;padding:18px;margin-bottom:1.2rem}
+.device-pick{display:flex;flex-direction:column;gap:10px;margin-bottom:1.2rem}
+.device-pick-title{font-family:'SF Pro Rounded',sans-serif;font-size:16px;font-weight:600;color:#fff;margin-bottom:4px}
+.device-pick-card{display:flex;align-items:center;gap:14px;background:#181818;border:1px solid #2a2a2a;border-radius:18px;padding:16px;cursor:pointer;font-family:'SF Pro Rounded',sans-serif;color:#fff;text-align:left;transition:background-color .15s ease,border-color .15s ease}
+.device-pick-card:hover{background:#202020;border-color:#0084ff}
+.device-pick-icon{flex:none;width:46px;height:46px;border-radius:14px;background:#202020;color:#0084ff;display:flex;align-items:center;justify-content:center}
+.device-pick-name{font-family:'SF Pro Rounded',sans-serif;font-size:15px;font-weight:600;color:#fff}
+.device-pick-sub{font-family:'SF Pro Rounded',sans-serif;font-size:12px;font-weight:600;color:#8e8e8e;margin-top:2px}
 .device-icon{flex:none;width:52px;height:52px;border-radius:14px;background:#202020;color:#0084ff;display:flex;align-items:center;justify-content:center}
 .device-name{font-family:'SF Pro Rounded',sans-serif;font-size:17px;font-weight:600;color:#fff}
 .device-detect{font-family:'SF Pro Rounded',sans-serif;font-size:12px;font-weight:600;color:#8e8e8e;margin-top:2px}
@@ -3634,7 +3641,18 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
       <div class="setup-title">Настройка VPN</div>
       <div style="width:36px"></div>
     </div>
-    <div class="device-card">
+    <div class="device-pick" id="devicePick">
+      <div class="device-pick-title">Где настроить VPN?</div>
+      <button class="device-pick-card" type="button" id="pickThis">
+        <span class="device-pick-icon" id="pickThisIcon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"></rect><line x1="11" y1="18" x2="13" y2="18"></line></svg></span>
+        <span><span class="device-pick-name" id="pickThisName">На этом устройстве</span><br><span class="device-pick-sub">система определится автоматически</span></span>
+      </button>
+      <button class="device-pick-card" type="button" id="pickOther">
+        <span class="device-pick-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="14" rx="2"></rect><line x1="2" y1="9" x2="22" y2="9"></line></svg></span>
+        <span><span class="device-pick-name">На другом устройстве</span><br><span class="device-pick-sub">выбрать систему вручную</span></span>
+      </button>
+    </div>
+    <div class="device-card hidden" id="deviceCard">
       <div class="device-icon" id="deviceIcon">
         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" id="deviceIconSvg"><rect x="7" y="2" width="10" height="20" rx="2"></rect></svg>
       </div>
@@ -3643,7 +3661,7 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
         <div class="device-detect" id="deviceDetect">определено автоматически</div>
       </div>
     </div>
-    <div class="os-switch" id="osSwitch">
+    <div class="os-switch hidden" id="osSwitch">
       <button class="os-chip" type="button" data-os="android">Android</button>
       <button class="os-chip" type="button" data-os="ios">iPhone / iPad</button>
       <button class="os-chip" type="button" data-os="windows">Windows</button>
@@ -4008,11 +4026,34 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
   document.getElementById('setupBack').addEventListener('click',function(){
     setupScreen.classList.add('hidden');
   });
+  function showDevicePick(){
+    document.getElementById('devicePick').classList.remove('hidden');
+    document.getElementById('deviceCard').classList.add('hidden');
+    document.getElementById('osSwitch').classList.add('hidden');
+    var name=osData[detectOS()].name;
+    document.getElementById('pickThisName').textContent='На этом устройстве — '+name;
+    setupSteps.innerHTML='';
+  }
   function openSetup(){
     renderOS(detectOS());
+    showDevicePick();
     if(window.scrollTo) window.scrollTo(0,0);
     setupScreen.classList.remove('hidden');
   }
+  document.getElementById('pickThis').addEventListener('click',function(){
+    document.getElementById('devicePick').classList.add('hidden');
+    document.getElementById('deviceCard').classList.remove('hidden');
+    document.getElementById('osSwitch').classList.add('hidden');
+    renderOS(detectOS());
+    document.getElementById('deviceDetect').textContent='система определена автоматически';
+  });
+  document.getElementById('pickOther').addEventListener('click',function(){
+    document.getElementById('devicePick').classList.add('hidden');
+    document.getElementById('deviceCard').classList.add('hidden');
+    document.getElementById('osSwitch').classList.remove('hidden');
+    renderOS('android');
+    document.getElementById('deviceDetect').textContent='выберите систему вручную';
+  });
   document.querySelectorAll('[data-open="setupScreen"]').forEach(function(b){
     b.addEventListener('click',openSetup);
   });
