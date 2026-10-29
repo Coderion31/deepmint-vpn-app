@@ -3895,12 +3895,12 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
   var emailError=document.getElementById('emailError');
   function validateEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
   function loginByEmail(){
-    closeModals();
     var v=emailInput.value.trim();
     if(!validateEmail(v)){ emailError.textContent='Введите корректную почту'; return; }
     emailError.textContent='';
     saveSession({method:'email',email:v});
     applySession();
+    closeModals();
     showToast('Вы вошли как '+v);
     emailInput.value='';
   }
