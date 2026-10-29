@@ -3549,6 +3549,9 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
 .toast{position:fixed;left:50%;bottom:calc(28px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);background:#202020;border:1px solid #2a2a2a;color:#fff;font-family:'SF Pro Rounded',sans-serif;font-size:14px;font-weight:600;padding:12px 18px;border-radius:12px;opacity:0;pointer-events:none;transition:opacity .25s ease,transform .25s ease;z-index:60;max-width:90vw;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast a{color:#0084ff;text-decoration:none}
+.home-btn{position:fixed;top:16px;left:16px;z-index:40;width:44px;height:44px;border-radius:50%;background:#202020;border:1px solid #2e2e2e;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background-color .15s ease,transform .15s ease}
+.home-btn:hover{background:#2a2a2a}
+.home-btn:active{transform:scale(.95)}
 .profile-btn{position:fixed;top:calc(16px + env(safe-area-inset-top));right:16px;z-index:40;width:40px;height:40px;border-radius:50%;background:#202020;border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background-color .15s ease,transform .15s ease;overflow:hidden;padding:0}
 .profile-btn:hover{background:#282828}
 .profile-btn:active{transform:scale(.95)}
@@ -3656,6 +3659,10 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
 
 </div>
 </main>
+
+<button class="home-btn" type="button" id="homeBtn" aria-label="Главная">
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.08398 9.43841C2.08398 8.21422 2.64456 7.05744 3.60541 6.29888L7.52207 3.20677C8.97531 2.05948 11.026 2.05948 12.4792 3.20677L16.3959 6.29888C17.3567 7.05744 17.9173 8.21422 17.9173 9.43841V13.9167C17.9173 16.1258 16.1265 17.9167 13.9173 17.9167H13.5007C12.9484 17.9167 12.5007 17.4689 12.5007 16.9167V14.9167C12.5007 13.8121 11.6052 12.9167 10.5007 12.9167H9.50065C8.39608 12.9167 7.50065 13.8121 7.50065 14.9167V16.9167C7.50065 17.4689 7.05294 17.9167 6.50065 17.9167H6.08398C3.87485 17.9167 2.08398 16.1258 2.08398 13.9167L2.08398 9.43841Z" stroke="currentColor" stroke-width="1.5"></path></svg>
+</button>
 
 <button class="profile-btn" type="button" data-open="profileModal" aria-label="Профиль" id="profileBtn">
   <svg id="profileIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -3951,6 +3958,13 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
   }
   document.querySelectorAll('[data-open="setupScreen"]').forEach(function(b){
     b.addEventListener('click',openSetup);
+  });
+
+  document.getElementById('homeBtn').addEventListener('click',function(){
+    var setup=document.getElementById('setupScreen');
+    if(setup) setup.classList.add('hidden');
+    document.querySelectorAll('.modal-overlay').forEach(function(o){o.classList.remove('open')});
+    if(window.scrollTo) window.scrollTo({top:0,behavior:'smooth'});
   });
 
   applySession();
