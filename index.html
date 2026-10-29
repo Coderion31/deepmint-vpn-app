@@ -3600,6 +3600,44 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
 .device-card .device-pick-card{margin-bottom:10px;width:100%}
 .soon-badge{font-size:10px;font-weight:700;color:#0084ff;border:1px solid #0084ff59;border-radius:99px;padding:2px 8px;vertical-align:middle}
 .key-box{background:#202020;border:1px solid #2a2a2a;border-radius:14px;padding:12px 14px;font-family:'SF Pro Rounded',sans-serif;font-size:13px;font-weight:600;color:#fff;margin-bottom:14px;word-break:break-all;text-align:left;user-select:all}
+.step-view{display:flex;flex-direction:column;align-items:center;text-align:center}
+.step-icon{width:84px;height:84px;border-radius:24px;background:#181818;border:1px solid #2a2a2a;display:flex;align-items:center;justify-content:center;margin:10px auto 18px}
+.step-icon.ok{background:#0d2226;border-color:#0084ff59}
+.step-h1{font-family:'SF Pro Rounded',sans-serif;font-size:24px;font-weight:600;color:#fff}
+.step-sub{font-family:'SF Pro Rounded',sans-serif;font-size:13px;font-weight:600;color:#8e8e8e;margin-top:8px;max-width:280px;line-height:1.4}
+.pick-cards{display:flex;flex-direction:column;gap:12px;width:100%;margin-top:28px}
+.pick-card{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#181818;border:1px solid #2a2a2a;border-radius:18px;padding:16px 18px;cursor:pointer;font-family:'SF Pro Rounded',sans-serif;color:#fff;text-align:left;transition:border-color .15s,background-color .15s}
+.pick-card:hover{background:#202020}
+.pick-card.selected{border-color:#0084ff;background:#0d1c26}
+.pick-card-body{display:flex;flex-direction:column;gap:6px}
+.pick-card-name{font-family:'SF Pro Rounded',sans-serif;font-size:15px;font-weight:600;color:#fff}
+.pick-card-tag{font-family:'SF Pro Rounded',sans-serif;font-size:12px;font-weight:600;color:#8e8e8e;background:#202020;border-radius:99px;padding:4px 10px;display:inline-block;width:fit-content}
+.pick-card-arrow{color:#0084ff;display:flex;align-items:center}
+.app-cards{display:flex;gap:12px;width:100%;margin-top:28px}
+.app-card{flex:1;display:flex;flex-direction:column;align-items:center;gap:10px;background:#181818;border:1px solid #2a2a2a;border-radius:20px;padding:20px 12px;cursor:pointer;font-family:'SF Pro Rounded',sans-serif;color:#fff;transition:border-color .15s,background-color .15s}
+.app-card:hover{background:#202020}
+.app-card.selected{border-color:#0084ff;background:#0d1c26}
+.app-card-top{display:flex;flex-direction:column;align-items:center;gap:8px}
+.app-card-logoH,.app-card-logoD{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;color:#fff}
+.app-card-logoH{background:linear-gradient(135deg,#0fb5ff,#0084ff)}
+.app-card-logoD{background:#202020;border:1px solid #2a2a2a}
+.app-card-name{font-family:'SF Pro Rounded',sans-serif;font-size:14px;font-weight:600;color:#fff}
+.app-card-tag{font-family:'SF Pro Rounded',sans-serif;font-size:11px;font-weight:600;color:#fff;background:#0084ff;border-radius:99px;padding:4px 10px}
+.app-card-tag.off{background:#202020;color:#8e8e8e}
+.soon{color:#0084ff}
+.btn-bottom{width:100%;margin-top:28px}
+.btn-bottom2{width:100%;margin-top:10px}
+.btn-light{background:#fff;color:#000}
+.btn-light:hover{background:#f0f0f0}
+.btn-ghost{background:transparent;color:#fff;border:1px solid #2a2a2a}
+.btn-ghost:hover{background:#202020;color:#0084ff}
+.key-field{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:#202020;border:1px solid #2a2a2a;border-radius:16px;padding:14px 16px;margin-top:24px;cursor:pointer;font-family:'SF Pro Rounded',sans-serif;font-size:13px;font-weight:600;color:#0084ff;word-break:break-all;user-select:all}
+.key-copy{color:#8e8e8e;display:flex;align-items:center;flex-shrink:0}
+.key-hint{font-family:'SF Pro Rounded',sans-serif;font-size:12px;font-weight:600;color:#6e6e6e;margin-top:10px}
+.done-card{width:100%;background:#181818;border:1px solid #2a2a2a;border-radius:18px;padding:22px;margin-top:28px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.done-device-icon{width:48px;height:48px;border-radius:50%;background:#202020;color:#0084ff;display:flex;align-items:center;justify-content:center}
+.done-device-name{font-family:'SF Pro Rounded',sans-serif;font-size:16px;font-weight:600;color:#fff;word-break:break-all}
+.done-device-sub{font-family:'SF Pro Rounded',sans-serif;font-size:12px;font-weight:600;color:#8e8e8e}
 .device-icon{flex:none;width:52px;height:52px;border-radius:14px;background:#202020;color:#0084ff;display:flex;align-items:center;justify-content:center}
 .device-name{font-family:'SF Pro Rounded',sans-serif;font-size:17px;font-weight:600;color:#fff}
 .device-detect{font-family:'SF Pro Rounded',sans-serif;font-size:12px;font-weight:600;color:#8e8e8e;margin-top:2px}
@@ -3645,17 +3683,78 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
       <div class="setup-title">Настройка VPN</div>
       <div style="width:36px"></div>
     </div>
-    <div class="device-pick" id="devicePick">
-      <div class="device-pick-title">Где настроить VPN?</div>
-      <button class="device-pick-card" type="button" id="pickThis">
-        <span class="device-pick-icon" id="pickThisIcon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"></rect><line x1="11" y1="18" x2="13" y2="18"></line></svg></span>
-        <span><span class="device-pick-name" id="pickThisName">На этом устройстве</span><br><span class="device-pick-sub">система определится автоматически</span></span>
-      </button>
-      <button class="device-pick-card" type="button" id="pickOther">
-        <span class="device-pick-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="14" rx="2"></rect><line x1="2" y1="9" x2="22" y2="9"></line></svg></span>
-        <span><span class="device-pick-name">На другом устройстве</span><br><span class="device-pick-sub">выбрать систему вручную</span></span>
-      </button>
+
+    <!-- Шаг 1: Где настраиваем? -->
+    <div class="step-view" id="viewDevice">
+      <div class="step-icon"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#0084ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"></rect><line x1="11" y1="18" x2="13" y2="18"></line></svg></div>
+      <div class="step-h1">Где настраиваем?</div>
+      <div class="step-sub">Выберите устройство, на котором требуется настройка</div>
+      <div class="pick-cards">
+        <button class="pick-card selected" type="button" id="pickThis">
+          <span class="pick-card-body">
+            <span class="pick-card-name">На этом устройстве</span>
+            <span class="pick-card-tag" id="pickThisName">Windows</span>
+          </span>
+          <span class="pick-card-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></span>
+        </button>
+        <button class="pick-card" type="button" id="pickOther">
+          <span class="pick-card-body">
+            <span class="pick-card-name">На другом устройстве</span>
+            <span class="pick-card-tag">Play Store, App Store, Windows и др.</span>
+          </span>
+          <span class="pick-card-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></span>
+        </button>
+      </div>
+      <button class="btn btn-accent btn-bottom" type="button" id="setThisBtn">Далее</button>
     </div>
+
+    <!-- Шаг 2: Какое приложение? -->
+    <div class="step-view hidden" id="viewApp">
+      <div class="step-icon"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#0084ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg></div>
+      <div class="step-h1">Какое приложение?</div>
+      <div class="step-sub">Установите приложение, которое подходит под ваши задачи</div>
+      <div class="app-cards">
+        <button class="app-card selected" type="button" id="appHapp">
+          <span class="app-card-top"><span class="app-card-logoH">H</span><span class="app-card-name">Happ</span></span>
+          <span class="app-card-tag rec">Рекомендуем</span>
+        </button>
+        <button class="app-card" type="button" id="appDeep">
+          <span class="app-card-top"><span class="app-card-logoD">D</span><span class="app-card-name">DeepmintUS</span></span>
+          <span class="app-card-tag">Поддерживается <span class="soon">· скоро</span></span>
+        </button>
+      </div>
+      <button class="btn btn-accent btn-bottom" type="button" id="installBtn">Установить Happ</button>
+      <button class="btn btn-ghost btn-bottom2" type="button" id="haveAppBtn">У меня уже есть приложение</button>
+    </div>
+
+    <!-- Шаг 3: Ваш ключ -->
+    <div class="step-view hidden" id="viewKey">
+      <div class="step-icon"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#0084ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7.5" cy="15.5" r="5.5"></circle><path d="m21 2-9.6 9.6"></path><path d="m15.5 7.5 3 3L22 7l-3-3Z"></path></svg></div>
+      <div class="step-h1">Ваш ключ</div>
+      <div class="step-sub">Нажмите «Добавить в приложение», чтобы автоматически добавить ключ</div>
+      <div class="key-field" id="keyBox">https://subs.deepmint.ru/jc526f758e124a6f4
+        <span class="key-copy"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></span>
+      </div>
+      <div class="key-hint">Либо нажмите на поле, чтобы скопировать ключ</div>
+      <button class="btn btn-light btn-bottom" type="button" id="addToAppBtn">Добавить в приложение</button>
+      <button class="btn btn-ghost btn-bottom2" type="button" id="finishBtn">Завершить</button>
+    </div>
+
+    <!-- Шаг 4: Готово! -->
+    <div class="step-view hidden" id="viewDone">
+      <div class="step-icon ok"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#0084ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></div>
+      <div class="step-h1">Готово!</div>
+      <div class="step-sub">Поздравляем, VPN подключен — пользуйтесь интернетом без ограничений</div>
+      <div class="done-card">
+        <div class="done-device-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"></rect><line x1="11" y1="18" x2="13" y2="18"></line></svg></div>
+        <div class="done-device-name" id="doneDeviceName">Моё устройство</div>
+        <div class="done-device-sub" id="doneDeviceSub">Windows — Happ</div>
+      </div>
+      <button class="btn btn-light btn-bottom" type="button" id="goHomeBtn">На главную</button>
+      <button class="btn btn-ghost btn-bottom2" type="button" id="addDeviceBtn">Добавить ещё устройство</button>
+    </div>
+
+    <!-- Левый флоу (другое устройство): выбор ОС + инструкции -->
     <div class="device-card hidden" id="deviceCard">
       <div class="device-icon" id="deviceIcon">
         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" id="deviceIconSvg"><rect x="7" y="2" width="10" height="20" rx="2"></rect></svg>
@@ -3664,31 +3763,6 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
         <div class="device-name" id="deviceName">Ваше устройство</div>
         <div class="device-detect" id="deviceDetect">определено автоматически</div>
       </div>
-    </div>
-    <div class="device-card hidden" id="appStep">
-      <div class="app-step-title">Какое приложение?</div>
-      <button class="device-pick-card" type="button" id="appHapp">
-        <span class="device-pick-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.5 9.5-8 11-4.5-1.5-8-6-8-11V5z"/></svg></span>
-        <span><span class="device-pick-name">Happ</span><br><span class="device-pick-sub">VPN-приложение</span></span>
-      </button>
-      <button class="device-pick-card" type="button" id="appDeep">
-        <span class="device-pick-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.5 9.5-8 11-4.5-1.5-8-6-8-11V5z"/></svg></span>
-        <span><span class="device-pick-name">DeepmintUS <span class="soon-badge">скоро</span></span><br><span class="device-pick-sub">наше приложение</span></span>
-      </button>
-    </div>
-    <div class="device-card hidden" id="installStep">
-      <div class="app-step-title" id="installTitle">Установить Happ</div>
-      <div class="device-pick-sub" style="margin:0 0 14px">Приложение доступно в магазине.</div>
-      <button class="btn btn-accent" type="button" id="installBtn">Установить</button>
-      <button class="btn" type="button" id="haveAppBtn" style="margin-top:10px">У меня уже есть приложение</button>
-    </div>
-    <div class="device-card hidden" id="connectStep">
-      <div class="app-step-title">Ключ подключения</div>
-      <div class="device-pick-sub" style="margin:0 0 14px">Скопируйте ключ, затем добавьте его в приложение.</div>
-      <div class="key-box" id="keyBox">deepmint://connect?key=DEMO-XXXX-XXXX</div>
-      <button class="btn btn-accent" type="button" id="copyKeyBtn">Скопировать ключ</button>
-      <button class="btn" type="button" id="addToAppBtn" style="margin-top:10px">Добавить в приложение</button>
-      <button class="btn" type="button" id="finishBtn" style="margin-top:10px">Завершить</button>
     </div>
     <div class="os-switch hidden" id="osSwitch">
       <button class="os-chip" type="button" data-os="android">Android</button>
@@ -4055,47 +4129,56 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
   document.getElementById('setupBack').addEventListener('click',function(){
     setupScreen.classList.add('hidden');
   });
-  function showDevicePick(){
-    document.getElementById('devicePick').classList.remove('hidden');
+  function hideAllViews(){
+    ['viewDevice','viewApp','viewKey','viewDone'].forEach(function(id){
+      document.getElementById(id).classList.add('hidden');
+    });
     document.getElementById('deviceCard').classList.add('hidden');
     document.getElementById('osSwitch').classList.add('hidden');
-    document.getElementById('appStep').classList.add('hidden');
-    document.getElementById('installStep').classList.add('hidden');
-    document.getElementById('connectStep').classList.add('hidden');
-    var name=osData[detectOS()].name;
-    document.getElementById('pickThisName').textContent='На этом устройстве — '+name;
     setupSteps.innerHTML='';
   }
   function openSetup(){
     renderOS(detectOS());
-    showDevicePick();
+    hideAllViews();
+    var name=osData[detectOS()].name;
+    document.getElementById('pickThisName').textContent=name;
+    document.getElementById('viewDevice').classList.remove('hidden');
     if(window.scrollTo) window.scrollTo(0,0);
     setupScreen.classList.remove('hidden');
   }
-  document.getElementById('pickThis').addEventListener('click',function(){
-    document.getElementById('devicePick').classList.add('hidden');
-    document.getElementById('deviceCard').classList.add('hidden');
-    document.getElementById('osSwitch').classList.add('hidden');
-    document.getElementById('appStep').classList.remove('hidden');
-    document.getElementById('installStep').classList.add('hidden');
-    document.getElementById('connectStep').classList.add('hidden');
-    setupSteps.innerHTML='';
-  });
   var selectedApp='happ';
+  function viewAppStep(){
+    hideAllViews();
+    document.getElementById('viewApp').classList.remove('hidden');
+  }
+  document.getElementById('setThisBtn').addEventListener('click',function(){
+    viewAppStep();
+  });
+  document.getElementById('pickThis').addEventListener('click',function(){
+    document.getElementById('pickThis').classList.add('selected');
+    document.getElementById('pickOther').classList.remove('selected');
+  });
+  document.getElementById('pickOther').addEventListener('click',function(){
+    document.getElementById('pickOther').classList.add('selected');
+    document.getElementById('pickThis').classList.remove('selected');
+    // Другое устройство: показываем выбор ОС
+    hideAllViews();
+    document.getElementById('deviceCard').classList.remove('hidden');
+    document.getElementById('osSwitch').classList.remove('hidden');
+    renderOS(detectOS());
+    document.getElementById('deviceDetect').textContent='выберите систему вручную';
+  });
   document.getElementById('appHapp').addEventListener('click',function(){
     selectedApp='happ';
-    document.getElementById('appStep').classList.add('hidden');
-    document.getElementById('installTitle').textContent='Установить Happ';
-    document.getElementById('installStep').classList.remove('hidden');
-    document.getElementById('connectStep').classList.add('hidden');
+    document.getElementById('appHapp').classList.add('selected');
+    document.getElementById('appDeep').classList.remove('selected');
+    document.getElementById('installBtn').textContent='Установить Happ';
   });
   document.getElementById('appDeep').addEventListener('click',function(){
     selectedApp='deep';
-    showToast('DeepmintUS скоро появится в магазинах');
-    document.getElementById('appStep').classList.add('hidden');
-    document.getElementById('installTitle').textContent='Установить DeepmintUS';
-    document.getElementById('installStep').classList.remove('hidden');
-    document.getElementById('connectStep').classList.add('hidden');
+    document.getElementById('appDeep').classList.add('selected');
+    document.getElementById('appHapp').classList.remove('selected');
+    document.getElementById('installBtn').textContent='Установить DeepmintUS';
   });
   document.getElementById('installBtn').addEventListener('click',function(){
     var url=selectedApp==='happ'
@@ -4107,11 +4190,11 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
     window.open(url,'_blank');
   });
   document.getElementById('haveAppBtn').addEventListener('click',function(){
-    document.getElementById('installStep').classList.add('hidden');
-    document.getElementById('connectStep').classList.remove('hidden');
+    hideAllViews();
+    document.getElementById('viewKey').classList.remove('hidden');
   });
-  document.getElementById('copyKeyBtn').addEventListener('click',function(){
-    var txt=document.getElementById('keyBox').textContent;
+  document.getElementById('keyBox').addEventListener('click',function(){
+    var txt=document.getElementById('keyBox').firstChild.textContent.trim();
     if(navigator.clipboard && navigator.clipboard.writeText){
       navigator.clipboard.writeText(txt).then(function(){ showToast('Ключ скопирован'); },function(){ fallbackCopy(txt); });
     }else{ fallbackCopy(txt); }
@@ -4122,23 +4205,27 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
     document.body.removeChild(ta);
   }
   document.getElementById('addToAppBtn').addEventListener('click',function(){
-    var key=document.getElementById('keyBox').textContent;
-    var scheme=selectedApp==='happ' ? 'happ://' : 'deepmintus://';
-    window.location.href=scheme+'open?key='+encodeURIComponent(key);
+    hideAllViews();
+    var osName=osData[detectOS()].name;
+    var appName=selectedApp==='happ' ? 'Happ' : 'DeepmintUS';
+    document.getElementById('doneDeviceName').textContent='Моё устройство';
+    document.getElementById('doneDeviceSub').textContent=osName+' — '+appName;
+    document.getElementById('viewDone').classList.remove('hidden');
   });
   document.getElementById('finishBtn').addEventListener('click',function(){
-    setupScreen.classList.add('hidden');
-    showToast('Подключение настроено. Добро пожаловать!');
+    hideAllViews();
+    var osName=osData[detectOS()].name;
+    var appName=selectedApp==='happ' ? 'Happ' : 'DeepmintUS';
+    document.getElementById('doneDeviceName').textContent='Моё устройство';
+    document.getElementById('doneDeviceSub').textContent=osName+' — '+appName;
+    document.getElementById('viewDone').classList.remove('hidden');
   });
-  document.getElementById('pickOther').addEventListener('click',function(){
-    document.getElementById('devicePick').classList.add('hidden');
-    document.getElementById('deviceCard').classList.add('hidden');
-    document.getElementById('appStep').classList.add('hidden');
-    document.getElementById('installStep').classList.add('hidden');
-    document.getElementById('connectStep').classList.add('hidden');
-    document.getElementById('osSwitch').classList.remove('hidden');
-    renderOS('android');
-    document.getElementById('deviceDetect').textContent='выберите систему вручную';
+  document.getElementById('goHomeBtn').addEventListener('click',function(){
+    setupScreen.classList.add('hidden');
+    showToast('VPN подключен. Добро пожаловать!');
+  });
+  document.getElementById('addDeviceBtn').addEventListener('click',function(){
+    openSetup();
   });
   document.querySelectorAll('[data-open="setupScreen"]').forEach(function(b){
     b.addEventListener('click',openSetup);
