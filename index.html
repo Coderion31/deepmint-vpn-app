@@ -3724,11 +3724,20 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
       <div class="modal-title">Войти по почте</div>
       <button class="modal-close" type="button" data-close aria-label="Закрыть">&times;</button>
     </div>
-    <label class="field-label" for="emailInput">Почта</label>
-    <input class="field-input" id="emailInput" type="email" placeholder="you@example.com" autocomplete="email" inputmode="email">
-    <div class="field-error" id="emailError"></div>
-    <button class="btn btn-accent auth-btn" type="button" id="emailLoginBtn">Войти</button>
-    <div class="field-hint">Демо-вход: письмо не отправляется</div>
+    <div id="emailStep1">
+      <label class="field-label" for="emailInput">Почта</label>
+      <input class="field-input" id="emailInput" type="email" placeholder="you@example.com" autocomplete="email" inputmode="email">
+      <div class="field-error" id="emailError"></div>
+      <button class="btn btn-accent auth-btn" type="button" id="emailSendBtn">Получить код</button>
+    </div>
+    <div id="emailStep2" class="hidden">
+      <div class="field-hint" id="emailSentHint" style="margin-top:0;margin-bottom:12px;text-align:left"></div>
+      <label class="field-label" for="codeInput">Код из письма</label>
+      <input class="field-input" id="codeInput" type="text" inputmode="numeric" autocomplete="one-time-code" placeholder="000000" maxlength="6" style="letter-spacing:.4em;font-weight:700">
+      <div class="field-error" id="codeError"></div>
+      <button class="btn btn-accent auth-btn" type="button" id="emailLoginBtn">Войти</button>
+      <button class="btn auth-btn" type="button" id="codeBackBtn" style="margin-top:8px">Назад</button>
+    </div>
   </div>
 </div>
 
@@ -3858,19 +3867,74 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
   });
   var emailInput=document.getElementById('emailInput');
   var emailError=document.getElementById('emailError');
+  var emailStep1=document.getElementById('emailStep1');
+  var emailStep2=document.getElementById('emailStep2');
+  var codeInput=document.getElementById('codeInput');
+  var codeError=document.getElementById('codeError');
+  var emailSentHint=document.getElementById('emailSentHint');
+  var pendingEmail='';
+  var EMAIL_API='http://127.0.0.1:8765';
   function validateEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
-  function loginByEmail(){
-    closeModals();
+  function emailRequest(path,payload,cb){
+    fetch(EMAIL_API+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+      .then(function(res){ return res.json().then(function(d){ return {code:res.status,d:d}; }); })
+      .then(function(r){ cb(r.code,r.d); })
+      .catch(function(e){ cb(0,{error:'Сервер недоступен ('+e.message+')'}); });
+  }
+  function sendEmailCode(){
     var v=emailInput.value.trim();
     if(!validateEmail(v)){ emailError.textContent='Введите корректную почту'; return; }
     emailError.textContent='';
-    saveSession({method:'email',email:v});
-    applySession();
-    showToast('Вы вошли как '+v);
-    emailInput.value='';
+    document.getElementById('emailSendBtn').disabled=true;
+    document.getElementById('emailSendBtn').textContent='Отправка…';
+    emailRequest('/api/email/send',{email:v},function(code,d){
+      document.getElementById('emailSendBtn').disabled=false;
+      document.getElementById('emailSendBtn').textContent='Получить код';
+      if(d && d.ok){
+        pendingEmail=v;
+        emailStep1.classList.add('hidden');
+        emailStep2.classList.remove('hidden');
+        emailSentHint.textContent='Код отправлен на '+v+'. Проверьте почту (и папку «Промоакции»).';
+        codeError.textContent='';
+        codeInput.value='';
+        setTimeout(function(){ codeInput.focus(); },100);
+      }else{
+        emailError.textContent=(d&&d.error)||'Не удалось отправить код';
+      }
+    });
   }
-  document.getElementById('emailLoginBtn').addEventListener('click',loginByEmail);
-  emailInput.addEventListener('keydown',function(e){ if(e.key==='Enter')loginByEmail(); });
+  function verifyEmailCode(){
+    var code=codeInput.value.trim();
+    if(!code){ codeError.textContent='Введите код из письма'; return; }
+    codeError.textContent='';
+    document.getElementById('emailLoginBtn').disabled=true;
+    document.getElementById('emailLoginBtn').textContent='Проверка…';
+    emailRequest('/api/email/verify',{email:pendingEmail,code:code},function(resCode,d){
+      document.getElementById('emailLoginBtn').disabled=false;
+      document.getElementById('emailLoginBtn').textContent='Войти';
+      if(d && d.ok){
+        closeModals();
+        saveSession({method:'email',email:d.email});
+        applySession();
+        showToast('Вы вошли как '+d.email);
+        emailInput.value='';
+        pendingEmail='';
+        emailStep2.classList.add('hidden');
+        emailStep1.classList.remove('hidden');
+      }else{
+        codeError.textContent=(d&&d.error)||'Неверный код';
+      }
+    });
+  }
+  document.getElementById('emailSendBtn').addEventListener('click',sendEmailCode);
+  document.getElementById('emailLoginBtn').addEventListener('click',verifyEmailCode);
+  document.getElementById('codeBackBtn').addEventListener('click',function(){
+    emailStep2.classList.add('hidden');
+    emailStep1.classList.remove('hidden');
+    codeError.textContent='';
+  });
+  emailInput.addEventListener('keydown',function(e){ if(e.key==='Enter')sendEmailCode(); });
+  codeInput.addEventListener('keydown',function(e){ if(e.key==='Enter')verifyEmailCode(); });
 
   document.getElementById('logoutBtn').addEventListener('click',function(){
     closeModals();
