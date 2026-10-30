@@ -4247,6 +4247,7 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
   var SUPPORT_KEY='support1234';
   var isSupport=(location.search.indexOf('support='+SUPPORT_KEY)>=0);
   function apiUrl(path){ return SUPPORT_API ? SUPPORT_API + path : ''; }
+  var lastMsgCount=-1;
   function loadChat(){
     var url=apiUrl('/api/support?key='+encodeURIComponent(SUPPORT_KEY));
     var box=document.getElementById('chatMessages');
@@ -4254,6 +4255,10 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
     if(!url){ renderFakeChat(); return; }
     fetch(url).then(function(r){return r.json()}).then(function(data){
       var msgs=data.messages||[];
+      if(msgs.length===lastMsgCount){ return; }
+      lastMsgCount=msgs.length;
+      var hadScroll=false;
+      if(box.scrollTop+box.clientHeight>=box.scrollHeight-20){ hadScroll=true; }
       box.innerHTML='';
       if(!msgs.length){
         box.innerHTML='<div class="chat-msg support">Здравствуйте! Чем можем помочь? Опишите вашу проблему.</div>';
@@ -4266,7 +4271,7 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
         div.textContent=label+m.text;
         box.appendChild(div);
       });
-      box.scrollTop=box.scrollHeight;
+      if(hadScroll || msgs.length===1){ box.scrollTop=box.scrollHeight; }
       if(isSupport){
         status.textContent='Режим поддержки · открыто тикетов: '+msgs.length;
       } else {
@@ -4317,6 +4322,7 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
     document.getElementById('supportChatScreen').classList.add('hidden');
   });
   loadChat();
+  setInterval(loadChat, 2000);
 
   applySession();
 })();
