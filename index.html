@@ -3527,7 +3527,8 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
 .btn-accent:hover{background:#1a90ff}
 .btn[disabled]{opacity:.4;cursor:default;transform:none}
 .modal-overlay{position:fixed;inset:0;background:rgba(16,16,16,.08);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;z-index:80;padding:1rem;opacity:0;pointer-events:none;transition:opacity .2s ease}
-.chat-modal .modal{display:flex;flex-direction:column;max-height:82vh;padding:0;overflow:hidden}
+.support-chat-inner{display:flex;flex-direction:column;height:calc(100vh - 2rem);padding-top:8px;max-width:400px}
+.support-chat-inner .chat-messages{flex:1;min-height:0}
 .chat-head{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid #2a2a2a}
 .chat-title{font-family:'SF Pro Rounded',sans-serif;font-size:17px;font-weight:600;color:#fff}
 .chat-status{font-size:12px;font-weight:600;color:#8e8e8e;margin-top:2px}
@@ -3854,17 +3855,16 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
   </div>
 </div>
 
-<div class="modal-overlay chat-modal" id="supportChatModal" role="dialog" aria-modal="true" aria-label="Поддержка">
-  <div class="modal">
-    <div class="chat-head">
-      <div>
-        <div class="chat-title">Чат поддержки</div>
-        <div class="chat-status" id="chatStatus">Тикет #1 · открыт</div>
-      </div>
-      <button class="modal-close" type="button" data-close aria-label="Закрыть">&times;</button>
+<div class="settings-screen hidden" id="supportChatScreen">
+  <div class="settings-inner support-chat-inner">
+    <div class="setup-head">
+      <button class="setup-back" type="button" id="chatBack" aria-label="Назад">&larr;</button>
+      <div class="setup-title">Чат поддержки</div>
+      <div style="width:36px"></div>
     </div>
-    <div class="chat-messages" id="chatMessages"></div>
-    <div class="chat-input-row">
+    <div class="chat-status" id="chatStatus" style="text-align:center;margin-bottom:10px">Тикет #1 · открыт</div>
+    <div class="chat-messages" id="chatMessages" style="background:#181818;border:1px solid #2a2a2a;border-radius:20px;min-height:300px;flex:1"></div>
+    <div class="chat-input-row" style="background:transparent;border-top:none;padding-left:0;padding-right:0">
       <input class="chat-input" id="chatInput" type="text" placeholder="Напишите сообщение…" autocomplete="off">
       <button class="chat-send" type="button" id="chatSend">Отправить</button>
     </div>
@@ -4121,6 +4121,8 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
     if(setup) setup.classList.add('hidden');
     var settings=document.getElementById('settingsScreen');
     if(settings) settings.classList.add('hidden');
+    var chat=document.getElementById('supportChatScreen');
+    if(chat) chat.classList.add('hidden');
     document.querySelectorAll('.modal-overlay').forEach(function(o){o.classList.remove('open')});
     if(window.scrollTo) window.scrollTo({top:0,behavior:'smooth'});
   });
@@ -4218,7 +4220,7 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
 
   var ticketClosed=false;
   function openSupportChat(){
-    var chat=document.getElementById('supportChatModal');
+    var chat=document.getElementById('supportChatScreen');
     var msgs=document.getElementById('chatMessages');
     msgs.innerHTML='';
     if(!ticketClosed){
@@ -4227,7 +4229,8 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
       msgs.innerHTML+='<div class="chat-msg closed">Тикет закрыт поддержкой. Если нужна помощь — напишите сообщение, и мы создадим новый.</div>';
     }
     document.getElementById('chatStatus').textContent=ticketClosed?'Тикет #1 · закрыт':'Тикет #1 · открыт';
-    openModal(chat);
+    chat.classList.remove('hidden');
+    if(window.scrollTo) window.scrollTo(0,0);
     setTimeout(function(){ document.getElementById('chatInput').focus(); },100);
   }
   function appendMsg(text, who){
@@ -4260,6 +4263,9 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
   document.getElementById('chatSend').addEventListener('click',sendChat);
   document.getElementById('chatInput').addEventListener('keydown',function(e){
     if(e.key==='Enter') sendChat();
+  });
+  document.getElementById('chatBack').addEventListener('click',function(){
+    document.getElementById('supportChatScreen').classList.add('hidden');
   });
 
   applySession();
