@@ -3535,7 +3535,10 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
 .chat-title{font-family:'SF Pro Rounded',sans-serif;font-size:17px;font-weight:600;color:#fff}
 .chat-status{font-family:'SF Pro Rounded',sans-serif;font-size:12px;font-weight:600;color:#8e8e8e;margin-top:2px}
 .chat-messages{flex:1;overflow:visible;padding:16px 18px;display:flex;flex-direction:column;gap:10px;min-height:0}
-.chat-msg{max-width:78%;padding:10px 14px;border-radius:18px;font-family:'SF Pro Rounded',sans-serif;font-size:14px;font-weight:500;line-height:1.4;word-break:break-word}
+.chat-msg{max-width:78%;padding:10px 14px;border-radius:18px;font-family:'SF Pro Rounded',sans-serif;font-size:14px;font-weight:500;line-height:1.4;word-break:break-word;animation:msgIn .28s cubic-bezier(.25,1,.5,1);transform-origin:bottom}
+@keyframes msgIn{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+.chat-msg.msg-new{animation:msgPop .35s cubic-bezier(.25,1.4,.5,1)}
+@keyframes msgPop{0%{opacity:0;transform:translateY(14px) scale(.94)}60%{opacity:1;transform:translateY(-2px) scale(1.02)}100%{opacity:1;transform:translateY(0) scale(1)}}
 .chat-msg.user{align-self:flex-end;background:#2aabee;color:#fff;border-bottom-right-radius:6px}
 .chat-msg.support{align-self:flex-start;background:#202020;border:1px solid #2a2a2a;color:#e5e5e5;border-bottom-left-radius:6px}
 .chat-msg.closed{align-self:flex-start;background:#1c1c1c;border:1px solid #2a2a2a;color:#8e8e8e;font-size:12px;border-radius:12px;font-family:'SF Pro Rounded',sans-serif}
@@ -4256,22 +4259,27 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
     fetch(url).then(function(r){return r.json()}).then(function(data){
       var msgs=data.messages||[];
       if(msgs.length===lastMsgCount){ return; }
-      lastMsgCount=msgs.length;
       var hadScroll=false;
       if(box.scrollTop+box.clientHeight>=box.scrollHeight-20){ hadScroll=true; }
-      box.innerHTML='';
-      if(!msgs.length){
-        box.innerHTML='<div class="chat-msg support">Здравствуйте! Чем можем помочь? Опишите вашу проблему.</div>';
+      if(lastMsgCount===-1){
+        box.innerHTML='';
+        if(!msgs.length){
+          box.innerHTML='<div class="chat-msg support">Здравствуйте! Чем можем помочь? Опишите вашу проблему.</div>';
+        } else {
+          msgs.forEach(function(m){
+            var div=makeMsgEl(m);
+            box.appendChild(div);
+          });
+        }
+      } else {
+        for(var i=lastMsgCount;i<msgs.length;i++){
+          var d=makeMsgEl(msgs[i]);
+          box.appendChild(d);
+          d.classList.add('msg-new');
+        }
       }
-      msgs.forEach(function(m){
-        var who = (m.role==='admin') ? 'support' : 'user';
-        var div=document.createElement('div');
-        div.className='chat-msg '+who;
-        var label = (isSupport && m.role==='user') ? (m.name||'Пользователь')+': ' : '';
-        div.textContent=label+m.text;
-        box.appendChild(div);
-      });
-      if(hadScroll || msgs.length===1){ box.scrollTop=box.scrollHeight; }
+      lastMsgCount=msgs.length;
+      if(hadScroll || lastMsgCount<=1){ box.scrollTop=box.scrollHeight; }
       if(isSupport){
         status.textContent='Режим поддержки · открыто тикетов: '+msgs.length;
       } else {
@@ -4279,6 +4287,14 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
         status.textContent = opened ? 'Тикет в работе · открыт' : 'Тикет #1 · открыт';
       }
     }).catch(function(){ renderFakeChat(); });
+  }
+  function makeMsgEl(m){
+    var who = (m.role==='admin') ? 'support' : 'user';
+    var div=document.createElement('div');
+    div.className='chat-msg '+who;
+    var label = (isSupport && m.role==='user') ? (m.name||'Пользователь')+': ' : '';
+    div.textContent=label+m.text;
+    return div;
   }
   function renderFakeChat(){
     var box=document.getElementById('chatMessages');
