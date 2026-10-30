@@ -15,6 +15,7 @@ import json
 import os
 import random
 import smtplib
+import threading
 import time
 from email.header import Header
 from email.mime.text import MIMEText
@@ -129,6 +130,75 @@ def verify_code():
     _codes.pop(email, None)
     _save_state()
     return jsonify(ok=True, email=email)
+
+
+SUPPORT_EMAIL = os.environ.get("SUPPORT_EMAIL", "bunseriy@gmail.com")
+ADMIN_KEY = os.environ.get("ADMIN_KEY", "support1234")
+CHAT_FILE = Path(__file__).resolve().parent / "chat_messages.json"
+_msg_lock = threading.Lock()
+
+
+def _load_messages():
+    try:
+        if CHAT_FILE.exists():
+            data = json.loads(CHAT_FILE.read_text(encoding="utf-8"))
+            if isinstance(data, list):
+                return data
+    except (OSError, ValueError):
+        pass
+    return []
+
+
+def _save_messages(msgs):
+    try:
+        CHAT_FILE.write_text(json.dumps(msgs, ensure_ascii=False, indent=2), encoding="utf-8")
+    except OSError:
+        pass
+
+
+def _strip_role(text, role):
+    """Убираем служебный префикс __support__/__user__, если он есть."""
+    prefix = "__" + role + "__"
+    if text.startswith(prefix):
+        return text[len(prefix):], True
+    return text, False
+
+
+@app.post("/api/support")
+def support_message():
+    """Добавляет сообщение в общий чат поддержки. role: user|admin."""
+    data = request.get_json(silent=True) or {}
+    raw = (data.get("message") or "").strip()
+    role = (data.get("role") or "user").strip()
+    name = (data.get("name") or "Пользователь").strip()
+    if role == "admin":
+        key = (data.get("key") or "").strip()
+        if not key or key != ADMIN_KEY:
+            return jsonify(ok=False, error="Нет доступа"), 403
+    if not raw:
+        return jsonify(ok=False, error="Пустое сообщение"), 400
+    msgs = _load_messages()
+    msgs.append({
+        "id": len(msgs) + 1,
+        "role": role,
+        "name": name,
+        "text": raw,
+        "ts": time.time(),
+    })
+    _save_messages(msgs)
+    return jsonify(ok=True, detail="message saved")
+
+
+@app.get("/api/support")
+def support_list():
+    """Возвращает переписку. С админ-ключом — все сообщения с ролями."""
+    key = (request.args.get("key") or "").strip()
+    msgs = _load_messages()
+    if key and key == ADMIN_KEY:
+        return jsonify(ok=True, messages=msgs)
+    # Пользователю — без ролей (для простоты показываем последние 50)
+    pub = [{"text": m["text"], "role": m["role"]} for m in msgs[-50:]]
+    return jsonify(ok=True, messages=pub)
 
 
 @app.get("/api/health")
