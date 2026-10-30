@@ -3561,6 +3561,12 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
 .plan.selected{border-color:#dfe3e6;background:#1c2836}
 .plan-name{font-family:'SF Pro Rounded',sans-serif;font-size:15px;font-weight:600;color:#fff}
 .plan-sub{font-family:'SF Pro Rounded',sans-serif;font-size:12px;font-weight:600;color:#8e8e8e;margin-top:2px}
+.bonus-list{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.bonus-card{display:flex;align-items:center;gap:12px;background:#202020;border:1px solid #2e2e2e;border-radius:20px;padding:14px}
+.bonus-icon{flex:none;width:40px;height:40px;border-radius:14px;background:#181818;display:flex;align-items:center;justify-content:center;font-size:20px}
+.bonus-text{flex:1;min-width:0}
+.bonus-title{font-family:'SF Pro Rounded',sans-serif;font-size:14px;font-weight:600;color:#fff}
+.bonus-desc{font-family:'SF Pro Rounded',sans-serif;font-size:12px;font-weight:600;color:#8e8e8e;margin-top:2px}
 .plan-price{font-family:'SF Pro Rounded',sans-serif;font-size:16px;font-weight:600;color:#fff;white-space:nowrap}
 .steps{display:flex;flex-direction:column;gap:12px;margin-bottom:18px}
 .step{display:flex;gap:12px;align-items:flex-start;text-align:left}
@@ -3876,6 +3882,45 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
   </div>
 </div>
 
+<div class="modal-overlay" id="bonusModal" role="dialog" aria-modal="true" aria-label="Бонусы">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">Бонусы</div>
+      <button class="modal-close" type="button" data-close aria-label="Закрыть">&times;</button>
+    </div>
+    <div class="bonus-list">
+      <a href="https://t.me/deepmintvpn" target="_blank" rel="noopener" style="text-decoration:none">
+        <div class="bonus-card">
+          <div class="bonus-icon">📢</div>
+          <div class="bonus-text">
+            <div class="bonus-title">Канал проекта</div>
+            <div class="bonus-desc">Подпишись — новости и анонсы акций</div>
+          </div>
+          <span style="color:#8e8e8e;font-size:20px">›</span>
+        </div>
+      </a>
+      <a href="https://t.me/deepmintvpn_bot?start=ref" target="_blank" rel="noopener" style="text-decoration:none">
+        <div class="bonus-card">
+          <div class="bonus-icon">🎁</div>
+          <div class="bonus-text">
+            <div class="bonus-title">Пригласи друга</div>
+            <div class="bonus-desc">Получи 20% с его оплат</div>
+          </div>
+          <span style="color:#8e8e8e;font-size:20px">›</span>
+        </div>
+      </a>
+      <div class="bonus-card">
+        <div class="bonus-icon">⚡</div>
+        <div class="bonus-text">
+          <div class="bonus-title">Бонус за подписку на канал</div>
+          <div class="bonus-desc">Скоро — следи за каналом</div>
+        </div>
+      </div>
+    </div>
+    <button class="btn" type="button" id="bonusCloseBtn">Понятно</button>
+  </div>
+</div>
+
 <div class="modal-overlay" id="emailModal" role="dialog" aria-modal="true" aria-label="Войти по почте">
   <div class="modal">
     <div class="modal-head">
@@ -4132,7 +4177,10 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
     if(window.scrollTo) window.scrollTo({top:0,behavior:'smooth'});
   });
   document.getElementById('bellBtn').addEventListener('click',function(){
-    showToast('Подпишитесь на канал, чтобы не пропустить новости и бонусы: <a href="https://t.me/deepmintvpn" target="_blank" rel="noopener">@deepmintvpn</a>');
+    openModal(document.getElementById('bonusModal'));
+  });
+  document.getElementById('bonusCloseBtn').addEventListener('click',function(){
+    closeModals();
   });
   document.getElementById('supportBtn').addEventListener('click',function(){
     openSupportChat();
