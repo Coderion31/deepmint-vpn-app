@@ -4249,15 +4249,23 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
   var SUPPORT_API=window.SUPPORT_API || 'https://deepmint-vpn-app.onrender.com';
   var SUPPORT_KEY='support1234';
   var isSupport=(location.search.indexOf('support='+SUPPORT_KEY)>=0);
+  var myTicket='';
+  try{ myTicket=localStorage.getItem('deepmint_ticket')||''; }catch(e){}
+  var activeTicket=null; // для режима поддержки — выбранный тикет
   function apiUrl(path){ return SUPPORT_API ? SUPPORT_API + path : ''; }
   var lastMsgCount=-1;
   function loadChat(){
-    var url=apiUrl('/api/support?key='+encodeURIComponent(SUPPORT_KEY));
     var box=document.getElementById('chatMessages');
     var status=document.getElementById('chatStatus');
+    if(isSupport){
+      loadTickets();
+      return;
+    }
+    var url=apiUrl('/api/support?ticket_id='+encodeURIComponent(myTicket||'new'));
     if(!url){ renderFakeChat(); return; }
     fetch(url).then(function(r){return r.json()}).then(function(data){
       var msgs=data.messages||[];
+      if(data.ticket_id && !myTicket){ myTicket=data.ticket_id; try{localStorage.setItem('deepmint_ticket',myTicket);}catch(e){} }
       if(msgs.length===lastMsgCount){ return; }
       var hadScroll=false;
       if(box.scrollTop+box.clientHeight>=box.scrollHeight-20){ hadScroll=true; }
@@ -4266,10 +4274,7 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
         if(!msgs.length){
           box.innerHTML='<div class="chat-msg support">Здравствуйте! Чем можем помочь? Опишите вашу проблему.</div>';
         } else {
-          msgs.forEach(function(m){
-            var div=makeMsgEl(m);
-            box.appendChild(div);
-          });
+          msgs.forEach(function(m){ box.appendChild(makeMsgEl(m)); });
         }
       } else {
         for(var i=lastMsgCount;i<msgs.length;i++){
@@ -4280,13 +4285,53 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
       }
       lastMsgCount=msgs.length;
       if(hadScroll || lastMsgCount<=1){ box.scrollTop=box.scrollHeight; }
-      if(isSupport){
-        status.textContent='Режим поддержки · открыто тикетов: '+msgs.length;
-      } else {
-        var opened=msgs.filter(function(m){return m.role==='admin'}).length;
-        status.textContent = opened ? 'Тикет в работе · открыт' : 'Тикет #1 · открыт';
-      }
+      var opened=msgs.filter(function(m){return m.role==='admin'}).length;
+      status.textContent = opened ? 'Тикет в работе · открыт' : 'Тикет #'+(myTicket||'1')+' · открыт';
     }).catch(function(){ renderFakeChat(); });
+  }
+  function loadTickets(){
+    var box=document.getElementById('chatMessages');
+    var status=document.getElementById('chatStatus');
+    if(activeTicket){
+      loadConversation();
+      return;
+    }
+    var url=apiUrl('/api/support?key='+encodeURIComponent(SUPPORT_KEY));
+    if(!url){ renderFakeChat(); return; }
+    fetch(url).then(function(r){return r.json()}).then(function(data){
+      var tickets=data.tickets||[];
+      status.textContent='Режим поддержки · тикетов: '+tickets.length;
+      box.innerHTML='';
+      if(!tickets.length){
+        box.innerHTML='<div class="chat-msg support">Тикетов пока нет. Когда пользователи напишут, они появятся здесь.</div>';
+        return;
+      }
+      tickets.forEach(function(t){
+        var d=document.createElement('div');
+        d.className='chat-msg support ticket-item';
+        d.style.cursor='pointer';
+        d.textContent='#'+t.ticket_id+' · '+(t.name||'Пользователь')+' — '+(t.last||'')+' ('+t.count+' сообщ.)';
+        d.addEventListener('click',function(){ openTicket(t.ticket_id); });
+        box.appendChild(d);
+      });
+    }).catch(function(){ renderFakeChat(); });
+  }
+  function openTicket(tid){
+    activeTicket=tid;
+    lastMsgCount=-1;
+    loadConversation();
+  }
+  function loadConversation(){
+    var box=document.getElementById('chatMessages');
+    var url=apiUrl('/api/support?key='+encodeURIComponent(SUPPORT_KEY)+'&ticket_id='+encodeURIComponent(activeTicket));
+    fetch(url).then(function(r){return r.json()}).then(function(data){
+      var msgs=data.messages||[];
+      lastMsgCount=msgs.length;
+      box.innerHTML='';
+      msgs.forEach(function(m){ box.appendChild(makeMsgEl(m)); });
+      if(!msgs.length){ box.innerHTML='<div class="chat-msg support">Пустой тикет.</div>'; }
+      box.scrollTop=box.scrollHeight;
+    }).catch(function(){});
   }
   function makeMsgEl(m){
     var who = (m.role==='admin') ? 'support' : 'user';
@@ -4316,13 +4361,15 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
       return;
     }
     var payload={message:text, role:role, name:(isSupport?'Поддержка':'Пользователь')};
-    if(isSupport) payload.key=SUPPORT_KEY;
+    if(isSupport){ payload.key=SUPPORT_KEY; payload.ticket_id=activeTicket||''; }
+    else { payload.ticket_id=myTicket||''; }
     fetch(url,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify(payload)
     }).then(function(r){return r.json()}).then(function(d){
       if(d.ok){
+        if(!isSupport && d.ticket_id){ myTicket=d.ticket_id; try{localStorage.setItem('deepmint_ticket',myTicket);}catch(e){} }
         if(!isSupport) appendMsg('Сообщение отправлено в поддержку.','support');
         loadChat();
       } else {

@@ -139,14 +139,15 @@ _msg_lock = threading.Lock()
 
 
 def _load_messages():
+    """Формат: {ticket_id: [ {role, name, text, ts}, ... ]}"""
     try:
         if CHAT_FILE.exists():
             data = json.loads(CHAT_FILE.read_text(encoding="utf-8"))
-            if isinstance(data, list):
+            if isinstance(data, dict):
                 return data
     except (OSError, ValueError):
         pass
-    return []
+    return {}
 
 
 def _save_messages(msgs):
@@ -156,49 +157,71 @@ def _save_messages(msgs):
         pass
 
 
-def _strip_role(text, role):
-    """Убираем служебный префикс __support__/__user__, если он есть."""
-    prefix = "__" + role + "__"
-    if text.startswith(prefix):
-        return text[len(prefix):], True
-    return text, False
+def _new_ticket_id(tickets):
+    """Числовой id следующего тикета."""
+    max_id = 0
+    for tid in tickets.keys():
+        try:
+            n = int(tid)
+            if n > max_id:
+                max_id = n
+        except (TypeError, ValueError):
+            pass
+    return str(max_id + 1)
 
 
 @app.post("/api/support")
 def support_message():
-    """Добавляет сообщение в общий чат поддержки. role: user|admin."""
+    """Добавляет сообщение в тикет. Пользователь: ticket_id (создаётся при первом сообщении).
+    Поддержка: key + ticket_id."""
     data = request.get_json(silent=True) or {}
     raw = (data.get("message") or "").strip()
     role = (data.get("role") or "user").strip()
     name = (data.get("name") or "Пользователь").strip()
+    ticket_id = (data.get("ticket_id") or "").strip()
     if role == "admin":
         key = (data.get("key") or "").strip()
         if not key or key != ADMIN_KEY:
             return jsonify(ok=False, error="Нет доступа"), 403
     if not raw:
         return jsonify(ok=False, error="Пустое сообщение"), 400
-    msgs = _load_messages()
+    tickets = _load_messages()
+    if not ticket_id or ticket_id not in tickets:
+        ticket_id = _new_ticket_id(tickets)
+    msgs = tickets.setdefault(ticket_id, [])
     msgs.append({
-        "id": len(msgs) + 1,
         "role": role,
         "name": name,
         "text": raw,
         "ts": time.time(),
     })
-    _save_messages(msgs)
-    return jsonify(ok=True, detail="message saved")
+    _save_messages(tickets)
+    return jsonify(ok=True, detail="message saved", ticket_id=ticket_id)
 
 
 @app.get("/api/support")
 def support_list():
-    """Возвращает переписку. С админ-ключом — все сообщения с ролями."""
+    """Без ключа: (ticket_id = свой чат). С админ-ключом: список тикетов."""
     key = (request.args.get("key") or "").strip()
-    msgs = _load_messages()
+    ticket_id = (request.args.get("ticket_id") or "").strip()
+    tickets = _load_messages()
     if key and key == ADMIN_KEY:
-        return jsonify(ok=True, messages=msgs)
-    # Пользователю — без ролей (для простоты показываем последние 50)
-    pub = [{"text": m["text"], "role": m["role"]} for m in msgs[-50:]]
-    return jsonify(ok=True, messages=pub)
+        # Для поддержки: список тикетов с последним сообщением и числом сообщений
+        summary = []
+        for tid, msgs in tickets.items():
+            last = msgs[-1] if msgs else {}
+            summary.append({
+                "ticket_id": tid,
+                "name": msgs[0].get("name", "") if msgs else "",
+                "last": last.get("text", ""),
+                "count": len(msgs),
+                "ts": last.get("ts", 0),
+            })
+        summary.sort(key=lambda t: t["ts"], reverse=True)
+        return jsonify(ok=True, tickets=summary)
+    if ticket_id:
+        return jsonify(ok=True, messages=tickets.get(ticket_id, []), ticket_id=ticket_id)
+    return jsonify(ok=True, messages=[], ticket_id="")
 
 
 @app.get("/api/health")
