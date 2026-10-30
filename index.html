@@ -3541,8 +3541,6 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
 .chat-input:focus{border-color:#5f666c}
 .chat-send{flex:none;background:#dfe3e6;border:none;border-radius:999px;color:#0c0e10;font-family:'SF Pro Rounded',sans-serif;font-size:14px;font-weight:600;padding:0 18px;cursor:pointer}
 .chat-send:active{transform:scale(.96)}
-.chat-close-ticket{width:100%;margin:0;background:transparent;color:#ff6b6b;border:1px solid rgba(255,107,107,.4)}
-.chat-close-ticket:hover{background:rgba(255,107,107,.1)}
 .chat-msg .ticket-closed{display:inline-block;background:#232323;border:1px solid #3a3a3a;border-radius:999px;padding:6px 12px;font-size:12px;font-weight:600;color:#8e8e8e;margin-top:8px}
 .modal-overlay.open{opacity:1;pointer-events:auto}
 .modal{background:#181818;border:1px solid #2a2a2a;border-radius:28px;width:100%;max-width:400px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.5);transform:translateY(10px) scale(.98);transition:transform .2s ease}
@@ -4225,9 +4223,8 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
     msgs.innerHTML='';
     if(!ticketClosed){
       msgs.innerHTML+='<div class="chat-msg support">Здравствуйте! Чем можем помочь? Опишите вашу проблему — постараемся ответить как можно быстрее.</div>';
-      msgs.innerHTML+='<button class="btn chat-close-ticket" type="button">Проблема решена — закрыть тикет</button>';
     } else {
-      msgs.innerHTML+='<div class="chat-msg closed">Тикет закрыт. Если нужна помощь — напишите сообщение, и мы создадим новый.</div>';
+      msgs.innerHTML+='<div class="chat-msg closed">Тикет закрыт поддержкой. Если нужна помощь — напишите сообщение, и мы создадим новый.</div>';
     }
     document.getElementById('chatStatus').textContent=ticketClosed?'Тикет #1 · закрыт':'Тикет #1 · открыт';
     openModal(chat);
@@ -4251,20 +4248,18 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
     setTimeout(function(){
       appendMsg('Спасибо за обращение! Ваш запрос принят, специалист скоро ответит.','support');
       setTimeout(function(){
-        appendMsg('Есть ли у вас ещё вопросы или можем закрыть тикет?','support');
+        appendMsg('Если вопросов больше нет, закрываем тикет.','support');
+        setTimeout(function(){
+          ticketClosed=true;
+          document.getElementById('chatStatus').textContent='Тикет закрыт';
+          appendMsg('Тикет закрыт. Всего доброго! Если возникнут вопросы — напишите, откроем новый.','support');
+        },1500);
       },1200);
     },700);
   }
   document.getElementById('chatSend').addEventListener('click',sendChat);
   document.getElementById('chatInput').addEventListener('keydown',function(e){
     if(e.key==='Enter') sendChat();
-  });
-  document.getElementById('supportChatModal').addEventListener('click',function(e){
-    if(e.target.closest('.chat-close-ticket')){
-      ticketClosed=true;
-      document.getElementById('chatStatus').textContent='Тикет закрыт';
-      appendMsg('Один из нас закрыл тикет.','support');
-    }
   });
 
   applySession();
