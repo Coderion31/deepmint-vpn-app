@@ -3708,6 +3708,17 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
     </div>
 
     <div class="setting-group">
+      <div class="setting-group-title">Устройства</div>
+      <div class="setting-row" id="rowDevices" style="cursor:pointer">
+        <div>
+          <div class="setting-row-label">Устройства</div>
+          <div class="setting-row-sub" id="devicesSub">0 подключено</div>
+        </div>
+        <span style="color:#dfe3e6;font-size:20px">›</span>
+      </div>
+    </div>
+
+    <div class="setting-group">
       <div class="setting-group-title">О приложении</div>
       <div class="setting-row">
         <div>
@@ -3810,6 +3821,18 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
       <span class="profile-balance-value" id="profileBalance">0 ₽</span>
     </div>
     <button class="btn btn-danger" type="button" id="logoutBtn">Выйти</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="devicesModal" role="dialog" aria-modal="true" aria-label="Устройства">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">Устройства</div>
+      <button class="modal-close" type="button" data-close aria-label="Закрыть">&times;</button>
+    </div>
+    <div class="plan-sub" style="font-size:13px;color:#8e8e8e;margin-bottom:14px">Подключено: <span id="devicesCount">0</span> из 2</div>
+    <div id="devicesList"></div>
+    <button class="btn" type="button" id="addDeviceBtn" data-open="setupScreen">Добавить устройство</button>
   </div>
 </div>
 
@@ -4079,6 +4102,33 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
     t.addEventListener('click',function(){
       t.classList.toggle('on');
     });
+  });
+
+  function renderDevices(){
+    var n=0;
+    var list=document.getElementById('devicesList');
+    var html='';
+    if(!list) return;
+    if(n===0){
+      html='<div style="text-align:center;color:#8e8e8e;font-size:14px;padding:10px 0 16px">Устройства ещё не добавлены.<br>Нажмите «Добавить устройство».</div>';
+    }
+    list.innerHTML=html;
+    var cnt=document.getElementById('devicesCount');
+    if(cnt) cnt.textContent=n;
+    var sub=document.getElementById('devicesSub');
+    if(sub) sub.textContent=n+' подключено';
+    var dc=document.getElementById('deviceCount');
+    if(dc) dc.textContent=n;
+  }
+  document.getElementById('rowDevices').addEventListener('click',function(){
+    renderDevices();
+    openModal(document.getElementById('devicesModal'));
+  });
+  document.getElementById('devicesModal').addEventListener('click',function(e){
+    if(e.target.closest('[data-open="setupScreen"]')){
+      closeModals();
+      setTimeout(function(){ document.querySelector('[data-open="setupScreen"]').click(); },50);
+    }
   });
 
   applySession();
