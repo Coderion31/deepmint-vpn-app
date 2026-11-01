@@ -3755,13 +3755,36 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
     </div>
 
     <div class="setting-group">
+      <div class="setting-group-title">Аккаунт</div>
+      <div class="setting-row">
+        <div>
+          <div class="setting-row-label">Пользователь</div>
+          <div class="setting-row-sub" id="accountName">—</div>
+        </div>
+      </div>
+      <div class="setting-row">
+        <div>
+          <div class="setting-row-label">Почта</div>
+          <div class="setting-row-sub" id="accountEmail">не указана</div>
+        </div>
+      </div>
+      <div class="setting-row" style="cursor:pointer" id="accountLogout">
+        <div>
+          <div class="setting-row-label" style="color:#ff6b6b">Выйти из аккаунта</div>
+          <div class="setting-row-sub">Завершить сессию</div>
+        </div>
+        <span style="color:#8e8e8e;font-size:20px">›</span>
+      </div>
+    </div>
+
+    <div class="setting-group">
       <div class="setting-group-title">О приложении</div>
       <div class="setting-row">
         <div>
           <div class="setting-row-label">Версия</div>
           <div class="setting-row-sub">Приложение deepmint.vpn</div>
         </div>
-        <span style="color:#dfe3e6;font-size:15px;font-weight:600" id="versionValue">1.0.0</span>
+        <span style="color:#dfe3e6;font-size:15px;font-weight:600" id="versionValue">1.1.0</span>
       </div>
       <a href="https://t.me/deepmintvpn" target="_blank" rel="noopener" style="text-decoration:none">
         <div class="setting-row">
@@ -4010,6 +4033,8 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
     var inTG = !!tgUser();
     var logged = inTG || (session && session.method==='email');
     auth.classList.toggle('hidden',!!logged);
+    var accName=document.getElementById('accountName');
+    var accEmail=document.getElementById('accountEmail');
     if(inTG){
       var u=tgUser();
       var name=displayName(u);
@@ -4017,6 +4042,8 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
       var nameEl=document.getElementById('profileName');
       nameEl.textContent=name;
       loginEl.textContent=u.username ? '@'+u.username : ('Telegram ID '+u.id);
+      if(accName) accName.textContent=name;
+      if(accEmail) accEmail.textContent = (session && session.email) ? session.email : 'не указана';
       if(u.photo_url){
         document.getElementById('profileAvatarBig').innerHTML='<img src="'+u.photo_url+'" alt="">';
         document.getElementById('profileBtn').innerHTML='<img src="'+u.photo_url+'" alt="">';
@@ -4024,9 +4051,13 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
     } else if(session && session.method==='email'){
       document.getElementById('profileName').textContent=session.email||'пользователь';
       document.getElementById('profileLogin').textContent='вход по почте';
+      if(accName) accName.textContent=session.email||'пользователь';
+      if(accEmail) accEmail.textContent=session.email||'';
     } else {
       document.getElementById('profileName').textContent='—';
       document.getElementById('profileLogin').textContent='вход через Telegram';
+      if(accName) accName.textContent='Гость';
+      if(accEmail) accEmail.textContent='не указана';
     }
   }
 
@@ -4203,6 +4234,13 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
   });
   document.getElementById('settingsBack').addEventListener('click',function(){
     document.getElementById('settingsScreen').classList.add('hidden');
+  });
+  document.getElementById('accountLogout').addEventListener('click',function(){
+    closeModals();
+    clearSession();
+    applySession();
+    document.getElementById('settingsScreen').classList.add('hidden');
+    showToast('Вы вышли из аккаунта');
   });
   document.querySelectorAll('.toggle').forEach(function(t){
     t.addEventListener('click',function(){
