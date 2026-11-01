@@ -3679,10 +3679,6 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
       <button class="btn btn-accent" type="button" data-open="payModal">Оплатить подписку</button>
       <button class="btn" type="button" data-open="setupScreen">Настроить VPN</button>
     </div>
-    <div class="mini-row">
-      <div class="mini-card" id="supportCard">Поддержка</div>
-      <div class="mini-card"></div>
-    </div>
   <div class="setup-screen hidden" id="setupScreen">
   <div class="setup-inner">
     <div class="setup-head">
@@ -4241,9 +4237,6 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
     closeModals();
   });
   document.getElementById('supportBtn').addEventListener('click',function(){
-    openSupportChat();
-  });
-  document.getElementById('supportCard').addEventListener('click',function(){
     openSupportChat();
   });
   document.getElementById('settingsBtn').addEventListener('click',function(){
