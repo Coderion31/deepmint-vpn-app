@@ -3639,8 +3639,9 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
 .toggle.on::after{transform:translateX(18px)}
 .setup-inner{max-width:560px;margin:0 auto;padding-top:1rem}
 .setup-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem}
-.setup-back{background:#202020;border:none;color:#fff;width:36px;height:36px;border-radius:50%;font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background-color .15s ease}
+.setup-back{background:#202020;border:none;color:#fff;width:36px;height:36px;border-radius:50%;font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background-color .15s ease;margin-top:-2px}
 .setup-back:hover{background:#2a2a2a}
+.setup-back svg{flex:none}
 .setup-title{font-family:'SF Pro Rounded',sans-serif;font-size:20px;font-weight:600;color:#fff}
 .device-card{display:flex;align-items:center;gap:14px;background:#181818;border:1px solid #2a2a2a;border-radius:26px;padding:18px;margin-bottom:1.2rem}
 .device-icon{flex:none;width:52px;height:52px;border-radius:18px;background:#202020;color:#dfe3e6;display:flex;align-items:center;justify-content:center}
@@ -3684,7 +3685,9 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
   <div class="setup-screen hidden" id="setupScreen">
   <div class="setup-inner">
     <div class="setup-head">
-      <button class="setup-back" type="button" id="setupBack" aria-label="Назад">&larr;</button>
+      <button class="setup-back" type="button" id="setupBack" aria-label="Назад">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"></path><path d="M12 19l-7-7 7-7"></path></svg>
+      </button>
       <div class="setup-title">Настройка VPN</div>
       <div style="width:36px"></div>
     </div>
@@ -3714,7 +3717,9 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
 <div class="settings-screen hidden" id="settingsScreen">
   <div class="settings-inner">
     <div class="setup-head">
-      <button class="setup-back" type="button" id="settingsBack" aria-label="Назад">&larr;</button>
+      <button class="setup-back" type="button" id="settingsBack" aria-label="Назад">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"></path><path d="M12 19l-7-7 7-7"></path></svg>
+      </button>
       <div class="setup-title">Настройки</div>
       <div style="width:36px"></div>
     </div>
@@ -3869,7 +3874,9 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
 <div class="settings-screen hidden" id="supportChatScreen">
   <div class="settings-inner support-chat-inner">
     <div class="setup-head">
-      <button class="setup-back" type="button" id="chatBack" aria-label="Назад">&larr;</button>
+      <button class="setup-back" type="button" id="chatBack" aria-label="Назад">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"></path><path d="M12 19l-7-7 7-7"></path></svg>
+      </button>
       <div class="setup-title">Чат поддержки</div>
       <div style="width:36px"></div>
     </div>
