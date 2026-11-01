@@ -4261,8 +4261,10 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
       openModal(document.getElementById('emailModal'));
     } else if(mode==='telegram'){
       closeModals();
-      window.open('https://t.me/deepmintvpn_bot','_blank','noopener');
-      showToast('Откройте бота, чтобы привязать Telegram');
+      var email=(session && session.email) || '';
+      var link='https://t.me/deepmintvpn_bot?start=link_'+encodeURIComponent(email);
+      window.open(link,'_blank','noopener');
+      showToast('Откройте бота — привяжем Telegram к '+email);
     } else {
       closeModals();
       openModal(document.getElementById('emailModal'));
