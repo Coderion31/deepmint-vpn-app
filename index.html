@@ -4263,7 +4263,13 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
       closeModals();
       var email=(session && session.email) || '';
       var link='https://t.me/deepmintvpn_bot?start=link_'+encodeURIComponent(email);
-      window.open(link,'_blank','noopener');
+      try{
+        if(window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.openTelegramLink){
+          window.Telegram.WebApp.openTelegramLink(link);
+        } else {
+          window.open(link,'_blank','noopener');
+        }
+      }catch(e){ window.open(link,'_blank','noopener'); }
       showToast('Откройте бота — привяжем Telegram к '+email);
     } else {
       closeModals();
