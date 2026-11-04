@@ -3765,13 +3765,13 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
           <div class="setting-row-sub" id="accountLoginMethod">—</div>
         </div>
       </div>
-      <div class="setting-row" style="cursor:pointer" id="accountLink">
+      <a class="setting-row" style="cursor:pointer;text-decoration:none;color:inherit" id="accountLink">
         <div>
           <div class="setting-row-label" id="accountLinkLabel">Привязать почту</div>
           <div class="setting-row-sub" id="accountLinkSub">Войти через почту</div>
         </div>
         <span style="color:#dfe3e6;font-size:20px">›</span>
-      </div>
+      </a>
       <div class="setting-row" style="cursor:pointer" id="accountLogout">
         <div>
           <div class="setting-row-label" style="color:#ff6b6b">Выйти из аккаунта</div>
@@ -4051,21 +4051,26 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
       if(accMethod) accMethod.textContent = 'Telegram';
       if(linkLabel) linkLabel.textContent='Привязать почту';
       if(linkSub) linkSub.textContent='Добавить email к аккаунту';
-      if(linkRow) linkRow.setAttribute('data-link','email');
+      if(linkRow){ linkRow.setAttribute('data-link','email'); linkRow.removeAttribute('href'); }
     } else if(session && session.method==='email'){
       if(accName) accName.textContent=session.email||'пользователь';
       if(accEmail) accEmail.textContent=session.email||'';
       if(accMethod) accMethod.textContent='Почта';
       if(linkLabel) linkLabel.textContent='Привязать Telegram';
       if(linkSub) linkSub.textContent='Войти через Telegram';
-      if(linkRow) linkRow.setAttribute('data-link','telegram');
+      if(linkRow){
+        linkRow.setAttribute('data-link','telegram');
+        linkRow.setAttribute('href','https://t.me/deepmintvpn_bot?start=link_'+encodeURIComponent(session.email||''));
+        linkRow.setAttribute('target','_blank');
+        linkRow.setAttribute('rel','noopener');
+      }
     } else {
       if(accName) accName.textContent='Гость';
       if(accEmail) accEmail.textContent='не указана';
       if(accMethod) accMethod.textContent='—';
       if(linkLabel) linkLabel.textContent='Войти';
       if(linkSub) linkSub.textContent='Войти через Telegram или почту';
-      if(linkRow) linkRow.setAttribute('data-link','none');
+      if(linkRow){ linkRow.setAttribute('data-link','none'); linkRow.removeAttribute('href'); }
     }
   }
 
@@ -4242,23 +4247,17 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
   document.getElementById('settingsBack').addEventListener('click',function(){
     document.getElementById('settingsScreen').classList.add('hidden');
   });
-  document.getElementById('accountLink').addEventListener('click',function(){
+  document.getElementById('accountLink').addEventListener('click',function(e){
     var mode=this.getAttribute('data-link')||'none';
+    if(mode==='telegram'){
+      // Это ссылка на бота со start=link_<email> — переход уже по href
+      closeModals();
+      return;
+    }
+    e.preventDefault();
     if(mode==='email'){
       closeModals();
       openModal(document.getElementById('emailModal'));
-    } else if(mode==='telegram'){
-      closeModals();
-      var email=(session && session.email) || '';
-      var link='https://t.me/deepmintvpn_bot?start=link_'+encodeURIComponent(email);
-      try{
-        if(window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.openTelegramLink){
-          window.Telegram.WebApp.openTelegramLink(link);
-        } else {
-          window.open(link,'_blank','noopener');
-        }
-      }catch(e){ window.open(link,'_blank','noopener'); }
-      showToast('Откройте бота — привяжем Telegram к '+email);
     } else {
       closeModals();
       openModal(document.getElementById('emailModal'));
