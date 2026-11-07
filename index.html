@@ -3670,6 +3670,7 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
       <div class="balance-label">Баланс</div>
       <div class="balance-amount" id="balanceAmount">0 ₽</div>
     </div>
+    <div style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden" aria-hidden="true">плаtega</div>
     <div class="actions">
       <button class="btn btn-accent" type="button" data-open="payModal">Оплатить подписку</button>
       <button class="btn" type="button" data-open="setupScreen">Настроить VPN</button>
@@ -3782,13 +3783,48 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
     </div>
 
     <div class="setting-group">
+      <div class="setting-group-title">Документы</div>
+      <a href="privacy.html" style="text-decoration:none">
+        <div class="setting-row">
+          <div>
+            <div class="setting-row-label">Политика конфиденциальности</div>
+            <div class="setting-row-sub">Как мы обрабатываем ваши данные</div>
+          </div>
+          <span style="color:#dfe3e6;font-size:20px">›</span>
+        </div>
+      </a>
+      <a href="terms.html" style="text-decoration:none">
+        <div class="setting-row">
+          <div>
+            <div class="setting-row-label">Пользовательское соглашение</div>
+            <div class="setting-row-sub">Условия использования сервиса</div>
+          </div>
+          <span style="color:#dfe3e6;font-size:20px">›</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="setting-group">
+      <div class="setting-group-title">Поддержка</div>
+      <a href="mailto:bunseriy@gmail.com" style="text-decoration:none">
+        <div class="setting-row">
+          <div>
+            <div class="setting-row-label">Написать на почту</div>
+            <div class="setting-row-sub">bunseriy@gmail.com — ответим в течение дня</div>
+          </div>
+          <span style="color:#dfe3e6;font-size:20px">›</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="setting-group">
       <div class="setting-group-title">О приложении</div>
       <div class="setting-row">
         <div>
           <div class="setting-row-label">Версия</div>
           <div class="setting-row-sub">Приложение deepmint.vpn</div>
         </div>
-        <span style="color:#dfe3e6;font-size:15px;font-weight:600" id="versionValue">1.1.0</span>
+        <span style="color:#dfe3e6;font-size:15px;font-weight:600" id="versionValue">1.2.0</span>
       </div>
       <a href="https://t.me/deepmintvpn" target="_blank" rel="noopener" style="text-decoration:none">
         <div class="setting-row">
@@ -3861,7 +3897,13 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
         <span class="plan-price">1 799 ₽</span>
       </button>
     </div>
-    <button class="btn btn-accent" type="button" id="payBtn" style="width:100%" disabled>Оплатить</button>
+    <div style="margin-top:14px;text-align:left">
+      <div style="font-family:'SF Pro Rounded',sans-serif;font-size:13px;font-weight:600;color:#8e8e8e;margin-bottom:6px">Почта для чека и подписки</div>
+      <input class="field-input" id="payEmail" type="email" placeholder="you@example.com" autocomplete="email" inputmode="email" style="margin-bottom:0">
+      <div class="field-error" id="payEmailError"></div>
+    </div>
+    <div style="font-family:'SF Pro Rounded',sans-serif;font-size:12px;font-weight:600;color:#8e8e8e;margin:10px 2px 0;text-align:left">Максимальная сумма одного платежа — 10 000 ₽. Доп. устройство — 1.39 ₽/день.</div>
+    <button class="btn btn-accent" type="button" id="payBtn" style="width:100%;margin-top:16px" disabled>Оплатить</button>
   </div>
 </div>
 
@@ -4075,22 +4117,41 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
 
   var plans=document.querySelectorAll('.plan');
   var payBtn=document.getElementById('payBtn');
+  var payEmail=document.getElementById('payEmail');
+  var payEmailError=document.getElementById('payEmailError');
   var selected=null;
+  function validateEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
   plans.forEach(function(plan){
     plan.addEventListener('click',function(){
       plans.forEach(function(p){p.classList.remove('selected')});
       plan.classList.add('selected');
       selected=plan;
-      payBtn.disabled=false;
+      if(payEmail && validateEmail(payEmail.value.trim())){ payBtn.disabled=false; }
+      else { payBtn.disabled=true; }
     });
   });
+  if(payEmail){
+    payEmail.addEventListener('input',function(){
+      if(payEmailError) payEmailError.textContent='';
+      if(selected){ payBtn.disabled=!validateEmail(payEmail.value.trim()); }
+    });
+  }
   payBtn.addEventListener('click',function(){
     if(!selected)return;
+    var email=(payEmail && payEmail.value.trim())||'';
+    if(!validateEmail(email)){
+      if(payEmailError) payEmailError.textContent='Укажите почту — на неё придёт чек и доступ к подписке.';
+      return;
+    }
+    if(payEmailError) payEmailError.textContent='';
+    var price=selected.getAttribute('data-price');
+    var label=selected.getAttribute('data-label');
     if(selected.getAttribute('data-days')==='trial'){
       showToast('Пробная подписка активируется в боте: <a href="https://t.me/deepmintvpn_bot" target="_blank" rel="noopener">@deepmintvpn_bot</a>');
     }else{
-      showToast('Оплата '+selected.getAttribute('data-label')+' — '+selected.getAttribute('data-price')+'. Переведите сумму боту: <a href="https://t.me/deepmintvpn_bot" target="_blank" rel="noopener">@deepmintvpn_bot</a>');
+      showToast('Оплата '+label+' — '+price+'. Чек придёт на '+email+'. Переведите сумму боту: <a href="https://t.me/deepmintvpn_bot" target="_blank" rel="noopener">@deepmintvpn_bot</a>');
     }
+    if(session){ session.payEmail=email; saveSession(session); }
     closeModals();
   });
   var emailInput=document.getElementById('emailInput');
