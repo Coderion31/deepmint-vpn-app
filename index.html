@@ -3903,7 +3903,7 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
       <div class="field-error" id="payEmailError"></div>
     </div>
     <div style="font-family:'SF Pro Rounded',sans-serif;font-size:12px;font-weight:600;color:#8e8e8e;margin:10px 2px 0;text-align:left">Максимальная сумма одного платежа — 10 000 ₽. Доп. устройство — 1.39 ₽/день.</div>
-    <button class="btn btn-accent" type="button" id="payBtn" style="width:100%;margin-top:16px" disabled>Оплатить</button>
+    <button class="btn btn-accent" type="button" id="payBtn" style="width:100%;margin-top:16px">Оплатить</button>
   </div>
 </div>
 
@@ -4126,18 +4126,18 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
       plans.forEach(function(p){p.classList.remove('selected')});
       plan.classList.add('selected');
       selected=plan;
-      if(payEmail && validateEmail(payEmail.value.trim())){ payBtn.disabled=false; }
-      else { payBtn.disabled=true; }
     });
   });
   if(payEmail){
     payEmail.addEventListener('input',function(){
       if(payEmailError) payEmailError.textContent='';
-      if(selected){ payBtn.disabled=!validateEmail(payEmail.value.trim()); }
     });
   }
   payBtn.addEventListener('click',function(){
-    if(!selected)return;
+    if(!selected){
+      showToast('Выберите тариф выше.');
+      return;
+    }
     var email=(payEmail && payEmail.value.trim())||'';
     if(!validateEmail(email)){
       if(payEmailError) payEmailError.textContent='Укажите почту — на неё придёт чек и доступ к подписке.';
@@ -4147,9 +4147,9 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
     var price=selected.getAttribute('data-price');
     var label=selected.getAttribute('data-label');
     if(selected.getAttribute('data-days')==='trial'){
-      showToast('Пробная подписка активируется в боте: <a href="https://t.me/deepmintvpn_bot" target="_blank" rel="noopener">@deepmintvpn_bot</a>');
+      showToast('Пробная подписка — 72 часа бесплатно. Подключение появится здесь после подключения платёжной системы.');
     }else{
-      showToast('Оплата '+label+' — '+price+'. Чек придёт на '+email+'. Переведите сумму боту: <a href="https://t.me/deepmintvpn_bot" target="_blank" rel="noopener">@deepmintvpn_bot</a>');
+      showToast('Вы выбрали тариф «'+label+'» — '+price+'. Оплата пока недоступна: платёжная система подключается. Скоро вы сможете оплатить здесь. Чек придёт на '+email+'.');
     }
     if(session){ session.payEmail=email; saveSession(session); }
     closeModals();
@@ -4190,31 +4190,31 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
   var osData={
     android:{name:'Android',icon:'<rect x="7" y="2" width="10" height="20" rx="2"></rect>',steps:[
       ['Скачайте приложение','Установите <a href="https://play.google.com/store/apps/details?id=com.wireguard.android" target="_blank" rel="noopener">WireGuard</a> или <a href="https://play.google.com/store/apps/details?id=net.openvpn.openvpn" target="_blank" rel="noopener">OpenVPN</a> из Google Play.'],
-      ['Получите ключ','Откройте бота <a href="https://t.me/deepmintvpn_bot" target="_blank" rel="noopener">@deepmintvpn_bot</a>, выберите тариф — ключ придёт в чат.'],
+      ['Получите ключ','Выберите тариф и нажмите «Оплатить» — ключ придёт на почту после оплаты.'],
       ['Импортируйте ключ','Скопируйте ключ и добавьте его в приложение (значок «+» → Импорт из буфера).'],
       ['Подключитесь','Нажмите переключатель — VPN включён. Готово!']
     ]},
     ios:{name:'iPhone / iPad',icon:'<rect x="5" y="2" width="14" height="20" rx="2"></rect><line x1="10" y1="18" x2="14" y2="18"></line>',steps:[
       ['Скачайте приложение','Установите <a href="https://apps.apple.com/app/wireguard/id1441195209" target="_blank" rel="noopener">WireGuard</a> или <a href="https://apps.apple.com/app/openvpn-connect/id590379981" target="_blank" rel="noopener">OpenVPN Connect</a> из App Store.'],
-      ['Получите ключ','Откройте бота <a href="https://t.me/deepmintvpn_bot" target="_blank" rel="noopener">@deepmintvpn_bot</a>, выберите тариф — ключ придёт в чат.'],
+      ['Получите ключ','Выберите тариф и нажмите «Оплатить» — ключ придёт на почту после оплаты.'],
       ['Импортируйте ключ','Скопируйте ключ, откройте WireGuard и нажмите «+» → «Создать из буфера обмена».'],
       ['Подключитесь','Активируйте туннель. При первом запуске разрешите добавить VPN-конфигурацию. Готово!']
     ]},
     windows:{name:'Windows',icon:'<rect x="2" y="4" width="20" height="14" rx="2"></rect><line x1="2" y1="9" x2="22" y2="9"></line>',steps:[
       ['Скачайте приложение','Установите <a href="https://www.wireguard.com/install/" target="_blank" rel="noopener">WireGuard для Windows</a> с официального сайта.'],
-      ['Получите ключ','Откройте бота <a href="https://t.me/deepmintvpn_bot" target="_blank" rel="noopener">@deepmintvpn_bot</a>, выберите тариф — ключ придёт в чат.'],
+      ['Получите ключ','Выберите тариф и нажмите «Оплатить» — ключ придёт на почту после оплаты.'],
       ['Импортируйте ключ','Нажмите «Импортировать туннели из файла» или вставьте конфигурацию вручную.'],
       ['Подключитесь','Нажмите «Активировать» — VPN включён. Готово!']
     ]},
     macos:{name:'macOS',icon:'<rect x="4" y="4" width="16" height="12" rx="2"></rect><path d="M12 16v3"></path><path d="M8 22h8"></path>',steps:[
       ['Скачайте приложение','Установите <a href="https://apps.apple.com/app/wireguard/id1451685025" target="_blank" rel="noopener">WireGuard из App Store</a> или с wireguard.com.'],
-      ['Получите ключ','Откройте бота <a href="https://t.me/deepmintvpn_bot" target="_blank" rel="noopener">@deepmintvpn_bot</a>, выберите тариф — ключ придёт в чат.'],
+      ['Получите ключ','Выберите тариф и нажмите «Оплатить» — ключ придёт на почту после оплаты.'],
       ['Импортируйте ключ','Нажмите «Импорт туннелей из файла» или вставьте конфигурацию.'],
       ['Подключитесь','Включите туннель. При запросе разрешите доступ — Готово!']
     ]},
     linux:{name:'Linux',icon:'<path d="M3 12h18"></path><path d="M12 3v18"></path>',steps:[
       ['Установите WireGuard','Выполните: <b>sudo apt install wireguard</b> (Debian/Ubuntu) или из репозитория вашего дистрибутива.'],
-      ['Получите ключ','Откройте бота <a href="https://t.me/deepmintvpn_bot" target="_blank" rel="noopener">@deepmintvpn_bot</a>, выберите тариф — ключ придёт в чат.'],
+      ['Получите ключ','Выберите тариф и нажмите «Оплатить» — ключ придёт на почту после оплаты.'],
       ['Добавьте конфиг','Сохраните ключ в /etc/wireguard/wg0.conf командой <b>sudo nano /etc/wireguard/wg0.conf</b>.'],
       ['Подключитесь','Запустите <b>sudo wg-quick up wg0</b>. Готово!']
     ]}
