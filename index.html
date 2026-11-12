@@ -4146,13 +4146,35 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
     if(payEmailError) payEmailError.textContent='';
     var price=selected.getAttribute('data-price');
     var label=selected.getAttribute('data-label');
-    if(selected.getAttribute('data-days')==='trial'){
-      showToast('Пробная подписка — 72 часа бесплатно. Подключение появится здесь после подключения платёжной системы.');
-    }else{
-      showToast('Вы выбрали тариф «'+label+'» — '+price+'. Оплата пока недоступна: платёжная система подключается. Скоро вы сможете оплатить здесь. Чек придёт на '+email+'.');
+    var days=selected.getAttribute('data-days');
+    if(days==='trial'){
+      showToast('Пробная подписка — 72 часа бесплатно. Она активируется после запуска платёжной системы.');
+      if(session){ session.payEmail=email; saveSession(session); }
+      return;
     }
-    if(session){ session.payEmail=email; saveSession(session); }
-    closeModals();
+    payBtn.disabled=true;
+    payBtn.textContent='Создаём ссылку…';
+    var apiBase=window.SUPPORT_API || 'https://deepmint-vpn-app.onrender.com';
+    fetch(apiBase+'/api/paylink',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({plan:days, email:email})
+    }).then(function(r){return r.json()}).then(function(d){
+      payBtn.disabled=false;
+      payBtn.textContent='Оплатить';
+      if(d.ok && d.url){
+        if(session){ session.payEmail=email; saveSession(session); }
+        window.open(d.url,'_blank');
+        closeModals();
+        showToast('Ссылка на оплату открыта. После оплаты подписка активируется автоматически.');
+      } else {
+        showToast('Не удалось создать ссылку: '+(d.error||'повторите попытку'));
+      }
+    }).catch(function(){
+      payBtn.disabled=false;
+      payBtn.textContent='Оплатить';
+      showToast('Сервер оплаты недоступен. Попробуйте позже.');
+    });
   });
   var emailInput=document.getElementById('emailInput');
   var emailError=document.getElementById('emailError');

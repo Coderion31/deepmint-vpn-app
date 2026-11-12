@@ -17,6 +17,9 @@ import random
 import smtplib
 import threading
 import time
+import uuid
+import urllib.request
+import urllib.error
 from email.header import Header
 from email.mime.text import MIMEText
 from pathlib import Path
@@ -136,6 +139,86 @@ SUPPORT_EMAIL = os.environ.get("SUPPORT_EMAIL", "bunseriy@gmail.com")
 ADMIN_KEY = os.environ.get("ADMIN_KEY", "support1234")
 CHAT_FILE = Path(__file__).resolve().parent / "chat_messages.json"
 _msg_lock = threading.Lock()
+
+PLATEGA_BASE = "https://app.platega.io"
+PLATEGA_MERCHANT_ID = os.environ.get("PLATEGA_MERCHANT_ID", "")
+PLATEGA_SECRET = os.environ.get("PLATEGA_SECRET", "")
+PLATEGA_RETURN_URL = os.environ.get("PLATEGA_RETURN_URL", "https://coderion31.github.io/deepmint-vpn-app/")
+
+PLANS = {
+    "trial": {"label": "Пробная — 72 часа", "price": "0.00", "days": "trial"},
+    "30": {"label": "30 дней", "price": "199.00"},
+    "90": {"label": "90 дней", "price": "549.00"},
+    "180": {"label": "180 дней", "price": "999.00"},
+    "360": {"label": "360 дней", "price": "1799.00"},
+}
+
+
+def _platega_request(method, path, body=None, idem=None):
+    """Выполняет запрос к API Platega. Возвращает (status, json)."""
+    url = PLATEGA_BASE + path
+    headers = {
+        "X-MerchantId": PLATEGA_MERCHANT_ID,
+        "X-Secret": PLATEGA_SECRET,
+    }
+    data = None
+    if body is not None:
+        headers["Content-Type"] = "application/json"
+        data = json.dumps(body).encode("utf-8")
+        if idem:
+            headers["Idempotency-Key"] = idem
+    req = urllib.request.Request(url, data=data, headers=headers, method=method)
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            raw = resp.read().decode("utf-8", "replace")
+            return resp.status, json.loads(raw) if raw else {}
+    except urllib.error.HTTPError as e:
+        raw = e.read().decode("utf-8", "replace")
+        try:
+            return e.code, json.loads(raw) if raw else {}
+        except ValueError:
+            return e.code, {"raw": raw}
+    except urllib.error.URLError as e:
+        return 0, {"error": str(e.reason)}
+
+
+@app.post("/api/paylink")
+def create_paylink():
+    """Создаёт одноразовую платёжную ссылку Platega для выбранного тарифа.
+    Тело: {plan: "30", email: "user@mail.ru"}"""
+    data = request.get_json(silent=True) or {}
+    plan_key = (data.get("plan") or "").strip()
+    email = (data.get("email") or "").strip().lower()
+    if plan_key not in PLANS:
+        return jsonify(ok=False, error="Неизвестный тариф"), 400
+    if not email or "@" not in email or "." not in email.split("@")[-1]:
+        return jsonify(ok=False, error="Укажите корректную почту"), 400
+    plan = PLANS[plan_key]
+    if plan["price"] == "0.00":
+        return jsonify(ok=True, trial=True, label=plan["label"])
+    body = {
+        "usageMode": 1,
+        "paymentMode": 0,
+        "currency": "RUB",
+        "minAmount": plan["price"],
+        "maxAmount": plan["price"],
+        "name": plan["label"],
+        "description": f"deepmint.vpn — {plan['label']}",
+        "orderId": f"DM-{int(time.time())}",
+        "payload": email,
+        "return": PLATEGA_RETURN_URL,
+        "failedUrl": PLATEGA_RETURN_URL,
+    }
+    status, resp = _platega_request(
+        "POST", "/v2/payment-links", body=body, idem=f"dm-{uuid.uuid4()}"
+    )
+    if status in (200, 201):
+        return jsonify(ok=True, url=resp.get("url"), id=resp.get("id"), label=plan["label"], price=plan["price"])
+    return jsonify(
+        ok=False,
+        error=resp.get("message") or resp.get("raw") or f"Ошибка Platega ({status})",
+        code=resp.get("code"),
+    ), 502 if status else 503
 
 
 def _load_messages():
