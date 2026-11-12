@@ -12,6 +12,7 @@ API:
   SMTP_USER, SMTP_APP_PASS (иначе берутся значения ниже для локального запуска).
 """
 import json
+import logging
 import os
 import random
 import smtplib
@@ -25,6 +26,8 @@ from email.mime.text import MIMEText
 from pathlib import Path
 
 from flask import Flask, jsonify, request
+
+log = logging.getLogger("deepmint-server")
 
 # CORS: разрешаем запросы откуда угодно (GitHub Pages, локальный file://, Telegram WebApp)
 from flask_cors import CORS

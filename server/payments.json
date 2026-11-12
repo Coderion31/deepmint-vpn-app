@@ -1,0 +1,15 @@
+{
+  "13cf5427-03f3-46b0-b33c-f1912079c461": {
+    "id": "13cf5427-03f3-46b0-b33c-f1912079c461",
+    "status": "CONFIRMED",
+    "amount": 199,
+    "currency": "RUB",
+    "paymentMethod": 2,
+    "paymentLinkId": "1d1e57d1-4f91-497a-b905-407a30004c6a",
+    "subscriptionId": null,
+    "refundId": null,
+    "refundedAmount": null,
+    "payload": "test-callback@mail.ru",
+    "ts": 1794501904.8938751
+  }
+}
