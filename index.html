@@ -4168,12 +4168,12 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
         closeModals();
         showToast('Ссылка на оплату открыта. После оплаты подписка активируется автоматически.');
       } else {
-        showToast('Не удалось создать ссылку: '+(d.error||'повторите попытку'));
+        showToast('Вы выбрали тариф «'+label+'» — '+price+'. Оплата пока недоступна: платёжная система подключается. Скоро вы сможете оплатить здесь. Чек придёт на '+email+'.');
       }
     }).catch(function(){
       payBtn.disabled=false;
       payBtn.textContent='Оплатить';
-      showToast('Сервер оплаты недоступен. Попробуйте позже.');
+      showToast('Вы выбрали тариф «'+label+'» — '+price+'. Оплата пока недоступна: платёжная система подключается. Скоро вы сможете оплатить здесь. Чек придёт на '+email+'.');
     });
   });
   var emailInput=document.getElementById('emailInput');
