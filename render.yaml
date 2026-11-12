@@ -3,11 +3,10 @@ services:
     name: deepmint-vpn-email
     runtime: python
     repo: https://github.com/Coderion31/deepmint-vpn-app
-    rootDir: server
     plan: free
     region: frankfurt
-    buildCommand: pip install -r email-requirements.txt
-    startCommand: python email_server.py
+    buildCommand: pip install -r server/email-requirements.txt
+    startCommand: python server/email_server.py
     healthCheckPath: /api/health
     envVars:
       - key: PLATEGA_MERCHANT_ID
@@ -26,3 +25,5 @@ services:
         sync: false
       - key: EMAIL_SERVER_PORT
         value: "10000"
+      - key: HOST
+        value: "0.0.0.0"
