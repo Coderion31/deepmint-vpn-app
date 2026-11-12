@@ -312,6 +312,87 @@ def health():
     return jsonify(ok=True)
 
 
+PAYMENTS_FILE = Path(__file__).resolve().parent / "payments.json"
+
+
+def _load_payments():
+    """Хранилище вебхуков Platega: {payment_id: record}"""
+    try:
+        if PAYMENTS_FILE.exists():
+            data = json.loads(PAYMENTS_FILE.read_text(encoding="utf-8"))
+            if isinstance(data, dict):
+                return data
+    except (OSError, ValueError):
+        pass
+    return {}
+
+
+def _save_payments(payments):
+    try:
+        PAYMENTS_FILE.write_text(json.dumps(payments, ensure_ascii=False, indent=2), encoding="utf-8")
+    except OSError:
+        pass
+
+
+@app.post("/api/callback")
+def platega_callback():
+    """Вебхук от Platega: уведомления о статусах платежей и возвратов.
+    Запрос проверяем по X-MerchantId / X-Secret. Идемпотентность по id."""
+    data = request.get_json(silent=True) or {}
+    merchant = (request.headers.get("X-MerchantId") or "").strip()
+    secret = (request.headers.get("X-Secret") or "").strip()
+    if merchant and merchant != PLATEGA_MERCHANT_ID:
+        log.info("Platega callback: несовпадение X-MerchantId")
+        return jsonify(ok=False, error="bad merchant"), 403
+    if secret and secret != PLATEGA_SECRET:
+        log.info("Platega callback: несовпадение X-Secret")
+        return jsonify(ok=False, error="bad secret"), 403
+
+    pid = str(data.get("id") or "")
+    status = (data.get("status") or "").upper()
+    record = {
+        "id": pid,
+        "status": status,
+        "amount": data.get("amount"),
+        "currency": data.get("currency"),
+        "paymentMethod": data.get("paymentMethod"),
+        "paymentLinkId": data.get("paymentLinkId"),
+        "subscriptionId": data.get("subscriptionId"),
+        "refundId": data.get("refundId"),
+        "refundedAmount": data.get("refundedAmount"),
+        "payload": data.get("payload") or "",
+        "ts": time.time(),
+    }
+    payments = _load_payments()
+    prev = payments.get(pid)
+    if prev and prev.get("status") == status:
+        # повторная доставка того же события — идемпотентный ответ
+        return jsonify(ok=True, idempotent=True)
+    payments[pid] = record
+    _save_payments(payments)
+
+    email = (data.get("payload") or "").strip().lower()
+    log.info(
+        "Platega callback: status=%s amount=%s %s id=%s email=%s link=%s",
+        status, data.get("amount"), data.get("currency"), pid, email or "-", record.get("paymentLinkId") or "-",
+    )
+    if status == "CONFIRMED":
+        # Платёж подтверждён: здесь происходит активация подписки для email.
+        log.info("Платёж CONFIRMED — активация подписки для email=%s", email or "-")
+    return jsonify(ok=True)
+
+
+@app.get("/api/payments")
+def payments_list():
+    """Просмотр полученных вебхуков (для отладки). Доступ по ADMIN_KEY."""
+    key = (request.args.get("key") or "").strip()
+    if not key or key != ADMIN_KEY:
+        return jsonify(ok=False, error="Нет доступа"), 403
+    payments = _load_payments()
+    items = sorted(payments.values(), key=lambda r: r.get("ts", 0), reverse=True)
+    return jsonify(ok=True, payments=items[:50])
+
+
 _load_state()
 
 if __name__ == "__main__":
