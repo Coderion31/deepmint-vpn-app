@@ -237,7 +237,7 @@ def docs_keyboard():
             [{"text": "Условия использования", "url": DOC_LINKS["doc_terms"]}],
             [{"text": "Условия возврата", "url": DOC_LINKS["doc_refund"]}],
             [{"text": "Политика бота", "url": DOC_LINKS["doc_bot_policy"]}],
-            [{"text": "← Назад", "callback_data": "menu_back"}],
+            [{"text": "Назад", "callback_data": "menu_back"}],
         ]
     }
 
@@ -261,7 +261,7 @@ def buy_keyboard():
             [{"text": "90 дней — 549 ₽", "callback_data": "buy_90"}],
             [{"text": "180 дней — 999 ₽", "callback_data": "buy_180"}],
             [{"text": "360 дней — 1799 ₽", "callback_data": "buy_360"}],
-            [{"text": "← Назад в меню", "callback_data": "menu_back"}],
+            [{"text": "Назад в меню", "callback_data": "menu_back"}],
         ]
     }
 
@@ -290,7 +290,7 @@ def balance_keyboard():
     return {
         "inline_keyboard": [
             [{"text": "Пополнить баланс", "callback_data": "balance_topup"}],
-            [{"text": "← Назад", "callback_data": "menu_back"}],
+            [{"text": "Назад", "callback_data": "menu_back"}],
         ]
     }
 
@@ -298,7 +298,7 @@ def balance_keyboard():
 def invite_keyboard():
     return {
         "inline_keyboard": [
-            [{"text": "← Назад в меню", "callback_data": "menu_back"}],
+            [{"text": "Назад в меню", "callback_data": "menu_back"}],
         ]
     }
 
@@ -362,9 +362,7 @@ CABINET_URL = "https://clck.ru/3WqZoF"
 def vpnus_welcome_keyboard():
     return {
         "inline_keyboard": [
-            [{"text": "💼 Личный кабинет", "callback_data": "vpnus_action"}],
-            [{"text": "📲 Подключиться", "callback_data": "vpnus_action"}],
-            [{"text": "💳 Купить подписку", "callback_data": "vpnus_action"}],
+            [{"text": "Личный кабинет", "callback_data": "vpnus_action"}],
         ]
     }
 
@@ -372,16 +370,16 @@ def vpnus_welcome_keyboard():
 def vpnus_cabinet_keyboard():
     return {
         "inline_keyboard": [
-            [{"text": "🔐 Открыть личный кабинет", "url": CABINET_URL}],
+            [{"text": "Открыть личный кабинет", "url": CABINET_URL}],
         ]
     }
 
 
 CABINET_MSG = (
-    "🔐 Ваш вход в личный кабинет VPNUS.\n\n"
-    "◾️ Откройте личный кабинет по кнопке ниже, чтобы подключиться или "
+    "Ваш вход в личный кабинет VPNUS.\n\n"
+    "Откройте личный кабинет по кнопке ниже, чтобы подключиться или "
     "оформить подписку."
-    "\n\n⌚️ Подключение займёт 2 минуты."
+    "\n\nПодключение займёт 2 минуты."
 )
 
 
@@ -417,15 +415,12 @@ def send_start(chat_id, user_id):
         state,
         chat_id,
         (
-            f"Приветствуем тебя, {name}! 👑\n\n"
-            "◾️ VPNUS VPN — это быстрый VPN-сервис с самыми быстрыми "
-            "серверами.\n\n"
-            "📞 Настройка происходит в нашем личном кабинете — "
-            "откройте его кнопкой ниже.\n\n"
-            "🔗 Личный кабинет: clck.ru/3WqZoF\n\n"
-            "⌚️ Подключение займёт 2 минуты."
+            f"Привет, {name}!\n\n"
+            "deepmint vpn — новейший vpn сервис.\n\n"
+            "Для настройки перейдите в личный кабинет: "
+            f"{CABINET_URL}\n\n"
+            "Подключение займёт 2 минуты."
         ),
-        reply_markup=vpnus_welcome_keyboard(),
     )
 
 
