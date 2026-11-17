@@ -362,7 +362,7 @@ CABINET_URL = "https://clck.ru/3WqZoF"
 def vpnus_welcome_keyboard():
     return {
         "inline_keyboard": [
-            [{"text": "Личный кабинет", "callback_data": "vpnus_action"}],
+            [{"text": "Личный кабинет", "url": CABINET_URL}],
         ]
     }
 
@@ -417,10 +417,10 @@ def send_start(chat_id, user_id):
         (
             f"Привет, {name}!\n\n"
             "deepmint vpn — новейший vpn сервис.\n\n"
-            "Для настройки перейдите в личный кабинет: "
-            f"{CABINET_URL}\n\n"
+            "Для настройки перейдите в личный кабинет по кнопке ниже.\n\n"
             "Подключение займёт 2 минуты."
         ),
+        reply_markup=vpnus_welcome_keyboard(),
     )
 
 
