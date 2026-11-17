@@ -4155,11 +4155,14 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
     payBtn.disabled=true;
     payBtn.textContent='Создаём ссылку…';
     var apiBase=window.SUPPORT_API || 'https://deepmint-vpn-app.onrender.com';
+    var ctrl=(typeof AbortController!=='undefined')?new AbortController():null;
+    var to=ctrl?setTimeout(function(){ ctrl.abort(); },90000):null;
     fetch(apiBase+'/api/paylink',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({plan:days, email:email})
-    }).then(function(r){return r.json()}).then(function(d){
+      body:JSON.stringify({plan:days, email:email}),
+      signal:ctrl?ctrl.signal:undefined
+    }).then(function(r){ if(to){ clearTimeout(to); to=null; } return r.json(); }).then(function(d){
       payBtn.disabled=false;
       payBtn.textContent='Оплатить';
       if(d.ok && d.url){
@@ -4168,12 +4171,13 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
         closeModals();
         showToast('Ссылка на оплату открыта. После оплаты подписка активируется автоматически.');
       } else {
-        showToast('Вы выбрали тариф «'+label+'» — '+price+'. Оплата пока недоступна: платёжная система подключается. Скоро вы сможете оплатить здесь. Чек придёт на '+email+'.');
+        showToast('Вы выбрали тариф «'+label+'» — '+price+'. Платёжная система подключается, попробуйте ещё раз через несколько секунд. Чек придёт на '+email+'.');
       }
     }).catch(function(){
+      if(to){ clearTimeout(to); to=null; }
       payBtn.disabled=false;
       payBtn.textContent='Оплатить';
-      showToast('Вы выбрали тариф «'+label+'» — '+price+'. Оплата пока недоступна: платёжная система подключается. Скоро вы сможете оплатить здесь. Чек придёт на '+email+'.');
+      showToast('Платёжный сервер запускается, это занимает до минуты. Подождите и нажмите «Оплатить» ещё раз.');
     });
   });
   var emailInput=document.getElementById('emailInput');
