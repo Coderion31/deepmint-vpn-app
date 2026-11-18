@@ -4165,8 +4165,29 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
     var label=selected.getAttribute('data-label');
     var days=selected.getAttribute('data-days');
     if(days==='trial'){
-      showToast('Пробная подписка — 72 часа бесплатно. Она активируется после запуска платёжной системы.');
       if(session){ session.payEmail=email; saveSession(session); }
+      payBtn.disabled=true;
+      payBtn.textContent='Активируем…';
+      var apiBaseT=window.SUPPORT_API || 'https://deepmint-vpn-app.onrender.com';
+      fetch(apiBaseT+'/api/paylink',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({plan:'trial', email:email})
+      }).then(function(r){ return r.json(); }).then(function(d){
+        payBtn.disabled=false;
+        payBtn.textContent='Оплатить';
+        if(d && d.ok && d.activated){
+          closeModals();
+          if(typeof loadMyVpn==='function') loadMyVpn();
+          showToast('Пробная подписка активирована на 72 часа. Ссылки — в разделе «Мой VPN».');
+        } else {
+          showToast('Не удалось активировать пробную подписку. Попробуйте ещё раз через несколько секунд или оплатите тариф.');
+        }
+      }).catch(function(){
+        payBtn.disabled=false;
+        payBtn.textContent='Оплатить';
+        showToast('Платёжный сервер запускается, это занимает до минуты. Подождите и нажмите ещё раз.');
+      });
       return;
     }
     payBtn.disabled=true;

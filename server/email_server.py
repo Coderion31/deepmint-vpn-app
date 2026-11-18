@@ -279,7 +279,13 @@ def create_paylink():
         return jsonify(ok=False, error="Укажите корректную почту"), 400
     plan = PLANS[plan_key]
     if plan["price"] == "0.00":
-        return jsonify(ok=True, trial=True, label=plan["label"])
+        # Пробная подписка: активируем доступ сразу, без платежа.
+        days = plan.get("days")
+        if isinstance(days, int) and days > 0 and VPN_NODES:
+            ok, res = _ensure_vpn_client(email, days)
+            log.info("Trial: активация для email=%s на %s дн. ok=%s %s", email, days, ok, json.dumps(res, ensure_ascii=False))
+            return jsonify(ok=True, trial=True, label=plan["label"], activated=ok, days=days)
+        return jsonify(ok=True, trial=True, label=plan["label"], activated=False)
     body = {
         "usageMode": 1,
         "paymentMode": 0,
