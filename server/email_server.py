@@ -343,6 +343,9 @@ def create_paylink():
     plan = PLANS[plan_key]
     if plan["price"] == "0.00":
         # Пробная подписка: один email — одна пробная. Продлевать нельзя.
+        # Весь блок (проверка + создание на панелях) — под одним замком,
+        # чтобы два параллельных запроса не активировали пробную дважды
+        # (иначе медленные панели получают двойное продление).
         with _trial_lock:
             used = _load_trial_used()
             if used.get(email, 0) >= 1:
@@ -352,12 +355,12 @@ def create_paylink():
                 ), 409
             used[email] = used.get(email, 0) + 1
             _save_trial_used(used)
-        days = plan.get("days")
-        if isinstance(days, int) and days > 0 and VPN_NODES:
-            ok, res = _ensure_vpn_client(email, days)
-            log.info("Trial: активация для email=%s на %s дн. ok=%s %s", email, days, ok, json.dumps(res, ensure_ascii=False))
-            return jsonify(ok=True, trial=True, label=plan["label"], activated=ok, days=days)
-        return jsonify(ok=True, trial=True, label=plan["label"], activated=False)
+            days = plan.get("days")
+            if isinstance(days, int) and days > 0 and VPN_NODES:
+                ok, res = _ensure_vpn_client(email, days)
+                log.info("Trial: активация для email=%s на %s дн. ok=%s %s", email, days, ok, json.dumps(res, ensure_ascii=False))
+                return jsonify(ok=True, trial=True, label=plan["label"], activated=ok, days=days)
+            return jsonify(ok=True, trial=True, label=plan["label"], activated=False)
     body = {
         "usageMode": 1,
         "paymentMode": 0,
