@@ -150,11 +150,92 @@ PLATEGA_RETURN_URL = os.environ.get("PLATEGA_RETURN_URL", "https://coderion31.gi
 
 PLANS = {
     "trial": {"label": "Пробная — 72 часа", "price": "0.00", "days": "trial"},
-    "30": {"label": "30 дней", "price": "199.00"},
-    "90": {"label": "90 дней", "price": "549.00"},
-    "180": {"label": "180 дней", "price": "999.00"},
-    "360": {"label": "360 дней", "price": "1799.00"},
+    "30": {"label": "30 дней", "price": "199.00", "days": 30},
+    "90": {"label": "90 дней", "price": "549.00", "days": 90},
+    "180": {"label": "180 дней", "price": "999.00", "days": 180},
+    "360": {"label": "360 дней", "price": "1799.00", "days": 360},
 }
+
+# VPN-панели (H1/VLESS). Токены в env: VPN_NODE_<LOC>_URL / VPN_NODE_<LOC>_TOKEN.
+VPN_NODES = []
+_VPN_ENV = {
+    "DE": ("VPN_NODE_DE_URL", "VPN_NODE_DE_TOKEN"),
+    "PL": ("VPN_NODE_PL_URL", "VPN_NODE_PL_TOKEN"),
+    "EE": ("VPN_NODE_EE_URL", "VPN_NODE_EE_TOKEN"),
+    "ES": ("VPN_NODE_ES_URL", "VPN_NODE_ES_TOKEN"),
+    "IL": ("VPN_NODE_IL_URL", "VPN_NODE_IL_TOKEN"),
+}
+for _loc, (_url_env, _tok_env) in _VPN_ENV.items():
+    _u = os.environ.get(_url_env, "").strip().rstrip("/")
+    _t = os.environ.get(_tok_env, "").strip()
+    if _u and _t:
+        VPN_NODES.append({"loc": _loc, "base": _u, "token": _t})
+log.info("VPN nodes configured: %s", ", ".join(n["loc"] for n in VPN_NODES) or "(none)")
+
+
+def _smart_hash(s):
+    """Короткий стабильный id из строки (без коллизий для имён клиентов)."""
+    h = 0
+    for ch in s:
+        h = (h * 31 + ord(ch)) & 0xFFFFFFFF
+    return format(h, "x")
+
+
+def _vpn_req(node, method, path, body=None):
+    """HTTP-запрос к панели H1/VLESS. Возвращает (status, json)."""
+    url = node["base"] + path
+    headers = {"Authorization": f"Bearer {node['token']}"}
+    data = None
+    if body is not None:
+        headers["Content-Type"] = "application/json"
+        data = json.dumps(body).encode("utf-8")
+    req = urllib.request.Request(url, data=data, headers=headers, method=method)
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            raw = resp.read().decode("utf-8", "replace")
+            return resp.status, json.loads(raw) if raw else {}
+    except urllib.error.HTTPError as e:
+        raw = e.read().decode("utf-8", "replace")
+        try:
+            return e.code, json.loads(raw) if raw else {}
+        except ValueError:
+            return e.code, {"raw": raw}
+    except urllib.error.URLError as e:
+        return 0, {"error": str(e.reason)}
+
+
+def _ensure_vpn_client(email, days):
+    """Создаёт или продлевает VPN-доступ для email на всех панелях.
+    Возвращает (ok, подробности по локациям)."""
+    name = "vpn-" + _smart_hash(email)
+    results = {}
+    ok_all = True
+    for node in VPN_NODES:
+        loc = node["loc"]
+        status, data = _vpn_req(node, "GET", f"/api/clients/{name}")
+        now = int(time.time())
+        # если клиент существует — продлеваем от текущего expires_at
+        if status == 200 and data.get("client"):
+            base_exp = int(data["client"].get("expires_at") or 0)
+            new_exp = max(base_exp, now) + days * 86400
+            st, upd = _vpn_req(node, "PATCH", f"/api/clients/{name}", body={"expires_at": new_exp})
+            if st in (200, 201):
+                results[loc] = {"ok": True, "extended": True, "expires_at": new_exp}
+            else:
+                results[loc] = {"ok": False, "error": upd.get("error") or f"HTTP {st}"}
+                ok_all = False
+        else:
+            exp = now + days * 86400
+            st, cre = _vpn_req(node, "POST", "/api/create", body={
+                "name": name, "manual": 1, "title": email,
+                "expires_at": exp, "traffic_limit": 0, "device_limit": 0,
+            })
+            if st in (200, 201):
+                results[loc] = {"ok": True, "created": True, "expires_at": exp}
+            else:
+                results[loc] = {"ok": False, "error": cre.get("error") or f"HTTP {st}"}
+                ok_all = False
+    return ok_all, results
 
 
 def _platega_request(method, path, body=None, idem=None):
@@ -315,6 +396,53 @@ def health():
     return jsonify(ok=True)
 
 
+def _days_for_amount(amount):
+    """Сопоставляет сумму платежа с тарифом и возвращает число дней подписки."""
+    if amount is None:
+        return 0
+    try:
+        amt = float(amount)
+    except (TypeError, ValueError):
+        return 0
+    for plan in PLANS.values():
+        try:
+            if abs(amt - float(plan["price"])) < 0.01:
+                d = plan.get("days")
+                if isinstance(d, int) and d > 0:
+                    return d
+        except (TypeError, ValueError):
+            continue
+    return 0
+
+
+@app.get("/api/my-access")
+def my_access():
+    """Ссылки VPN-доступа для email. {email} -> {ok, nodes: [{loc, active, left_days, expires_at, sub_url, link}]}"""
+    email = (request.args.get("email") or "").strip().lower()
+    if not email or "@" not in email or "." not in email.split("@")[-1]:
+        return jsonify(ok=False, error="Неверный email"), 400
+
+    name = "vpn-" + _smart_hash(email)
+    nodes_out = []
+    for node in VPN_NODES:
+        status, data = _vpn_req(node, "GET", f"/api/clients/{name}")
+        if status == 200 and data.get("client"):
+            cl = data["client"]
+            nodes_out.append({
+                "loc": node["loc"],
+                "active": cl.get("status") == "active" and not cl.get("banned"),
+                "left_days": cl.get("left_days"),
+                "expires_at": cl.get("expires_at"),
+                "traffic_limit_gb": cl.get("traffic_limit_gb"),
+                "traffic_used_gb": cl.get("traffic_used_gb"),
+                "sub_url": cl.get("sub_url") or "",
+                "link": (cl.get("inbound_links") or [{}])[0].get("link", "") if cl.get("inbound_links") else "",
+            })
+        else:
+            nodes_out.append({"loc": node["loc"], "active": False})
+    return jsonify(ok=True, email=email, nodes=nodes_out)
+
+
 PAYMENTS_FILE = Path(__file__).resolve().parent / "payments.json"
 
 
@@ -380,8 +508,16 @@ def platega_callback():
         status, data.get("amount"), data.get("currency"), pid, email or "-", record.get("paymentLinkId") or "-",
     )
     if status == "CONFIRMED":
-        # Платёж подтверждён: здесь происходит активация подписки для email.
-        log.info("Платёж CONFIRMED — активация подписки для email=%s", email or "-")
+        # Платёж подтверждён: активируем/продлеваем VPN-доступ для email.
+        days = _days_for_amount(data.get("amount"))
+        if email and days:
+            ok, res = _ensure_vpn_client(email, days)
+            log.info(
+                "VPN: активация для email=%s на %s дн. ok=%s details=%s",
+                email, days, ok, json.dumps(res, ensure_ascii=False),
+            )
+        else:
+            log.info("VPN: пропускаю активацию email=%s days=%s", email or "-", days)
     return jsonify(ok=True)
 
 
