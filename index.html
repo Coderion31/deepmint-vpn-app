@@ -3744,6 +3744,7 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
         </div>
       </div>
       <div id="vpnAccessList"></div>
+      <button class="btn" type="button" id="addAllServersBtn" style="margin-top:10px;width:100%">Добавить все серверы сразу</button>
       <div class="setting-row" style="display:none" id="vpnAccessEmpty">
         <div>
           <div class="setting-row-label">Нет активного доступа</div>
@@ -4297,6 +4298,31 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
     try{ document.execCommand('copy'); }catch(e){}
     document.body.removeChild(ta);
   }
+  function addAllServers(){
+    var em = session && session.email ? session.email : '';
+    if(!em){ showToast('Войдите по почте, чтобы получить серверы'); return; }
+    var btn=document.getElementById('addAllServersBtn');
+    var oldTxt=btn ? btn.textContent : '';
+    if(btn){ btn.disabled=true; btn.textContent='Собираем…'; }
+    var apiBase=window.SUPPORT_API || 'https://deepmint-vpn-app.onrender.com';
+    fetch(apiBase+'/api/sub-all?email='+encodeURIComponent(em))
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        if(btn){ btn.disabled=false; btn.textContent=oldTxt; }
+        if(!d || !d.ok){ showToast('Не удалось получить серверы'); return; }
+        var links=d.links || [];
+        if(!links.length){
+          showToast('Нет активных серверов — сначала оформите подписку');
+          return;
+        }
+        copyToClipboard(links.join('\n'));
+        showToast('Скопировано серверов: '+links.length+'. Вставьте их в приложение разом.');
+      })
+      .catch(function(){
+        if(btn){ btn.disabled=false; btn.textContent=oldTxt; }
+        showToast('Сервер временно недоступен, попробуйте ещё раз');
+      });
+  }
   function loginByEmail(){
     var v=emailInput.value.trim();
     if(!validateEmail(v)){ emailError.textContent='Введите корректную почту'; return; }
@@ -4481,6 +4507,8 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
   document.getElementById('settingsBack').addEventListener('click',function(){
     document.getElementById('settingsScreen').classList.add('hidden');
   });
+  var addAllBtn=document.getElementById('addAllServersBtn');
+  if(addAllBtn) addAllBtn.addEventListener('click',addAllServers);
   document.getElementById('accountLink').addEventListener('click',function(e){
     var mode=this.getAttribute('data-link')||'none';
     if(mode==='telegram'){

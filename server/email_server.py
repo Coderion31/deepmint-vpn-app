@@ -480,6 +480,35 @@ def my_access():
     return jsonify(ok=True, email=email, nodes=nodes_out)
 
 
+@app.get("/api/sub-all")
+def sub_all():
+    """Собирает ссылки-подписки со всех активных локаций клиента в одну строку.
+    {email} -> {ok, email, subs: ["https://.../sub/<uuid>", ...], links: ["vless://...", ...], all: "<subs, по одной на строку>"}"""
+    email = (request.args.get("email") or "").strip().lower()
+    if not email or "@" not in email or "." not in email.split("@")[-1]:
+        return jsonify(ok=False, error="Неверный email"), 400
+
+    name = "vpn-" + _smart_hash(email)
+    subs, links = [], []
+    for node in VPN_NODES:
+        status, data = _vpn_req(node, "GET", f"/api/clients/{name}")
+        if status != 200 or not data.get("client"):
+            continue
+        cl = data["client"]
+        if cl.get("status") != "active" or cl.get("banned"):
+            continue
+        sub = (cl.get("sub_url") or "").strip()
+        if sub:
+            subs.append(sub)
+        inbound = cl.get("inbound_links") or []
+        for entry in inbound:
+            l = (entry or {}).get("link") or ""
+            if l.startswith("vless://"):
+                links.append(l)
+                break
+    return jsonify(ok=True, email=email, subs=subs, links=links, all="\n".join(subs + links))
+
+
 PAYMENTS_FILE = Path(__file__).resolve().parent / "payments.json"
 
 
