@@ -38,42 +38,39 @@ SMTP_HOST = os.environ.get("SMTP_HOST", "smtp.gmail.com")
 SMTP_PORT = int(os.environ.get("SMTP_PORT", "587"))
 SMTP_USER = os.environ.get("SMTP_USER", "bunseriy@gmail.com")
 SMTP_APP_PASS = os.environ.get("SMTP_APP_PASS", "mcpzuicanobwsdsu")
-
-
-def _smtp_host_ipv4():
-    """Возвращает IPv4-адрес SMTP-хоста (Render free tier без IPv6: smtp.gmail.com
-    резолвится в AAAA первой, поэтому принудительно берём A-запись)."""
-    import socket
-    try:
-        infos = socket.getaddrinfo(SMTP_HOST, SMTP_PORT, socket.AF_INET, socket.SOCK_STREAM)
-        if infos:
-            return infos[0][4][0]
-    except OSError:
-        pass
-    return SMTP_HOST
-CODE_TTL = 300
-RATE_LIMIT_HOUR = 5
-STATE_FILE = Path(__file__).resolve().parent / "email_codes.json"
-_codes = {}   # email -> {"code": str, "expires": ts, "sent": ts, "count": n}
-
-
-def _load_state():
-    global _codes
-    try:
-        if STATE_FILE.exists():
-            _codes = json.loads(STATE_FILE.read_text(encoding="utf-8"))
-    except (OSError, ValueError):
-        _codes = {}
-
-
-def _save_state():
-    try:
-        STATE_FILE.write_text(json.dumps(_codes, ensure_ascii=False), encoding="utf-8")
-    except OSError:
-        pass
+MAILBRIDGE_URL = os.environ.get("MAILBRIDGE_URL", "").strip().rstrip("/")
+MAILBRIDGE_KEY = os.environ.get("MAILBRIDGE_KEY", "deepmint-bridge-2026")
 
 
 def _send_email(to_email, code):
+    """Отправляет код. Если задан MAILBRIDGE_URL (почтовый релей на h1cloud) —
+    шлём через него, иначе напрямую по SMTP."""
+    if MAILBRIDGE_URL:
+        _send_email_via_bridge(to_email, code)
+    else:
+        _send_email_smtp(to_email, code)
+
+
+def _send_email_via_bridge(to_email, code):
+    body = json.dumps({"email": to_email, "code": code}).encode("utf-8")
+    req = urllib.request.Request(
+        MAILBRIDGE_URL + "/send",
+        data=body,
+        headers={"Content-Type": "application/json", "X-Mailbridge-Key": MAILBRIDGE_KEY},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            raw = resp.read().decode("utf-8", "replace")
+            if resp.status == 200:
+                return
+            raise RuntimeError(f"bridge HTTP {resp.status}: {raw}")
+    except urllib.error.HTTPError as e:
+        raw = e.read().decode("utf-8", "replace")
+        raise RuntimeError(f"bridge HTTP {e.code}: {raw}") from e
+
+
+def _send_email_smtp(to_email, code):
     msg = MIMEText(
         f"Код подтверждения для входа в deepmint.vpn:\n\n{code}\n\n"
         "Никому не сообщайте этот код. Он действует 5 минут.",
@@ -94,6 +91,25 @@ def _send_email(to_email, code):
             s.quit()
         except Exception:
             pass
+RATE_LIMIT_HOUR = 5
+STATE_FILE = Path(__file__).resolve().parent / "email_codes.json"
+_codes = {}   # email -> {"code": str, "expires": ts, "sent": ts, "count": n}
+
+
+def _load_state():
+    global _codes
+    try:
+        if STATE_FILE.exists():
+            _codes = json.loads(STATE_FILE.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        _codes = {}
+
+
+def _save_state():
+    try:
+        STATE_FILE.write_text(json.dumps(_codes, ensure_ascii=False), encoding="utf-8")
+    except OSError:
+        pass
 
 
 @app.post("/api/email/send")
