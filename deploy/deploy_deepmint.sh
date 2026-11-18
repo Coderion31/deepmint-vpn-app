@@ -3,8 +3,8 @@
 # Запуск от root:  bash /root/deploy_deepmint.sh
 set -euo pipefail
 
-SUBDOMAIN="${1:-deepmint-vpn}"          # имя поддомена duckdns.org
-PUBLIC_IP="${2:-179.254.115.142}"       # IP сервера
+SUBDOMAIN="${1:-deepmain}"          # имя поддомена duckdns.org
+PUBLIC_IP="${2:-179.254.115.142}"   # IP сервера
 
 echo "==> Обновляю систему и ставлю зависимости"
 apt-get update -y

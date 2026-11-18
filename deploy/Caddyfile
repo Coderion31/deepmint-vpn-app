@@ -1,7 +1,7 @@
 # Caddyfile для deepmint.vpn — бесплатный HTTPS (DuckDNS + Let's Encrypt)
 # Замените deepmint-vpn на ваш поддомен duckdns.org
 
-deepmint-vpn.duckdns.org {
+deepmain.duckdns.org {
     encode zstd gzip
     reverse_proxy 127.0.0.1:8080
 }
