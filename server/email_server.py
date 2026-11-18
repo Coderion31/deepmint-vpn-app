@@ -149,7 +149,7 @@ PLATEGA_SECRET = os.environ.get("PLATEGA_SECRET", "")
 PLATEGA_RETURN_URL = os.environ.get("PLATEGA_RETURN_URL", "https://coderion31.github.io/deepmint-vpn-app/")
 
 PLANS = {
-    "trial": {"label": "Пробная — 72 часа", "price": "0.00", "days": "trial"},
+    "trial": {"label": "Пробная — 72 часа", "price": "0.00", "days": 3},
     "30": {"label": "30 дней", "price": "199.00", "days": 30},
     "90": {"label": "90 дней", "price": "549.00", "days": 90},
     "180": {"label": "180 дней", "price": "999.00", "days": 180},
