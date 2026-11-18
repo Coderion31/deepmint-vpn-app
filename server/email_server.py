@@ -156,6 +156,28 @@ PLANS = {
     "360": {"label": "360 дней", "price": "1799.00", "days": 360},
 }
 
+# Один email — одна пробная подписка. Храним факт использования.
+TRIAL_FILE = Path(__file__).resolve().parent / "trial_used.json"
+_trial_lock = threading.Lock()
+
+
+def _load_trial_used():
+    try:
+        if TRIAL_FILE.exists():
+            data = json.loads(TRIAL_FILE.read_text(encoding="utf-8"))
+            if isinstance(data, dict):
+                return data
+    except (OSError, ValueError):
+        pass
+    return {}
+
+
+def _save_trial_used(data):
+    try:
+        TRIAL_FILE.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+    except OSError:
+        pass
+
 # VPN-панели (H1/VLESS). Токены в env: VPN_NODE_<LOC>_URL / VPN_NODE_<LOC>_TOKEN.
 VPN_NODES = []
 _VPN_ENV = {
@@ -279,7 +301,16 @@ def create_paylink():
         return jsonify(ok=False, error="Укажите корректную почту"), 400
     plan = PLANS[plan_key]
     if plan["price"] == "0.00":
-        # Пробная подписка: активируем доступ сразу, без платежа.
+        # Пробная подписка: один email — одна пробная. Продлевать нельзя.
+        with _trial_lock:
+            used = _load_trial_used()
+            if used.get(email, 0) >= 1:
+                return jsonify(
+                    ok=False, error="Пробная подписка уже была использована для этой почты",
+                    trial_already_used=True,
+                ), 409
+            used[email] = used.get(email, 0) + 1
+            _save_trial_used(used)
         days = plan.get("days")
         if isinstance(days, int) and days > 0 and VPN_NODES:
             ok, res = _ensure_vpn_client(email, days)

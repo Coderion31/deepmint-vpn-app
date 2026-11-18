@@ -4007,6 +4007,10 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
     <label class="field-label" for="emailInput">Почта</label>
     <input class="field-input" id="emailInput" type="email" placeholder="you@example.com" autocomplete="email" inputmode="email">
     <div class="field-error" id="emailError"></div>
+    <div id="codeRow" style="display:none">
+      <label class="field-label" for="codeInput">Код из письма</label>
+      <input class="field-input" id="codeInput" type="text" placeholder="000000" inputmode="numeric" autocomplete="one-time-code" style="margin-bottom:0">
+    </div>
     <button class="btn btn-accent auth-btn" type="button" id="emailLoginBtn">Войти</button>
   </div>
 </div>
@@ -4180,6 +4184,10 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
           closeModals();
           if(typeof loadMyVpn==='function') loadMyVpn();
           showToast('Пробная подписка активирована на 72 часа. Ссылки — в разделе «Мой VPN».');
+        } else if(d && d.trial_already_used){
+          closeModals();
+          if(typeof loadMyVpn==='function') loadMyVpn();
+          showToast('Пробная подписка уже была использована для этой почты. Оформите платный тариф — ссылки уже в разделе «Мой VPN».');
         } else {
           showToast('Не удалось активировать пробную подписку. Попробуйте ещё раз через несколько секунд или оплатите тариф.');
         }
@@ -4293,13 +4301,62 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
     var v=emailInput.value.trim();
     if(!validateEmail(v)){ emailError.textContent='Введите корректную почту'; return; }
     emailError.textContent='';
-    var tg=null;
-    try{ var u=tgUser(); if(u) tg=(displayName(u)||''); }catch(e){}
-    saveSession({method:'email',email:v,tg:tg});
-    applySession();
-    closeModals();
-    showToast(tg ? ('Почта '+v+' привязана к аккаунту') : ('Вы вошли как '+v));
-    emailInput.value='';
+    var apiBase=window.SUPPORT_API || 'https://deepmint-vpn-app.onrender.com';
+    var codeInput=document.getElementById('codeInput');
+    var codeRow=document.getElementById('codeRow');
+    var isStep2 = codeRow && codeRow.style.display!=='none';
+    if(!isStep2){
+      // Шаг 1: отправить код на почту
+      var btn=document.getElementById('emailLoginBtn');
+      btn.disabled=true; btn.textContent='Отправляем…';
+      fetch(apiBase+'/api/email/send',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({email:v})
+      }).then(function(r){ return r.json(); }).then(function(d){
+        btn.disabled=false; btn.textContent='Войти';
+        if(d && d.ok){
+          codeRow.style.display='block';
+          if(codeInput) codeInput.focus();
+          showToast('Код отправлен на '+v+'. Проверьте почту.');
+        } else {
+          emailError.textContent=(d && d.error) ? d.error : 'Не удалось отправить код';
+        }
+      }).catch(function(){
+        btn.disabled=false; btn.textContent='Войти';
+        emailError.textContent='Платёжный/почтовый сервер запускается, попробуйте ещё раз';
+      });
+      return;
+    }
+    // Шаг 2: проверить код
+    var code=(codeInput?codeInput.value:'').trim();
+    if(!code){ emailError.textContent='Введите код из письма'; return; }
+    var btn2=document.getElementById('emailLoginBtn');
+    btn2.disabled=true; btn2.textContent='Проверяем…';
+    fetch(apiBase+'/api/email/verify',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email:v, code:code})
+    }).then(function(r){ return r.json(); }).then(function(d){
+      btn2.disabled=false; btn2.textContent='Войти';
+      if(d && d.ok){
+        var tg=null;
+        try{ var u=tgUser(); if(u) tg=(displayName(u)||''); }catch(e){}
+        saveSession({method:'email',email:v,tg:tg});
+        applySession();
+        closeModals();
+        if(typeof loadMyVpn==='function') loadMyVpn();
+        showToast('Вы вошли как '+v);
+        emailInput.value='';
+        if(codeInput) codeInput.value='';
+        if(codeRow) codeRow.style.display='none';
+      } else {
+        emailError.textContent=(d && d.error) ? d.error : 'Неверный код';
+      }
+    }).catch(function(){
+      btn2.disabled=false; btn2.textContent='Войти';
+      emailError.textContent='Платёжный/почтовый сервер запускается, попробуйте ещё раз';
+    });
   }
   document.getElementById('emailLoginBtn').addEventListener('click',loginByEmail);
   emailInput.addEventListener('keydown',function(e){ if(e.key==='Enter')loginByEmail(); });
