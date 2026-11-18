@@ -4023,7 +4023,7 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
     <div class="auth-title">deepmint.vpn</div>
     <div class="auth-sub" id="authSub">Войдите через Telegram</div>
     <div class="auth-methods">
-      <a class="btn btn-accent auth-btn" href="https://t.me/deepmintvpn_bot" target="_blank" rel="noopener" id="tgOpenBtn" style="text-decoration:none">
+      <a class="btn btn-accent auth-btn" href="https://t.me/deepmintvpn_bot?start=tg" target="_blank" rel="noopener" id="tgOpenBtn" style="text-decoration:none">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
           <path d="M22 2 11 13"></path>
           <path d="M22 2 15 22l-4-9-9-4z"></path>
@@ -4768,6 +4768,22 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
   setInterval(loadChat, 2000);
 
   applySession();
+
+  var tgOpenBtn=document.getElementById('tgOpenBtn');
+  if(tgOpenBtn){
+    function buildTgStart(){
+      var u=null;
+      try{ u=TG && TG.initDataUnsafe && TG.initDataUnsafe.user; }catch(e){}
+      if(session && session.email) return 'link_'+encodeURIComponent(session.email);
+      if(u && u.id) return 'tg_'+u.id;
+      return 'tg';
+    }
+    function setTgHref(){
+      tgOpenBtn.setAttribute('href','https://t.me/deepmintvpn_bot?start='+buildTgStart());
+    }
+    tgOpenBtn.addEventListener('click',setTgHref);
+    setTgHref();
+  }
 })();
 </script>
 </body>
