@@ -4031,12 +4031,12 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
         Открыть в Telegram
       </a>
       <div class="sep"><span class="sep-line"></span><span class="sep-text">или</span><span class="sep-line"></span></div>
-      <button class="btn auth-btn" type="button" data-open="emailModal">
+      <button class="btn auth-btn" type="button" id="emailSoonBtn" disabled style="opacity:.55;cursor:not-allowed">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <rect x="2" y="4" width="20" height="16" rx="2"></rect>
           <path d="m22 7-10 5L2 7"></path>
         </svg>
-        Войти по почте
+        Войти по почте · скоро
       </button>
       <div class="tg-note">Вы уже в Telegram? Приложение определит профиль автоматически — просто откройте его через бота.</div>
     </div>
@@ -4517,13 +4517,9 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
       return;
     }
     e.preventDefault();
-    if(mode==='email'){
-      closeModals();
-      openModal(document.getElementById('emailModal'));
-    } else {
-      closeModals();
-      openModal(document.getElementById('emailModal'));
-    }
+    // Вход по почте пока в разработке
+    closeModals();
+    showToast('Вход по почте скоро появится. Пока войдите через Telegram.');
   });
   document.getElementById('accountLogout').addEventListener('click',function(){
     closeModals();
