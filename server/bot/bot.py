@@ -357,12 +357,13 @@ def send_enter_text(state, chat_id):
 
 
 CABINET_URL = "https://clck.ru/3WqZoF"
+APP_LINK = "https://coderion31.github.io/deepmint-vpn-app/"
 
 
 def vpnus_welcome_keyboard():
     return {
         "inline_keyboard": [
-            [{"text": "Личный кабинет", "url": CABINET_URL}],
+            [{"text": "Личный кабинет", "web_app": {"url": APP_LINK}}],
         ]
     }
 
@@ -370,7 +371,7 @@ def vpnus_welcome_keyboard():
 def vpnus_cabinet_keyboard():
     return {
         "inline_keyboard": [
-            [{"text": "Открыть личный кабинет", "url": CABINET_URL}],
+            [{"text": "Открыть личный кабинет", "web_app": {"url": APP_LINK}}],
         ]
     }
 
@@ -417,10 +418,10 @@ def send_start(chat_id, user_id):
         (
             f"Привет, {name}!\n\n"
             "deepmint vpn — новейший vpn сервис.\n\n"
-            "Для настройки перейдите в личный кабинет:\n\n"
-            f'<a href="{CABINET_URL}">Открыть личный кабинет</a>'
+            "Для входа и настройки нажмите кнопку ниже — "
+            "приложение откроется внутри Telegram, без пароля."
         ),
-        parse_mode="HTML",
+        reply_markup=vpnus_welcome_keyboard(),
     )
 
 

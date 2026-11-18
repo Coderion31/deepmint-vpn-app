@@ -34,10 +34,23 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
-SMTP_HOST = "smtp.gmail.com"
-SMTP_PORT = 587
+SMTP_HOST = os.environ.get("SMTP_HOST", "smtp.gmail.com")
+SMTP_PORT = int(os.environ.get("SMTP_PORT", "587"))
 SMTP_USER = os.environ.get("SMTP_USER", "bunseriy@gmail.com")
 SMTP_APP_PASS = os.environ.get("SMTP_APP_PASS", "mcpzuicanobwsdsu")
+
+
+def _smtp_host_ipv4():
+    """Возвращает IPv4-адрес SMTP-хоста (Render free tier без IPv6: smtp.gmail.com
+    резолвится в AAAA первой, поэтому принудительно берём A-запись)."""
+    import socket
+    try:
+        infos = socket.getaddrinfo(SMTP_HOST, SMTP_PORT, socket.AF_INET, socket.SOCK_STREAM)
+        if infos:
+            return infos[0][4][0]
+    except OSError:
+        pass
+    return SMTP_HOST
 CODE_TTL = 300
 RATE_LIMIT_HOUR = 5
 STATE_FILE = Path(__file__).resolve().parent / "email_codes.json"
@@ -69,7 +82,7 @@ def _send_email(to_email, code):
     msg["Subject"] = Header("Код входа — deepmint.vpn", "utf-8")
     msg["From"] = SMTP_USER
     msg["To"] = to_email
-    s = smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=30)
+    s = smtplib.SMTP(_smtp_host_ipv4(), SMTP_PORT, timeout=30)
     try:
         s.ehlo()
         s.starttls()
@@ -431,6 +444,25 @@ def support_list():
 @app.get("/api/health")
 def health():
     return jsonify(ok=True)
+
+
+@app.get("/api/email/diag")
+def email_diag():
+    """Диагностика: к какому IP резолвится SMTP-хост и какие порты доступны."""
+    import socket
+    out = {"host": SMTP_HOST, "port": SMTP_PORT, "ipv4": None, "ipv4_ok": False, "online": False}
+    try:
+        infos = socket.getaddrinfo(SMTP_HOST, SMTP_PORT, socket.AF_INET, socket.SOCK_STREAM)
+        if infos:
+            out["ipv4"] = infos[0][4][0]
+    except OSError as e:
+        out["ipv4_error"] = str(e)
+    try:
+        with socket.create_connection((out["ipv4"] or SMTP_HOST, SMTP_PORT), timeout=8):
+            out["ipv4_ok"] = True
+    except OSError as e:
+        out["ipv4_error"] = str(e)
+    return jsonify(ok=True, diag=out)
 
 
 def _days_for_amount(amount):
