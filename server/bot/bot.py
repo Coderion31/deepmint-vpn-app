@@ -417,10 +417,10 @@ def send_start(chat_id, user_id):
         (
             f"Привет, {name}!\n\n"
             "deepmint vpn — новейший vpn сервис.\n\n"
-            "Для настройки перейдите в личный кабинет по кнопке ниже.\n\n"
-            "Подключение займёт 2 минуты."
+            "Для настройки перейдите в личный кабинет:\n\n"
+            f'<a href="{CABINET_URL}">Открыть личный кабинет</a>'
         ),
-        reply_markup=vpnus_welcome_keyboard(),
+        parse_mode="HTML",
     )
 
 
