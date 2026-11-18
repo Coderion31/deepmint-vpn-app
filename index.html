@@ -3735,6 +3735,23 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
       </div>
     </div>
 
+    <div class="setting-group" id="vpnAccessGroup">
+      <div class="setting-group-title">Мой VPN</div>
+      <div class="setting-row">
+        <div>
+          <div class="setting-row-label">Подписка</div>
+          <div class="setting-row-sub" id="vpnAccessStatus">Загрузка…</div>
+        </div>
+      </div>
+      <div id="vpnAccessList"></div>
+      <div class="setting-row" style="display:none" id="vpnAccessEmpty">
+        <div>
+          <div class="setting-row-label">Нет активного доступа</div>
+          <div class="setting-row-sub">Оформите подписку, чтобы получить ссылку на подключение</div>
+        </div>
+      </div>
+    </div>
+
     <div class="setting-group">
       <div class="setting-group-title">Устройства</div>
       <div class="setting-row" id="rowDevices" style="cursor:pointer">
@@ -4183,6 +4200,74 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
   var emailInput=document.getElementById('emailInput');
   var emailError=document.getElementById('emailError');
   function validateEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+  function loadMyVpn(){
+    var st=document.getElementById('vpnAccessStatus');
+    var list=document.getElementById('vpnAccessList');
+    var empty=document.getElementById('vpnAccessEmpty');
+    var em = session && session.email ? session.email : '';
+    if(!em){
+      if(st) st.textContent='Войдите по почте, чтобы увидеть доступ';
+      if(list) list.innerHTML='';
+      if(empty) empty.style.display='';
+      return;
+    }
+    if(st) st.textContent='Загрузка…';
+    var apiBase=window.SUPPORT_API || 'https://deepmint-vpn-app.onrender.com';
+    fetch(apiBase+'/api/my-access?email='+encodeURIComponent(em))
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        if(!d || !d.ok || !d.nodes){ throw new Error('bad resp'); }
+        var active = d.nodes.filter(function(n){ return n && n.active; });
+        if(st){
+          if(active.length){
+            var maxDays=0;
+            active.forEach(function(n){ if(n.left_days && n.left_days>maxDays) maxDays=n.left_days; });
+            st.textContent='Активна · '+active.length+' из '+d.nodes.length+' локаций · '+Math.round(maxDays)+' дн.';
+          } else {
+            st.textContent='Нет активного доступа';
+          }
+        }
+        if(empty) empty.style.display = (active.length ? 'none' : '');
+        list.innerHTML='';
+        d.nodes.forEach(function(n){
+          if(!n || !n.active) return;
+          var locName = ({DE:'Германия',PL:'Польша',EE:'Эстония',ES:'Испания',IL:'Израиль'})[n.loc] || n.loc;
+          var row=document.createElement('div');
+          row.className='setting-row';
+          row.style.cursor='pointer';
+          row.style.flexWrap='wrap';
+          var link = n.link || n.sub_url || '';
+          var show = (link && link.indexOf('vless://')===0) ? link : (n.sub_url || '');
+          row.innerHTML=
+            '<div style="flex:1;min-width:160px">'+
+              '<div class="setting-row-label">'+locName+'</div>'+
+              '<div class="setting-row-sub">'+(n.left_days!=null ? Math.round(n.left_days)+' дн.' : 'активен')+'</div>'+
+            '</div>'+
+            '<span style="font-size:12px;color:#8e8e8e;word-break:break-all;max-width:55%">'+(show?show:'есть доступ')+'</span>'+
+            '<span style="color:#dfe3e6;font-size:20px;margin-left:8px">›</span>';
+          row.addEventListener('click',function(){
+            var target = link ? link : (n.sub_url || '');
+            if(!target){ showToast('Ссылка пока недоступна'); return; }
+            copyToClipboard(target);
+            showToast('Ссылка скопирована: '+locName);
+          });
+          list.appendChild(row);
+        });
+      })
+      .catch(function(){
+        if(st) st.textContent='Не удалось загрузить';
+      });
+  }
+  function copyToClipboard(txt){
+    try{
+      if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt); return; }
+    }catch(e){}
+    var ta=document.createElement('textarea');
+    ta.value=txt; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); }catch(e){}
+    document.body.removeChild(ta);
+  }
   function loginByEmail(){
     var v=emailInput.value.trim();
     if(!validateEmail(v)){ emailError.textContent='Введите корректную почту'; return; }
@@ -4313,6 +4398,7 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
     var s=document.getElementById('settingsScreen');
     if(window.scrollTo) window.scrollTo(0,0);
     s.classList.remove('hidden');
+    if(typeof loadMyVpn==='function') loadMyVpn();
   });
   document.getElementById('settingsBack').addEventListener('click',function(){
     document.getElementById('settingsScreen').classList.add('hidden');
