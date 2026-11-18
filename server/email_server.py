@@ -42,6 +42,18 @@ MAILBRIDGE_URL = os.environ.get("MAILBRIDGE_URL", "").strip().rstrip("/")
 MAILBRIDGE_KEY = os.environ.get("MAILBRIDGE_KEY", "deepmint-bridge-2026")
 
 
+def _smtp_host_ipv4():
+    """Возвращает IPv4-адрес SMTP-хоста (на хостах без IPv6 avoid резолва в AAAA)."""
+    import socket
+    try:
+        infos = socket.getaddrinfo(SMTP_HOST, SMTP_PORT, socket.AF_INET, socket.SOCK_STREAM)
+        if infos:
+            return infos[0][4][0]
+    except OSError:
+        pass
+    return SMTP_HOST
+
+
 def _send_email(to_email, code):
     """Отправляет код. Если задан MAILBRIDGE_URL (почтовый релей на h1cloud) —
     шлём через него, иначе напрямую по SMTP."""
