@@ -4021,24 +4021,15 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
 <div class="auth-screen" id="authScreen">
   <div class="auth-card">
     <div class="auth-title">deepmint.vpn</div>
-    <div class="auth-sub" id="authSub">Войдите через Telegram</div>
+    <div class="auth-sub" id="authSub">Вход по ключевой фразе</div>
     <div class="auth-methods">
-      <a class="btn btn-accent auth-btn" href="https://t.me/deepmintvpn_bot?start=tg" target="_blank" rel="noopener" id="tgOpenBtn" style="text-decoration:none">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M22 2 11 13"></path>
-          <path d="M22 2 15 22l-4-9-9-4z"></path>
-        </svg>
-        Открыть в Telegram
-      </a>
-      <div class="sep"><span class="sep-line"></span><span class="sep-text">или</span><span class="sep-line"></span></div>
-      <button class="btn auth-btn" type="button" id="emailSoonBtn" disabled style="opacity:.55;cursor:not-allowed">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <rect x="2" y="4" width="20" height="16" rx="2"></rect>
-          <path d="m22 7-10 5L2 7"></path>
-        </svg>
-        Войти по почте · скоро
-      </button>
-      <div class="tg-note">Вы уже в Telegram? Приложение определит профиль автоматически — просто откройте его через бота.</div>
+      <div class="field-hint" style="color:#8e8e8e;font-size:13px;margin-bottom:4px">Фраза — это ваш логин и пароль одновременно. Состоит минимум из 5 слов.</div>
+      <div style="width:100%">
+        <input class="field-input" id="phraseInput" type="text" placeholder="арбуз ворона дом 3756" autocomplete="off" style="width:100%;box-sizing:border-box">
+        <div class="field-error" id="phraseError"></div>
+      </div>
+      <button class="btn btn-accent auth-btn" type="button" id="phraseLoginBtn">Войти</button>
+      <div class="tg-note">Один и тот же пользователь — одна и та же фраза. Введите её снова, чтобы вернуться в свой аккаунт.</div>
     </div>
   </div>
 </div>
@@ -4082,7 +4073,7 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
   function applySession(){
     var auth=document.getElementById('authScreen');
     var inTG = !!tgUser();
-    var logged = inTG || (session && session.method==='email');
+    var logged = inTG || (session && (session.method==='email' || session.method==='phrase'));
     auth.classList.toggle('hidden',!!logged);
     var accName=document.getElementById('accountName');
     var accEmail=document.getElementById('accountEmail');
@@ -4111,6 +4102,13 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
         linkRow.setAttribute('target','_blank');
         linkRow.setAttribute('rel','noopener');
       }
+    } else if(session && session.method==='phrase'){
+      if(accName) accName.textContent=session.phrase||'пользователь';
+      if(accEmail) accEmail.textContent='по ключевой фразе';
+      if(accMethod) accMethod.textContent='Фраза';
+      if(linkLabel) linkLabel.textContent='Ключевая фраза';
+      if(linkSub) linkSub.textContent='Используется для доступа к VPN';
+      if(linkRow){ linkRow.setAttribute('data-link','phrase'); linkRow.removeAttribute('href'); }
     } else {
       if(accName) accName.textContent='Гость';
       if(accEmail) accEmail.textContent='не указана';
@@ -4516,6 +4514,12 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
       closeModals();
       return;
     }
+    if(mode==='phrase'){
+      e.preventDefault();
+      closeModals();
+      showToast('Ключевая фраза — ваш доступ к VPN.');
+      return;
+    }
     e.preventDefault();
     // Вход по почте пока в разработке
     closeModals();
@@ -4769,21 +4773,45 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
 
   applySession();
 
-  var tgOpenBtn=document.getElementById('tgOpenBtn');
-  if(tgOpenBtn){
-    function buildTgStart(){
-      var u=null;
-      try{ u=TG && TG.initDataUnsafe && TG.initDataUnsafe.user; }catch(e){}
-      if(session && session.email) return 'link_'+encodeURIComponent(session.email);
-      if(u && u.id) return 'tg_'+u.id;
-      return 'tg';
-    }
-    function setTgHref(){
-      tgOpenBtn.setAttribute('href','https://t.me/deepmintvpn_bot?start='+buildTgStart());
-    }
-    tgOpenBtn.addEventListener('click',setTgHref);
-    setTgHref();
+  var phraseInput=document.getElementById('phraseInput');
+  var phraseBtn=document.getElementById('phraseLoginBtn');
+  var phraseError=document.getElementById('phraseError');
+  function loginByPhrase(){
+    if(!phraseInput) return;
+    var v=phraseInput.value.trim();
+    if(!v){ if(phraseError) phraseError.textContent='Введите ключевую фразу'; return; }
+    var words=v.toLowerCase().split(/\s+/).filter(Boolean);
+    if(words.length<5){ if(phraseError) phraseError.textContent='Минимум 5 слов'; return; }
+    if(phraseError) phraseError.textContent='';
+    var apiBase=window.SUPPORT_API || 'https://deepmint-vpn-app.onrender.com';
+    phraseBtn.disabled=true; phraseBtn.textContent='Входим…';
+    fetch(apiBase+'/api/phrase-login',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({phrase:v})
+    }).then(function(r){ return r.json(); }).then(function(d){
+      phraseBtn.disabled=false; phraseBtn.textContent='Войти';
+      if(d && d.ok){
+        saveSession({method:'phrase',phrase:d.account});
+        applySession();
+        closeModals();
+        if(typeof loadMyVpn==='function') loadMyVpn();
+        phraseInput.value='';
+        showToast('Доступ выдан. Серверы переданы в приложение.');
+        if(d.links && d.links.length){
+          copyToClipboard(d.links.join('\n'));
+          showToast('Доступ выдан. Ссылки скопированы — вставьте в приложение.');
+        }
+      } else {
+        if(phraseError) phraseError.textContent=(d && d.error) ? d.error : 'Не удалось войти, попробуйте ещё раз';
+      }
+    }).catch(function(){
+      phraseBtn.disabled=false; phraseBtn.textContent='Войти';
+      if(phraseError) phraseError.textContent='Сервер запускается, попробуйте ещё раз';
+    });
   }
+  if(phraseBtn) phraseBtn.addEventListener('click',loginByPhrase);
+  if(phraseInput) phraseInput.addEventListener('keydown',function(e){ if(e.key==='Enter')loginByPhrase(); });
 })();
 </script>
 </body>

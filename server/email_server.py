@@ -271,6 +271,12 @@ def _ensure_vpn_client(email, days):
     """Создаёт или продлевает VPN-доступ для email на всех панелях.
     Возвращает (ok, подробности по локациям)."""
     name = "vpn-" + _smart_hash(email)
+    return _ensure_vpn_client_name(name, email, days)
+
+
+def _ensure_vpn_client_name(name, title, days):
+    """Создаёт или продлевает клиента NAME (title) на всех панелях.
+    Возвращает (ok, подробности по локациям)."""
     results = {}
     ok_all = True
     for node in VPN_NODES:
@@ -290,7 +296,7 @@ def _ensure_vpn_client(email, days):
         else:
             exp = now + days * 86400
             st, cre = _vpn_req(node, "POST", "/api/create", body={
-                "name": name, "manual": 1, "title": email,
+                "name": name, "manual": 1, "title": title,
                 "expires_at": exp, "traffic_limit": 0, "device_limit": 0,
             })
             if st in (200, 201):
@@ -517,7 +523,6 @@ def _days_for_amount(amount):
 
 @app.get("/api/my-access")
 def my_access():
-    """Ссылки VPN-доступа для email. {email} -> {ok, nodes: [{loc, active, left_days, expires_at, sub_url, link}]}"""
     email = (request.args.get("email") or "").strip().lower()
     if not email or "@" not in email or "." not in email.split("@")[-1]:
         return jsonify(ok=False, error="Неверный email"), 400
@@ -570,6 +575,70 @@ def sub_all():
                 links.append(l)
                 break
     return jsonify(ok=True, email=email, subs=subs, links=links, all="\n".join(subs + links))
+
+
+@app.post("/api/phrase-login")
+def phrase_login():
+    """Вход по ключевой фразе (5+ слов). Фраза — это и логин, и пароль.
+    Нормализуем: только слова и цифры, в нижнем регистре. Для фразы создаём
+    клиента VPN (30 дней) со стабильным именем из хэша фразы и выдаём ссылки.
+    {phrase: "арбуз ворона дом 3756"} -> {ok, account, links:[...], nodes:[...]}"""
+    data = request.get_json(silent=True) or {}
+    phrase = (data.get("phrase") or "").strip()
+    if not phrase:
+        return jsonify(ok=False, error="Введите ключевую фразу"), 400
+    norm = " ".join(phrase.lower().split())
+    words = [w for w in norm.split() if w]
+    if len(words) < 4:
+        return jsonify(ok=False, error="Фраза должна состоять минимум из 4 слов"), 400
+    # имя клиента — стабильный хэш от фразы: phrase-<hash>
+    name = "phrase-" + _smart_hash(norm)
+    days = 30
+    ok, results = _ensure_vpn_client_name(name, norm, days)
+    # Доступ выдан, если фраза создана хотя бы на одной живой панели;
+    # невалидная нода (DE) не должна блокировать вход целиком.
+    created_any = any(
+        isinstance(r, dict) and r.get("ok") for r in results.values()
+    )
+    if not ok and not created_any:
+        return jsonify(ok=False, error="Не удалось создать доступ, попробуйте позже"), 502
+
+    # собираем ссылки со всех панелей
+    links, subs, nodes = [], [], []
+    for node in VPN_NODES:
+        status, data = _vpn_req(node, "GET", f"/api/clients/{name}")
+        if status == 200 and data.get("client"):
+            cl = data["client"]
+            st_ok = cl.get("status") == "active" and not cl.get("banned")
+            sub = (cl.get("sub_url") or "").strip()
+            first_link = ""
+            for e in (cl.get("inbound_links") or []):
+                if isinstance(e, dict) and str(e.get("link", "")).startswith("vless://"):
+                    first_link = e["link"]
+                    break
+            nodes.append({
+                "loc": node["loc"],
+                "active": st_ok,
+                "left_days": cl.get("left_days"),
+                "expires_at": cl.get("expires_at"),
+                "sub_url": sub,
+                "link": first_link,
+            })
+            if st_ok:
+                if sub:
+                    subs.append(sub)
+                if first_link:
+                    links.append(first_link)
+    return jsonify(
+        ok=True,
+        account=norm,
+        name=name,
+        days=days,
+        links=links,
+        subs=subs,
+        nodes=nodes,
+        all="\n".join(subs + links),
+    )
 
 
 PAYMENTS_FILE = Path(__file__).resolve().parent / "payments.json"
