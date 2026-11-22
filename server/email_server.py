@@ -104,7 +104,17 @@ def _send_email_smtp(to_email, code):
         except Exception:
             pass
 RATE_LIMIT_HOUR = 5
-STATE_FILE = Path(__file__).resolve().parent / "email_codes.json"
+# Каталог для runtime-хранилищ (email_codes/chat/payments/trial).
+# На Vercel файловая система serverless read-only кроме /tmp — поэтому
+# DATA_DIR переопределяется через env (vercel.json: DATA_DIR=/tmp).
+DATA_DIR = Path(os.environ.get("DATA_DIR", "")).expanduser() if os.environ.get("DATA_DIR") else Path(__file__).resolve().parent
+try:
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+except OSError:
+    pass
+def _data_file(name):
+    return DATA_DIR / name
+STATE_FILE = _data_file("email_codes.json")
 _codes = {}   # email -> {"code": str, "expires": ts, "sent": ts, "count": n}
 
 
@@ -181,7 +191,7 @@ def verify_code():
 
 SUPPORT_EMAIL = os.environ.get("SUPPORT_EMAIL", "bunseriy@gmail.com")
 ADMIN_KEY = os.environ.get("ADMIN_KEY", "support1234")
-CHAT_FILE = Path(__file__).resolve().parent / "chat_messages.json"
+CHAT_FILE = _data_file("chat_messages.json")
 _msg_lock = threading.Lock()
 
 PLATEGA_BASE = "https://app.platega.io"
@@ -198,7 +208,7 @@ PLANS = {
 }
 
 # Один email — одна пробная подписка. Храним факт использования.
-TRIAL_FILE = Path(__file__).resolve().parent / "trial_used.json"
+TRIAL_FILE = _data_file("trial_used.json")
 _trial_lock = threading.Lock()
 
 
@@ -641,7 +651,7 @@ def phrase_login():
     )
 
 
-PAYMENTS_FILE = Path(__file__).resolve().parent / "payments.json"
+PAYMENTS_FILE = _data_file("payments.json")
 
 
 def _load_payments():
