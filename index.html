@@ -4021,15 +4021,29 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
 <div class="auth-screen" id="authScreen">
   <div class="auth-card">
     <div class="auth-title">deepmint.vpn</div>
-    <div class="auth-sub" id="authSub">Вход по ключевой фразе</div>
+    <div class="auth-sub" id="authSub">Войдите или зарегистрируйтесь</div>
     <div class="auth-methods">
-      <div class="field-hint" style="color:#8e8e8e;font-size:13px;margin-bottom:4px">Фраза — это ваш логин и пароль одновременно. Состоит минимум из 5 слов.</div>
       <div style="width:100%">
-        <input class="field-input" id="phraseInput" type="text" placeholder="арбуз ворона дом 3756" autocomplete="off" style="width:100%;box-sizing:border-box">
+        <input class="field-input" id="phraseInput" type="text" placeholder="Ключевая фраза (если уже есть)" autocomplete="off" style="width:100%;box-sizing:border-box">
         <div class="field-error" id="phraseError"></div>
       </div>
-      <button class="btn btn-accent auth-btn" type="button" id="phraseLoginBtn">Войти</button>
-      <div class="tg-note">Один и тот же пользователь — одна и та же фраза. Введите её снова, чтобы вернуться в свой аккаунт.</div>
+      <button class="btn btn-accent auth-btn" type="button" id="phraseLoginBtn">Войти по фразе</button>
+      <div class="sep"><span class="sep-line"></span><span class="sep-text">или</span><span class="sep-line"></span></div>
+      <button class="btn auth-btn" type="button" id="registerBtn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <line x1="19" y1="8" x2="19" y2="14"></line>
+          <line x1="22" y1="11" x2="16" y2="11"></line>
+        </svg>
+        Зарегистрироваться
+      </button>
+      <div class="tg-note" id="registeredBox" style="display:none">
+        <div style="font-weight:600;color:#fff;margin-bottom:6px">Вы зарегистрированы как <span id="regUserId">юзер #1</span></div>
+        <div style="color:#8e8e8e;font-size:13px;margin-bottom:4px">Ваша ключевая фраза (сохраните её, это ваш логин и пароль):</div>
+        <div id="regPhrase" style="font-weight:600;color:#58a6ff;font-size:16px;word-break:break-word">—</div>
+        <button class="btn auth-btn" type="button" id="copyPhraseBtn" style="margin-top:10px;width:100%">Скопировать фразу</button>
+      </div>
     </div>
   </div>
 </div>
@@ -4776,42 +4790,83 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
   var phraseInput=document.getElementById('phraseInput');
   var phraseBtn=document.getElementById('phraseLoginBtn');
   var phraseError=document.getElementById('phraseError');
+  var registerBtn=document.getElementById('registerBtn');
+  var registeredBox=document.getElementById('registeredBox');
+  var regUserId=document.getElementById('regUserId');
+  var regPhrase=document.getElementById('regPhrase');
+  var copyPhraseBtn=document.getElementById('copyPhraseBtn');
+  var apiBase=window.SUPPORT_API || 'https://deepmint-vpn-app.onrender.com';
+
+  function enterWithSession(d){
+    if(d && d.ok){
+      var label = d.user || d.phrase || ('юзер #' + d.userId);
+      saveSession({method:'phrase',phrase:label,userId:d.userId});
+      applySession();
+      closeModals();
+      if(typeof loadMyVpn==='function') loadMyVpn();
+      if(phraseInput) phraseInput.value='';
+      if(d.links && d.links.length){
+        copyToClipboard(d.links.join('\n'));
+        showToast('Доступ выдан. Ссылки скопированы — вставьте в приложение.');
+      } else {
+        showToast('Доступ выдан.');
+      }
+    } else {
+      if(phraseError) phraseError.textContent=(d && d.error) ? d.error : 'Не удалось выполнить операцию';
+    }
+  }
   function loginByPhrase(){
     if(!phraseInput) return;
     var v=phraseInput.value.trim();
     if(!v){ if(phraseError) phraseError.textContent='Введите ключевую фразу'; return; }
-    var words=v.toLowerCase().split(/\s+/).filter(Boolean);
-    if(words.length<5){ if(phraseError) phraseError.textContent='Минимум 5 слов'; return; }
     if(phraseError) phraseError.textContent='';
-    var apiBase=window.SUPPORT_API || 'https://deepmint-vpn-app.onrender.com';
     phraseBtn.disabled=true; phraseBtn.textContent='Входим…';
-    fetch(apiBase+'/api/phrase-login',{
+    fetch(apiBase+'/api/login',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({phrase:v})
     }).then(function(r){ return r.json(); }).then(function(d){
-      phraseBtn.disabled=false; phraseBtn.textContent='Войти';
+      phraseBtn.disabled=false; phraseBtn.textContent='Войти по фразе';
+      enterWithSession(d);
+    }).catch(function(){
+      phraseBtn.disabled=false; phraseBtn.textContent='Войти по фразе';
+      if(phraseError) phraseError.textContent='Сервер запускается, попробуйте ещё раз';
+    });
+  }
+  function register(){
+    if(phraseError) phraseError.textContent='';
+    registerBtn.disabled=true; registerBtn.textContent='Создаём…';
+    fetch(apiBase+'/api/register',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({})
+    }).then(function(r){ return r.json(); }).then(function(d){
+      registerBtn.disabled=false; registerBtn.textContent='Зарегистрироваться';
       if(d && d.ok){
-        saveSession({method:'phrase',phrase:d.account});
-        applySession();
-        closeModals();
-        if(typeof loadMyVpn==='function') loadMyVpn();
-        phraseInput.value='';
-        showToast('Доступ выдан. Серверы переданы в приложение.');
-        if(d.links && d.links.length){
-          copyToClipboard(d.links.join('\n'));
-          showToast('Доступ выдан. Ссылки скопированы — вставьте в приложение.');
-        }
+        if(regUserId) regUserId.textContent='юзер #' + d.userId;
+        if(regPhrase) regPhrase.textContent=d.phrase;
+        if(registeredBox) registeredBox.style.display='block';
+        if(phraseInput) phraseInput.value='';
+        if(phraseError) phraseError.textContent='';
+        // сразу входим: выдаём доступ
+        enterWithSession(d);
       } else {
-        if(phraseError) phraseError.textContent=(d && d.error) ? d.error : 'Не удалось войти, попробуйте ещё раз';
+        if(phraseError) phraseError.textContent=(d && d.error) ? d.error : 'Не удалось зарегистрироваться';
       }
     }).catch(function(){
-      phraseBtn.disabled=false; phraseBtn.textContent='Войти';
+      registerBtn.disabled=false; registerBtn.textContent='Зарегистрироваться';
       if(phraseError) phraseError.textContent='Сервер запускается, попробуйте ещё раз';
     });
   }
   if(phraseBtn) phraseBtn.addEventListener('click',loginByPhrase);
   if(phraseInput) phraseInput.addEventListener('keydown',function(e){ if(e.key==='Enter')loginByPhrase(); });
+  if(registerBtn) registerBtn.addEventListener('click',register);
+  if(copyPhraseBtn) copyPhraseBtn.addEventListener('click',function(){
+    if(regPhrase && regPhrase.textContent && regPhrase.textContent!=='—'){
+      copyToClipboard(regPhrase.textContent);
+      showToast('Фраза скопирована');
+    }
+  });
 })();
 </script>
 </body>
