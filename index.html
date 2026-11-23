@@ -3603,9 +3603,9 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
 .profile-balance-value{font-family:'SF Pro Rounded',sans-serif;font-size:16px;font-weight:600;color:#fff}
 .btn-danger{margin-top:14px;width:100%;background:#202020}
 .btn-danger:hover{background:#382626}
-.auth-screen{position:fixed;inset:0;z-index:70;background:#101010;display:flex;align-items:center;justify-content:center;padding:1.5rem;transition:opacity .3s ease}
+.auth-screen{position:fixed;inset:0;z-index:70;background:#101010;display:flex;align-items:center;justify-content:center;padding:1.5rem;overflow-y:auto;transition:opacity .3s ease}
 .auth-screen.hidden{opacity:0;pointer-events:none}
-.auth-card{width:100%;max-width:340px;display:flex;flex-direction:column;align-items:center;text-align:center}
+.auth-card{width:100%;max-width:340px;margin:auto;display:flex;flex-direction:column;align-items:center;text-align:center}
 .auth-title{font-family:'SF Pro Rounded',sans-serif;font-size:30px;font-weight:600;color:#fff;letter-spacing:-.02em}
 .auth-sub{font-family:'SF Pro Rounded',sans-serif;font-size:14px;font-weight:600;color:#8e8e8e;margin-top:8px;margin-bottom:28px}
 .auth-methods{display:flex;flex-direction:column;gap:10px;width:100%}
@@ -4039,23 +4039,19 @@ main{min-height:100vh;min-height:100dvh;background:transparent;color:#fff;positi
         Зарегистрироваться
       </button>
       <div class="tg-note" id="registeredBox" style="display:none;width:100%">
-        <div style="font-weight:600;color:#fff;margin-bottom:8px">Вы зарегистрированы. Сохраните данные — это ваш доступ:</div>
-        <div style="text-align:left;margin-bottom:8px">
-          <div style="font-size:12px;font-weight:600;color:#8e8e8e;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px">Юзер</div>
-          <div style="display:flex;gap:6px;align-items:stretch">
-            <div id="regUserField" style="flex:1;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:14px;padding:10px 12px;font-weight:600;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-height:20px">юзер #1</div>
-            <button class="btn auth-btn" type="button" id="copyUserBtn" style="flex:none;padding:8px 12px">Копировать</button>
-          </div>
+        <div style="font-weight:600;color:#fff;margin-bottom:10px">Вы зарегистрированы. Сохраните данные — это ваш доступ:</div>
+        <div style="text-align:left;margin-bottom:10px">
+          <div style="font-size:12px;font-weight:600;color:#8e8e8e;text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px">Юзер</div>
+          <div style="width:100%;box-sizing:border-box;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:14px;padding:11px 13px;font-weight:600;color:#fff;word-break:break-word;min-height:22px" id="regUserField">юзер #1</div>
+          <button class="btn auth-btn" type="button" id="copyUserBtn" style="margin-top:6px;width:100%">Копировать юзера</button>
         </div>
-        <div style="text-align:left;margin-bottom:8px">
-          <div style="font-size:12px;font-weight:600;color:#8e8e8e;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px">Фраза</div>
-          <div style="display:flex;gap:6px;align-items:stretch">
-            <div id="regPhraseField" style="flex:1;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:14px;padding:10px 12px;font-weight:600;color:#58a6ff;word-break:break-word;min-height:20px">—</div>
-            <button class="btn auth-btn" type="button" id="copyPhraseBtn" style="flex:none;padding:8px 12px">Копировать</button>
-          </div>
+        <div style="text-align:left;margin-bottom:10px">
+          <div style="font-size:12px;font-weight:600;color:#8e8e8e;text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px">Фраза</div>
+          <div style="width:100%;box-sizing:border-box;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:14px;padding:11px 13px;font-weight:600;color:#58a6ff;word-break:break-word;min-height:22px" id="regPhraseField">—</div>
+          <button class="btn auth-btn" type="button" id="copyPhraseBtn" style="margin-top:6px;width:100%">Копировать фразу</button>
         </div>
         <div style="color:#8e8e8e;font-size:12px;margin-top:4px">Вход уже выполнен. Фраза понадобится для входа с другого устройства.</div>
-        <button class="btn btn-accent auth-btn" type="button" id="regDoneBtn" style="margin-top:10px;width:100%">В кабинет</button>
+        <button class="btn btn-accent auth-btn" type="button" id="regDoneBtn" style="margin-top:12px;width:100%">В кабинет</button>
       </div>
     </div>
   </div>

@@ -1,3 +1,5 @@
 ﻿rootskip: index-verify
 __pycache__/
 *.pyc
+
+.vercel
